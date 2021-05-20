@@ -1,4 +1,4 @@
-package it.unipv.ingsfw.user.userDetails;
+package it.unipv.ingsfw.User.UserDetails;
 
 public class Review {
 

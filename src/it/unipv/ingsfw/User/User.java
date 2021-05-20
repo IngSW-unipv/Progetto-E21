@@ -1,4 +1,4 @@
-package it.unipv.ingsfw.user;
+package it.unipv.ingsfw.User;
 
 public interface User {
 

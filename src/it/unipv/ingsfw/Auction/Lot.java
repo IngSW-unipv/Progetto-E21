@@ -1,4 +1,4 @@
-package it.unipv.ingsfw.auction;
+package it.unipv.ingsfw.Auction;
 
 public class Lot {
 
