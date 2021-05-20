@@ -1,4 +1,4 @@
-package it.unipv.ingsfw.Auction;
+package it.unipv.ingsfw.auction;
 
 public class Item {
 

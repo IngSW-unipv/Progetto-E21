@@ -1,4 +1,4 @@
-package it.unipv.ingsfw.User.UserDetails;
+package it.unipv.ingsfw.user.userDetails;
 
 public class ID {
 
