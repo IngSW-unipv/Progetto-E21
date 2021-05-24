@@ -8,7 +8,7 @@ public class CreditCard {
 	private String firstName;
 	private String lastName;
 	
-	public CreditCard(String number, String cVV, Date expirationDate, String firstName, String lastName) {
+	public CreditCard(String number, String CVV, Date expirationDate, String firstName, String lastName) {
 		
 		this.number = number;
 		this.CVV = CVV;
