@@ -42,7 +42,7 @@ public class AuctionHouse {
 			   rs = st.executeQuery(sql); //faccio la query su uno statement
 			   while(rs.next() == true) {
 				   
-				   Participant p1 = new Participant(rs.getString("first_name"), rs.getString("last_name"), rs.getString("email"), rs.getString("username"), rs.getString("password"), rs.getString("address"), rs.getString("mobile_number"), rs.getDate("birthday").toLocalDate());
+				   Participant p1 = new Participant(rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"), rs.getString("username"), rs.getString("password"), rs.getString("address"), rs.getDate("birthday").toLocalDate(), rs.getString("mobile_number"));
 				   
 				   System.out.println(rs.getNString(1) + "\t" + rs.getNString("last_name") + rs.getDate("birthday"));
 		

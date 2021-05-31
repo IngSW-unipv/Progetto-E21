@@ -16,7 +16,7 @@ public class Participant {
 	    private String firstName, lastName, email, username, mobileNumber, password, address;
 	    LocalDate bDay;
 	    
-	    public Participant(String firstName, String lastName, String email, String username, String password, String address, String mobileNumber, LocalDate birthday) {
+	    public Participant(String firstName, String lastName, String email, String username, String password, String address, LocalDate birthday, String mobileNumber) {
 			
 			this.firstName = firstName;
 			this.lastName = lastName;
@@ -84,33 +84,18 @@ public class Participant {
 				 
 				cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/registration_system", "root", "Crisele05");//Establishing connection
 				System.out.println("Connected With the database successfully");	
-				// Statements allow to issue SQL queries to the database
-	            st = cn.createStatement();
-	            // Result set get the result of the SQL query
-	            rs = st.executeQuery("select * from participant");
-	                  
-	            writeResultSet(rs);
-
-	            // PreparedStatements can use variables and are more efficient
-	            PreparedStatement preparedStatement = cn .prepareStatement("insert into participant ( ?, ?, ?, ? , ?, ?, ?, ? )");
-	               
-	            // "myuser, webpage, datum, summary, COMMENTS from feedback.comments");
-	            // Parameters start with 1
-	            java.sql.Date sqlDate = java.sql.Date.valueOf(bDay);
-	            
-	            
-	            preparedStatement.setString(1, firstName);
-	            preparedStatement.setString(2, lastName);
-	            preparedStatement.setString(3, username);
-	            preparedStatement.setDate(6, sqlDate);
-	            preparedStatement.setString(5, email);
-	            preparedStatement.setString(4, password);
-	            preparedStatement.setString(8, mobileNumber);
-	            preparedStatement.setString(7, address);
-	            preparedStatement.executeUpdate();
-	            
-	            cn.close();
-				System.out.println("connection terminated"); 
+				
+		
+				sql = "insert into participant(firstName, lastName, email, username, password, address, birthday, mobile_number) values ('" + firstName + "','" + lastName + "','" + email + "','" 
+						+ username + "','" + password + "','" + address + "','" + bDay + "','" + mobileNumber + "')";
+				
+				
+				st = cn.createStatement();
+				
+				System.out.println("inserted new participant on the DB");
+				st.execute(sql);
+		
+				System.out.println("connection terminated");
 	            
 			} catch (SQLException e) {
 				
