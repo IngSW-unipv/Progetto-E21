@@ -96,6 +96,7 @@ public class Participant {
 				st.execute(sql);
 		
 				System.out.println("connection terminated");
+				cn.close();
 	            
 			} catch (SQLException e) {
 				
