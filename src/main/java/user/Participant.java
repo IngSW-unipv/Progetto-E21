@@ -89,11 +89,15 @@ public class Participant {
 				sql = "insert into participant(firstName, lastName, email, username, password, address, birthday, mobile_number) values ('" + firstName + "','" + lastName + "','" + email + "','" 
 						+ username + "','" + password + "','" + address + "','" + bDay + "','" + mobileNumber + "')";
 				
-				
+				try {
 				st = cn.createStatement();
 				
-				System.out.println("inserted new participant on the DB");
 				st.execute(sql);
+				System.out.println("inserted new participant on the DB");
+				} catch(SQLException e){
+					System.out.println("email already exists");
+					
+				}
 		
 				System.out.println("connection terminated");
 				cn.close();
