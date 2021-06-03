@@ -61,61 +61,6 @@ public class Participant {
 		public String getAddress() {
 			return address;
 		}
-
-		
-		
-		
-		public Participant() {
-			// TODO Auto-generated constructor stub
-		}
-		//aggiorna
-		
-		
-		
-		public void registerParticipantToDB() throws SQLException {
-			
-			Connection cn = null;
-			Statement st;
-			ResultSet rs;
-			String sql;
-			
-		
-			   try {
-				 
-				cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/registration_system", "root", "Crisele05");//Establishing connection
-				System.out.println("Connected With the database successfully");	
-				
-		
-				sql = "insert into participant(firstName, lastName, email, username, password, address, birthday, mobile_number) values ('" + firstName + "','" + lastName + "','" + email + "','" 
-						+ username + "','" + password + "','" + address + "','" + bDay + "','" + mobileNumber + "')";
-				
-				try {
-				st = cn.createStatement();
-				
-				st.execute(sql);
-				System.out.println("inserted new participant on the DB");
-				} catch(SQLException e){
-					System.out.println("email already exists");
-					
-				}
-		
-				System.out.println("connection terminated");
-				cn.close();
-	            
-			} catch (SQLException e) {
-				
-				System.out.println("Error while connecting to the database");
-				
-			}
-			    //fine try-catch  
-			   
-			   
-			   //ha dei metodi per leggere/scrivere e modificare il db registration_system
-			   
-			   
-			   
-		}
-		
 		
 		
 		private void writeResultSet(ResultSet rs) {
