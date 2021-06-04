@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import user.Participant;
 import user.User;
+import user.userDetails.Address;
 
 public class AuctionHouse {
 	private String name;
@@ -36,16 +37,16 @@ public class AuctionHouse {
 				}
 	
 		   ArrayList<Participant> list = new ArrayList<Participant>();
-	        sql = "SELECT * FROM participant;";
+	        sql = "SELECT * FROM participant join address;";
 		   //____________query___________
 		   try {
 			   st = cn.createStatement(); //creo sempre uno statement sulla coneesione
 			   
 			   rs = st.executeQuery(sql); //faccio la query su uno statement
 			   while(rs.next() == true) {
-				   
-				   Participant p1 = new Participant(rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"), rs.getString("username"), rs.getString("password"), rs.getString("address"), rs.getDate("birthday").toLocalDate(), rs.getString("mobile_number"));
-				   
+				   Address a1 = new Address(rs.getString("city"),rs.getString("road"),rs.getString("postalCode"),rs.getString("number"),rs.getString("country"));
+				   Participant p1 = new Participant(rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"), rs.getString("username"), rs.getString("password"), a1, rs.getDate("birthday").toLocalDate(), rs.getString("mobile_number"));
+				   list.add(p1);
 				   System.out.println(rs.getNString(1) + "\t" + rs.getNString("lastName") + rs.getDate("birthday"));
 		
 			   }
@@ -74,7 +75,7 @@ public class AuctionHouse {
 			
 	
 			sql = "insert into participant(firstName, lastName, email, username, password, address, birthday, mobile_number) values ('" + p.getFirstName() + "','" + p.getLastName() + "','" + p.getEmail() + "','" 
-					+ p.getUsername() + "','" + p.getPassword() + "','" + p.getAddress() + "','" + p.getBirthday() + "','" + p.getMobileNumber() + "')";
+					+ p.getUsername() + "','" + p.getPassword() + "','" + p.getBirthday() + "','" + p.getMobileNumber() + "')";
 			
 			try {
 			st = cn.createStatement();

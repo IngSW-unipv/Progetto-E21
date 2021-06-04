@@ -3,14 +3,14 @@ package user.userDetails;
 public class Address {
 	
 
-	private String city;
-	private String road;
-	private String postalCode;
+	private String city, road, postalCode, number, country;
 	
-	public Address(String city, String road, String postalCode) {
+	public Address(String city, String road, String postalCode, String number, String country) {
 		this.city = city;
 		this.road = road;
 		this.postalCode = postalCode;
+		this.number = number;
+		this.country = country;
 	}
 
 	public String getCity() {

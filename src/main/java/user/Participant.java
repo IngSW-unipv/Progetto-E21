@@ -11,12 +11,15 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import user.userDetails.Address;
+
 public class Participant {
 	
-	    private String firstName, lastName, email, username, mobileNumber, password, address;
+	    private String firstName, lastName, email, username, mobileNumber, password;
 	    LocalDate bDay;
+	    Address address;
 	    
-	    public Participant(String firstName, String lastName, String email, String username, String password, String address, LocalDate birthday, String mobileNumber) {
+	    public Participant(String firstName, String lastName, String email, String username, String password, Address address, LocalDate birthday, String mobileNumber) {
 			
 			this.firstName = firstName;
 			this.lastName = lastName;
@@ -58,7 +61,7 @@ public class Participant {
 			return bDay;
 		}
 		
-		public String getAddress() {
+		public Address getAddress() {
 			return address;
 		}
 		
