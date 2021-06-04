@@ -28,7 +28,7 @@ public class AuctionHouse {
 		//___________connesione___________
 		   try {
 			 
-			cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/registration_system", "root", "Crisele05");//Establishing connection
+			cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11416799", "sql11416799", "B5kzNwUta6");//Establishing connection
 			System.out.println("Connected With the database successfully");	
 		} catch (SQLException e) {
 			
@@ -70,7 +70,7 @@ public class AuctionHouse {
 	
 		   try {
 			 
-			cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/registration_system", "root", "Crisele05");//Establishing connection
+			cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11416799", "sql11416799", "B5kzNwUta6");//Establishing connection
 			System.out.println("Connected With the database successfully");	
 			
 	
@@ -108,7 +108,7 @@ public class AuctionHouse {
 		//___________connesione___________
 		   try {
 			 
-			cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/registration_system", "root", "Crisele05");//Establishing connection
+			cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11416799", "sql11416799", "B5kzNwUta6");//Establishing connection
 			System.out.println("Connected With the database successfully");	
 		} catch (SQLException e) {
 			
