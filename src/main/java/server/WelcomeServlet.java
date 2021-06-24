@@ -17,7 +17,15 @@ public class WelcomeServlet extends HttpServlet {
  
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		File f =  new File("src/main/resources/imgDB/img1.jpg");
+		resp.getWriter().write(Rythm.render("index.html"));
+		
+		
+		
+		
+		
+		
+		
+		/*File f =  new File("src/main/resources/imgDB/img1.jpg");
         String encodstring = null;
 		try {
 			encodstring = encodeFileToBase64Binary(f);
@@ -28,7 +36,7 @@ public class WelcomeServlet extends HttpServlet {
         System.out.println(encodstring);
 
  
-		resp.getWriter().write(Rythm.render("helloworld.html", "Banana Joe", encodstring));
+		resp.getWriter().write(Rythm.render("helloworld.html", "Banana Joe", encodstring)); */
 	}
 
 	 private static String encodeFileToBase64Binary(File file) throws Exception{

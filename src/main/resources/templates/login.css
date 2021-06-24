@@ -83,7 +83,7 @@
   padding: 11px 39px 12px;
 }
 
-@media (max-width: 1199px) {
+@@media (max-width: 1199px) {
   .u-section-1 .u-sheet-1 {
     min-height: 701px;
   }
@@ -97,7 +97,7 @@
   }
 }
 
-@media (max-width: 991px) {
+@@media (max-width: 991px) {
   .u-section-1 .u-sheet-1 {
     min-height: 303px;
   }
@@ -107,7 +107,7 @@
   }
 }
 
-@media (max-width: 767px) {
+@@media (max-width: 767px) {
   .u-section-1 .u-sheet-1 {
     min-height: 265px;
   }
@@ -126,7 +126,7 @@
   }
 }
 
-@media (max-width: 575px) {
+@@media (max-width: 575px) {
   .u-section-1 .u-sheet-1 {
     min-height: 671px;
   }

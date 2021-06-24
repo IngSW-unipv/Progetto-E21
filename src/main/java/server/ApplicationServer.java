@@ -44,7 +44,7 @@ public class ApplicationServer {
 	    
 	    private void initTemplateEngine() {
 	        Map<String, Object> conf = new HashMap<>();
-	        conf.put("home.template", "D:/Eclipse/Eclipse-Workspace/ServerProva/src/main/resources/templates");
+	        conf.put("home.template", "templates");
 	        Rythm.init(conf);
 	    }
 }
