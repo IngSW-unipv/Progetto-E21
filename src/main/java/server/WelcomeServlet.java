@@ -21,7 +21,13 @@ public class WelcomeServlet extends HttpServlet {
  
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.getWriter().write(Rythm.render("login.html", ""));
+		if (req.getPathInfo().equals("/register")) {
+			resp.getWriter().write(Rythm.render("register.html"));
+		} else {
+			resp.getWriter().write(Rythm.render("login.html", ""));
+		}
+		
+		
 
 		/*File f =  new File("src/main/resources/imgDB/img1.jpg");
         String encodstring = null;
@@ -36,6 +42,7 @@ public class WelcomeServlet extends HttpServlet {
  
 		resp.getWriter().write(Rythm.render("helloworld.html", "Banana Joe", encodstring)); */
 	}
+		
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -107,21 +107,15 @@ public class AuctionHouse {
 		ResultSet rs;
 		String sql;
 		//___________connesione___________
+		 int candy = 1;
 		   try {
 			 
 			cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11416799", "sql11416799", "B5kzNwUta6");//Establishing connection
 			System.out.println("Connected With the database successfully");	
-		} catch (SQLException e) {
-			
-			System.out.println("Error while connecting to the database");
 		
-				}
-	
-		   ArrayList<Participant> list = new ArrayList<Participant>();
 	        sql = "SELECT username FROM participant where email =" + email + "and pwd =" + pwd + ";";
-	        int candy = -1;
-		   //____________query___________
-		   try {
+	       
+		   //____________query_________
 			   st = cn.createStatement(); //creo sempre uno statement sulla coneesione
 			   
 			   rs = st.executeQuery(sql); //faccio la query su uno statement
@@ -145,30 +139,27 @@ public class AuctionHouse {
 		ResultSet rs1, rs2;
 		String sql1;
 		//___________connesione___________
+		// TEST
+        java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		java.time.LocalDate birthday = java.time.LocalDate.parse("26/03/1987", formatter);
+		
+			Address a1 = new Address("Milano", "Via Rismondo", "21093", "12", "Italy");
+        Participant p1 = new Participant("Crisele", "Ariola", "crisele05@gmail.com", "crisele05", "Password", a1, birthday, "1234567890"); 
+		 //FINE TEST
+        
 		   try {
 			 
 			cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11416799", "sql11416799", "B5kzNwUta6");//Establishing connection
 			System.out.println("Connected With the database successfully");	
-		} catch (SQLException e) {
-			
-			System.out.println("Error while connecting to the database");
-		
-				}
 		   	
 	        sql1 = "SELECT * FROM participant where username =" + loggedIn.get(cookie) + ";";
 	        
 	        
-	        // TEST
-	        java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			java.time.LocalDate birthday = java.time.LocalDate.parse("26/03/1987", formatter);
-			
-				Address a1 = new Address("Milano", "Via Rismondo", "21093", "12", "Italy");
-	        Participant p1 = new Participant("Crisele", "Ariola", "crisele05@gmail.com", "crisele05", "Password", a1, birthday, "1234567890"); 
-		  //FINE TEST
+	        
+
 	        // AGGIUSTARE QUERY
 	        
 	        //____________query___________
-		   try {
 			   st = cn.createStatement(); //creo sempre uno statement sulla coneesione
 			   
 			   rs1 = st.executeQuery(sql1); //faccio la query su uno statement
