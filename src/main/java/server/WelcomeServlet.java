@@ -21,7 +21,7 @@ public class WelcomeServlet extends HttpServlet {
  
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		if (req.getPathInfo().equals("/register")) {
+		if (req.getPathInfo().equals("/registerRequest")) {
 			resp.getWriter().write(Rythm.render("register.html"));
 		} else {
 			resp.getWriter().write(Rythm.render("login.html", ""));
