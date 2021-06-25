@@ -12,19 +12,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.rythmengine.Rythm;
 
+import utilities.AuctionHouse;
+
 
 public class WelcomeServlet extends HttpServlet {
+	
+	private AuctionHouse auctionHouse = new AuctionHouse("Il mercationo della sirena");
  
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.getWriter().write(Rythm.render("index.html"));
-		
-		
-		
-		
-		
-		
-		
+		resp.getWriter().write(Rythm.render("login.html", ""));
+
 		/*File f =  new File("src/main/resources/imgDB/img1.jpg");
         String encodstring = null;
 		try {
@@ -37,6 +35,32 @@ public class WelcomeServlet extends HttpServlet {
 
  
 		resp.getWriter().write(Rythm.render("helloworld.html", "Banana Joe", encodstring)); */
+	}
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		if (req.getPathInfo().equals("/login")) {
+			int cookie = auctionHouse.login(req.getParameter("email"), req.getParameter("password"));			
+			
+			if (cookie == -1) {
+				resp.getWriter().write(Rythm.render("login.html", "Username o password errati"));
+			}
+			else {
+		
+				File f =  new File("src/main/resources/imgDB/img1.jpg");
+		        String encodstring = null;
+				try {
+					encodstring = encodeFileToBase64Binary(f);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		        System.out.println(encodstring);
+				resp.getWriter().write(Rythm.render("helloworld.html", auctionHouse.getParticipant(cookie).getUsername(), encodstring)); 
+			}
+		
+		}
 	}
 
 	 private static String encodeFileToBase64Binary(File file) throws Exception{
