@@ -19,7 +19,20 @@ public class Participant {
 	    LocalDate bDay;
 	    Address address;
 	    
-	    public Participant(String firstName, String lastName, String email, String username, String password, Address address, LocalDate birthday, String mobileNumber) {
+	    public Participant(String firstName, String lastName, String email, String username, String password, LocalDate birthday, String mobileNumber) {
+			
+			this.firstName = firstName;
+			this.lastName = lastName;
+			this.email = email;
+			this.username = username;
+			this.mobileNumber = mobileNumber;
+			this.password = password;
+			this.bDay = birthday;
+			this.address = address;
+			
+		}
+	    
+ public Participant(String firstName, String lastName, String email, String username, String password, Address address, LocalDate birthday, String mobileNumber) {
 			
 			this.firstName = firstName;
 			this.lastName = lastName;

@@ -3,6 +3,7 @@ package server;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Base64;
 
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.rythmengine.Rythm;
 
+import user.Participant;
 import utilities.AuctionHouse;
 
 
@@ -68,6 +70,31 @@ public class WelcomeServlet extends HttpServlet {
 			}
 		
 		}
+		else if (req.getPathInfo().equals("/register")) {
+			java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			java.time.LocalDate birthday = java.time.LocalDate.parse("26/03/1987", formatter);
+			Participant p1 = new Participant(req.getParameter("firstName"), req.getParameter("lastName"), req.getParameter("email"), req.getParameter("username"), req.getParameter("pwd"), birthday, req.getParameter("mobileNumber"));
+			try {
+				int cookie = auctionHouse.registerParticipantToDB(p1);
+				File f =  new File("src/main/resources/imgDB/img1.jpg");
+		        String encodstring = null;
+				try {
+					encodstring = encodeFileToBase64Binary(f);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		        System.out.println(encodstring);
+				resp.getWriter().write(Rythm.render("helloworld.html", auctionHouse.getParticipant(cookie).getUsername(), encodstring)); 
+			
+				 
+			} catch (Exception e) {
+				resp.getWriter().write(Rythm.render("register.html", "Errore durante la registrazione, riprova più tardi"));
+			}
+			
+		}
+		
+		
 		else if (req.getPathInfo().equals("/sendMessage")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			String receiverUsername = req.getParameter("receiver");

@@ -15,11 +15,17 @@ public class InsertTester {
 		java.time.LocalDate birthday = java.time.LocalDate.parse("26/03/1987", formatter);
 		
 			Address a1 = new Address("Milano", "Via Rismondo", "21093", "12", "Italy");
-			Participant p1 = new Participant ("Crisele", "Ariola", "crisele05@gmail.com", "crisele05", "Password", a1, birthday, "1234567890");
+			Participant p1 = new Participant ("Iron", "Man", "IamIronMan@gmail.com", "iron", "man", a1, birthday, "1234567890");
 			AuctionHouse a = new AuctionHouse("Ebay");
 			
 			System.out.println(birthday);
-			a.registerParticipantToDB(p1);
+			try {
+				int registreationStatus = a.registerParticipantToDB(p1);
+				System.out.println(registreationStatus);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	
 

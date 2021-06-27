@@ -30,76 +30,64 @@ public class AuctionHouse {
 		Statement st;
 		ResultSet rs;
 		String sql;
+		ArrayList<Participant> list = new ArrayList<Participant>();
 		//___________connesione___________
-		   try {
+		try {
 			 
-			cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11416799", "sql11416799", "B5kzNwUta6");//Establishing connection
-			System.out.println("Connected With the database successfully");	
-		} catch (SQLException e) {
-			
-			System.out.println("Error while connecting to the database");
-		
-				}
-	
-		   ArrayList<Participant> list = new ArrayList<Participant>();
+			cn =  connectDB(); //Establishing connection	
 	        sql = "SELECT * FROM participant join address;";
 		   //____________query___________
-		   try {
-			   st = cn.createStatement(); //creo sempre uno statement sulla coneesione
+	        st = cn.createStatement(); //creo sempre uno statement sulla coneesione
 			   
-			   rs = st.executeQuery(sql); //faccio la query su uno statement
-			   while(rs.next() == true) {
-				   Address a1 = new Address(rs.getString("city"),rs.getString("road"),rs.getString("postalCode"),rs.getString("number"),rs.getString("country"));
-				   Participant p1 = new Participant(rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"), rs.getString("username"), rs.getString("password"), a1, rs.getDate("birthday").toLocalDate(), rs.getString("mobile_number"));
-				   list.add(p1);
-				   System.out.println(rs.getNString(1) + "\t" + rs.getNString("lastName") + rs.getDate("birthday"));
+		 	rs = st.executeQuery(sql); //faccio la query su uno statement
+		 	while(rs.next() == true) {
+	  	    Address a1 = new Address(rs.getString("city"),rs.getString("road"),rs.getString("postalCode"),rs.getString("number"),rs.getString("country"));
+			Participant p1 = new Participant(rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"), rs.getString("username"), rs.getString("password"), a1, rs.getDate("birthday").toLocalDate(), rs.getString("mobileNumber"));
+			list.add(p1);
+			System.out.println(rs.getNString(1) + "\t" + rs.getNString("lastName") + rs.getDate("birthday"));
 		
-			   }
-			   
-		   } catch(SQLException e) {
+			}
+		 	
+		}catch(SQLException e) {
 			   System.out.println("errore: " + e.getMessage());
-		   } //fine try-catch  
+	     } //fine try-catch  
 		return list;
 	}
 	
 	
 	
 	
-	public void registerParticipantToDB(Participant p) throws SQLException {
+	public int registerParticipantToDB(Participant p) throws Exception {
 		
 		Connection cn = null;
 		Statement st;
 		ResultSet rs;
 		String sql;
+		int candy = -1;
 		
 	
 		   try {
 			 
-			cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11416799", "sql11416799", "B5kzNwUta6");//Establishing connection
-			System.out.println("Connected With the database successfully");	
-			
-	
-			sql = "insert into participant(firstName, lastName, email, username, password, birthday, mobile_number) values ('" + p.getFirstName() + "','" + p.getLastName() + "','" + p.getEmail() + "','" 
+			cn =  connectDB(); //Establishing connection	
+			sql = "insert into participant(firstName, lastName, email, username, password, birthday, mobileNumber) values ('" + p.getFirstName() + "','" + p.getLastName() + "','" + p.getEmail() + "','" 
 					+ p.getUsername() + "','" + p.getPassword() + "','" + p.getBirthday() + "','" + p.getMobileNumber() + "')";
-			
-			try {
-			st = cn.createStatement();
-			
+
+			st = cn.createStatement();				
 			st.execute(sql);
 			System.out.println("inserted new participant on the DB");
-			} catch(SQLException e){
-				System.out.println("email already exists");
-				
-			}
-	
 			System.out.println("connection terminated");
 			cn.close();
+			loggedIn.put(cookie, p.getUsername());
+	        candy = cookie;
+	        cookie +=1;
+			return candy;
+			
             
 		} catch (SQLException e) {
-			
-			System.out.println("Error while connecting to the database");
-			
+			throw new Exception(e.getMessage());
 		}
+
+		   
 	}
 	
 	public int login(String email, String pwd) {
@@ -111,10 +99,8 @@ public class AuctionHouse {
 		//___________connesione___________
 		   try {
 			 
-			cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11416799", "sql11416799", "B5kzNwUta6");//Establishing connection
-			System.out.println("Connected With the database successfully");	
-		
-	        sql = "SELECT username FROM participant where email =" + email + "and pwd =" + pwd + ";";
+			cn =  connectDB(); //Establishing connection
+	        sql = "SELECT participant.username FROM participant where email = '" + email + "' and password = '" + pwd + "';";
 	       
 		   //____________query_________
 			   st = cn.createStatement(); //creo sempre uno statement sulla coneesione
@@ -139,21 +125,14 @@ public class AuctionHouse {
 		Statement st;
 		ResultSet rs;
 		String sql;
+		Participant p1;
 		//___________connesione___________
-		// TEST
-        java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		java.time.LocalDate birthday = java.time.LocalDate.parse("26/03/1987", formatter);
-		
-			Address a2 = new Address("Milano", "Via Rismondo", "21093", "12", "Italy");
-        Participant p1 = new Participant("Crisele", "Ariola", "crisele05@gmail.com", "crisele05", "Password", a2, birthday, "1234567890"); 
-		 //FINE TEST
         
 		   try {
 			 
-			cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11416799", "sql11416799", "B5kzNwUta6");//Establishing connection
-			System.out.println("Connected With the database successfully");	
+			   cn =  connectDB(); //Establishing connection
 		   	
-	        sql = "SELECT * FROM participant join address where username =" + loggedIn.get(cookie2) + ";";
+	           sql = "SELECT * FROM participant where username = '" + loggedIn.get(cookie2) + "';";
 
 	        
 	        //____________query___________
@@ -161,16 +140,17 @@ public class AuctionHouse {
 			   
 			   rs = st.executeQuery(sql); //faccio la query su uno statement
 			   while(rs.next() == true) {
-				   
-				  Address a1 = new Address(rs.getString("city"),rs.getString("road"),rs.getString("postalCode"),rs.getString("number"),rs.getString("country"));
-				  p1 = new Participant(rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"), rs.getString("username"), rs.getString("password"), a1, rs.getDate("birthday").toLocalDate(), rs.getString("mobile_number"));
+
+				  p1 = new Participant(rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"), rs.getString("username"), rs.getString("password"),  rs.getDate("birthday").toLocalDate(), rs.getString("mobileNumber"));
+				  return p1;
 			   }
 			   
 		   } catch(SQLException e) {
 			   System.out.println("errore: " + e.getMessage());
 		   } //fine try-catch  
+		return null;
 
-		return p1;
+		
 	}
 	
 	
@@ -186,8 +166,7 @@ public class AuctionHouse {
 		//___________connesione___________
 		   try {
 			 
-			cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11416799", "sql11416799", "B5kzNwUta6");//Establishing connection
-			System.out.println("Connected With the database successfully");	
+			cn =  connectDB(); //Establishing connection	
 		    String email = p1.getEmail();
 	        sql = "DELETE FROM PARTICIPANT WHERE EMAIL= " + email;
 		   //____________query___________
@@ -225,11 +204,8 @@ public class AuctionHouse {
 	
 		   try {
 			 
-			cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11416799", "sql11416799", "B5kzNwUta6");//Establishing connection
-			System.out.println("Connected With the database successfully");	
-			
-	
-			sql = "insert into msg(sender, receiver, message, time) values ('" + senderUsername + "','" + receiverUsername + "','" + message + "','" 
+			cn =  connectDB(); //Establishing connection
+			sql = "insert into messages(sender, receiver, message, time) values ('" + senderUsername + "','" + receiverUsername + "','" + message + "','" 
 					+ LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + "')";
 			
 			st = cn.createStatement();
@@ -261,11 +237,10 @@ public class AuctionHouse {
 	
 		   try {
 			 
-			cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11416799", "sql11416799", "B5kzNwUta6");//Establishing connection
-			System.out.println("Connected With the database successfully");	
+			cn =  connectDB(); //Establishing connection
 			
 			//prendo tutti i messaggi inviati e ricevuti da una coppia di utenti
-			sql = "select count* from msg where (sender = " + senderUsername + " and receiver = " + receiverUsername + ") or ( receiver = " + senderUsername + " and sender =" + receiverUsername + ");" ;
+			sql = "select count* from messages where (sender = " + senderUsername + " and receiver = " + receiverUsername + ") or ( receiver = " + senderUsername + " and sender =" + receiverUsername + ");" ;
 			
 			st = cn.createStatement();
 			rs = st.executeQuery(sql);
@@ -299,6 +274,12 @@ public class AuctionHouse {
 		}
 		
 		return messages;
+	}
+	
+	private Connection connectDB() throws SQLException {
+		Connection cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11421731", "sql11421731", "83bkPjI9Yf");//Establishing connection
+		System.out.println("Connected With the database successfully");
+		return cn;	
 	}
 	
 }
