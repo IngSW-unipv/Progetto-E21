@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +18,7 @@ public class AuctionHouse {
 	private String name;
 	private int cookie = 0;
 	private ArrayList<User> users, onlineUsers;
-	Map<String, Integer> loggedIn = new HashMap<>();
+	Map<Integer, String> loggedIn = new HashMap<>();
 	
 	public AuctionHouse(String name) {
 		this.name = name;
@@ -120,7 +121,7 @@ public class AuctionHouse {
 			   
 			   rs = st.executeQuery(sql); //faccio la query su uno statement
 			   while(rs.next() == true) {
-			        loggedIn.put(rs.getString("username"), cookie);
+			        loggedIn.put(cookie, rs.getString("username"));
 			        candy = cookie;
 			        cookie +=1;
 			   }
@@ -133,7 +134,7 @@ public class AuctionHouse {
 	}
 	
 	
-	public Participant getParticipant(int cookie) {
+	public Participant getParticipant(int cookie2) {
 		Connection cn = null;
 		Statement st;
 		ResultSet rs;
@@ -152,7 +153,7 @@ public class AuctionHouse {
 			cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11416799", "sql11416799", "B5kzNwUta6");//Establishing connection
 			System.out.println("Connected With the database successfully");	
 		   	
-	        sql = "SELECT * FROM participant join address where username =" + loggedIn.get(cookie) + ";";
+	        sql = "SELECT * FROM participant join address where username =" + loggedIn.get(cookie2) + ";";
 
 	        
 	        //____________query___________
@@ -160,7 +161,6 @@ public class AuctionHouse {
 			   
 			   rs = st.executeQuery(sql); //faccio la query su uno statement
 			   while(rs.next() == true) {
-				  sql = "SELECT * FROM participant where username =" + loggedIn.get(cookie) + ";";
 				   
 				  Address a1 = new Address(rs.getString("city"),rs.getString("road"),rs.getString("postalCode"),rs.getString("number"),rs.getString("country"));
 				  p1 = new Participant(rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"), rs.getString("username"), rs.getString("password"), a1, rs.getDate("birthday").toLocalDate(), rs.getString("mobile_number"));
@@ -212,6 +212,93 @@ public class AuctionHouse {
 		   cn.close();
 		   System.out.println("connection terminated"); 
 		
+	}
+
+
+	public int saveMessage(int cookie2, String receiverUsername, String message)  {
+		// TODO Auto-generated method stub
+		Connection cn = null;
+		Statement st;
+		ResultSet rs;
+		String sql;
+		String senderUsername = loggedIn.get(cookie2);
+	
+		   try {
+			 
+			cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11416799", "sql11416799", "B5kzNwUta6");//Establishing connection
+			System.out.println("Connected With the database successfully");	
+			
+	
+			sql = "insert into msg(sender, receiver, message, time) values ('" + senderUsername + "','" + receiverUsername + "','" + message + "','" 
+					+ LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + "')";
+			
+			st = cn.createStatement();
+			
+			st.execute(sql);
+			System.out.println("inserted new message on the DB");
+			System.out.println("connection terminated");
+			cn.close();
+            
+		} catch (SQLException e) {
+			
+			System.out.println("Error while connecting to the database");
+			return -1;
+		}
+		   return 0;
+		
+		
+	}
+
+
+	public String[] getMessages(int cookie2, String receiverUsername) throws Exception {
+		// TODO Auto-generated method stub
+		Connection cn = null;
+		Statement st;
+		ResultSet rs;
+		String sql;
+		String [] messages; 
+		String senderUsername = loggedIn.get(cookie2);
+	
+		   try {
+			 
+			cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11416799", "sql11416799", "B5kzNwUta6");//Establishing connection
+			System.out.println("Connected With the database successfully");	
+			
+			//prendo tutti i messaggi inviati e ricevuti da una coppia di utenti
+			sql = "select count* from msg where (sender = " + senderUsername + " and receiver = " + receiverUsername + ") or ( receiver = " + senderUsername + " and sender =" + receiverUsername + ");" ;
+			
+			st = cn.createStatement();
+			rs = st.executeQuery(sql);
+			
+			//conto i messaggi
+			int rowcount = 0;
+			System.out.println("got messages");
+			if (rs.last()) {
+				  rowcount = rs.getRow();
+				  rs.beforeFirst();
+			}
+			//creo array della dimensione dei messaggi + 2 (per identificare sender e receiver)
+			rowcount = (rowcount *3) + 2 ;
+			messages = new String[rowcount];
+			messages[0]= senderUsername;
+			messages[1]= receiverUsername;
+			int count = 2;
+			while(rs.next() == true) {
+				  messages[count] = rs.getString("sender");
+				  messages[count+1] = rs.getString("message");
+				  messages[count+1] = rs.getString("time");
+			   }
+			
+			System.out.println("connection terminated");
+			cn.close();
+            
+		} catch (SQLException e) {
+			
+			System.out.println("Error while connecting to the database");
+			throw new Exception("Errore nel caricamento dei messaggi, riprova più tardi");
+		}
+		
+		return messages;
 	}
 	
 }

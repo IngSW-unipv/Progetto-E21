@@ -7,6 +7,12 @@
   border-radius: 5px;
 }
 
+.messagebox{
+	width: 750px;
+	padding: 5px;
+	
+}
+
 .container{
   position:relative;
   border: 2px solid #dedede;
@@ -54,6 +60,8 @@
 }
 
 .time-right {
+  position:absolute;
+  bottom:0;
   float: right;
   color: #aaa;
 }

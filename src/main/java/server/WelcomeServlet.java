@@ -68,6 +68,30 @@ public class WelcomeServlet extends HttpServlet {
 			}
 		
 		}
+		else if (req.getPathInfo().equals("/sendMessage")) {
+			int cookie = Integer.parseInt(req.getParameter("cookie"));
+			String receiverUsername = req.getParameter("receiver");
+			String message = req.getParameter("message");
+			int ok = auctionHouse.saveMessage(cookie, receiverUsername, message);
+			if (ok == -1)
+			{
+				resp.getWriter().write(Rythm.render("error.html", "Errore nell' invio del messaggio, riprova più tardi"));
+			}
+		}
+		else if (req.getPathInfo().equals("/getMessage")) {
+			int cookie = Integer.parseInt(req.getParameter("cookie"));
+			String receiverUsername = req.getParameter("receiver");
+			
+			try {
+				String messages[] =auctionHouse.getMessages(cookie, receiverUsername);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				resp.getWriter().write(Rythm.render("error.html", e.getMessage()));
+			}
+			
+			
+		}
+		                                                
 	}
 
 	 private static String encodeFileToBase64Binary(File file) throws Exception{

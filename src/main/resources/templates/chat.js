@@ -1,24 +1,55 @@
-function loopTest(){
-	var i=0;
-	for (i=0;i<5;i++) {  
-        var newDiv = document.createElement("div");
-		var newImg = document.createElement("img");
-		var newSpan = document.createElement("span");
-		
-		newSpan.classList.add("time-right");
-		newDiv.classList.add("container");
-		newImg.src="/w3images/bandmember.jpg";
-		newImg.alt="Avatar";
-		newImg.style="width:100%;";
-		
+//message["senderU", "receiverU", "sender", "message", "time", "sender", "message", "time", "sender", "message", "time"]
 
-		// and give it some content
-		var newContent = document.createTextNode("Hi there and greetings!");
-		var newContentSpan = document.createTextNode("19:13");
+
+function loopTest(message, k){
+	var i;
+	for (i=2; i< k;) { 
+	
+			var newDiv = document.createElement("div");
+			var newImg = document.createElement("img");
+			var newSpan = document.createElement("span");
+			var newP = document.createElement("p");
+			
+		if(message[i] == message[0])
+		{
+			console.log("Ananas");
+			newP.classList.add("chatrighttext");
+			newSpan.classList.add("time-left");
+			newDiv.classList.add("container");
+			newDiv.classList.add("darker");
+			newImg.classList.add("right");
+			newImg.src="/w3images/bandmember.jpg";
+			newImg.alt="Avatar";
+			newImg.style="width:100%;";
+			
+
+			// and give it some content
+			var newContent = document.createTextNode(message[i+1]);
+			var newContentSpan = document.createTextNode(message[i+2]);
+			i+=3;
+			console.log("Ananas");
+		}
+		else {
+			
+			newP.classList.add("chatlefttext");
+			newSpan.classList.add("time-right");
+			newDiv.classList.add("container");
+			newImg.src="/w3images/bandmember.jpg";
+			newImg.alt="Avatar";
+			newImg.style="width:100%;";
+			
+
+			// and give it some content
+			var newContent = document.createTextNode(message[i+1]);
+			var newContentSpan = document.createTextNode(message[i+2]);
+			i+=3;
+			console.log("Apple");
+		}
 
 		// add the text node to the newly created div
 		newDiv.appendChild(newImg);
-		newDiv.appendChild(newContent);
+		newP.appendChild(newContent);
+		newDiv.appendChild(newP);
 		newSpan.appendChild(newContentSpan);
 		newDiv.appendChild(newSpan);
 
