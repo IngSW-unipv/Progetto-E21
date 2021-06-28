@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,8 +15,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.rythmengine.Rythm;
 
+import com.stevesoft.pat.apps.Message;
+
 import user.Participant;
 import utilities.AuctionHouse;
+import utilities.ChatMessage;
 
 
 public class WelcomeServlet extends HttpServlet {
@@ -26,8 +31,15 @@ public class WelcomeServlet extends HttpServlet {
 		if (req.getPathInfo().equals("/registerRequest")) {
 			resp.getWriter().write(Rythm.render("register.html"));
 		} else {
-			String[] fruits = { "Apple", "Ananas", "Apple", "Banana", "Kiwi", "Ananas", "Banana", "Kiwi","Apple", "Banana", "Kiwi","Ananas", "Banana", "Kiwi", "Apple", "Banana", "Kiwi"};
-			resp.getWriter().write(Rythm.render("chat.html", 1 , fruits.length, fruits));
+			
+			ChatMessage msg1 = new ChatMessage("Marco","Percy", "Ciao" , "11:53");
+			ChatMessage msg2 = new ChatMessage("Percy","Marco", "Ciao" , "11:54");
+			ChatMessage msg3 = new ChatMessage("Marco","Percy", "Patata" , "11:55");
+			ArrayList<ChatMessage> messages = new ArrayList<ChatMessage>();
+			messages.add(msg1);
+			messages.add(msg2);
+			messages.add(msg3);
+			resp.getWriter().write(Rythm.render("chat.html", 1 , "Marco", "Percy", messages));
 		}
 		
 		

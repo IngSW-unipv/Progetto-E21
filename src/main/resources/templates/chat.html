@@ -1,4 +1,5 @@
-@args int cookie, int lunghezza, String[] messages
+@args int cookie, String sender, String receiver, ArrayList<utilities.ChatMessage> messages
+		
 
 <!DOCTYPE html>
 <html style="font-size: 16px;">
@@ -11,10 +12,9 @@
     <title>Messages</title>
     <link rel="stylesheet" href= "https://drive.google.com/uc?id=14bj-3oxU-bKmtNfMEVdJDaXNyAdSNoSI" media="screen">
     <link rel="stylesheet" href="https://drive.google.com/uc?id=13O9pXLHohrOBcBkEQb1Z36mMB2N13j5q" media="screen">
-	<link rel="stylesheet" href= @chat.css() >
+	<link rel="stylesheet" href= "https://drive.google.com/uc?id=15OdDeOhLLuV976XyAcP2piWhbGIO_4ar" >
     <script class="u-script" type="text/javascript" href="https://drive.google.com/uc?id=1NedRzl0d4XRzMYzmCx9TjW2iukMYPuCa" defer=""></script>
     <script class="u-script" type="text/javascript" href="https://drive.google.com/uc?id=1m37QWAGG16-ZSewPGNXl8hgLpJ3ISVf5" defer=""></script>
-	<script  type="text/javascript" source= @chat.js() ></script>
     <meta name="generator" content="Nicepage 3.17.5, nicepage.com">
     <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i">
     
@@ -46,18 +46,19 @@
           </div>
           <div class="u-custom-menu u-nav-container">
             <ul class="u-nav u-unstyled u-nav-1">
-			<li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" method="post" href="/auctions?" style="padding: 10px 20px;">Auctions</a></li>
-			<li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" method="post" href="/messages?" style="padding: 10px 20px;">Messages</a></li>
-			<li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" method="post" href="/html?" style="padding: 10px 20px;">Profile</a></li>
+			<li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" method="post" href="/auctions?cookie=@cookie" style="padding: 10px 20px;">Auctions</a></li>
+			<li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" method="post" href="/messages?cookie=@cookie" style="padding: 10px 20px;">Messages</a></li>
+			<li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" method="post" href="/html?cookie=@cookie" style="padding: 10px 20px;">Profile</a></li>
 			</ul>
           </div>
           <div class="u-custom-menu u-nav-container-collapse">
             <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
               <div class="u-sidenav-overflow">
                 <div class="u-menu-close"></div>
-                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/home" method="get" style="padding: 10px 20px;">Home</a>
-</li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/profile" method="get" style="padding: 10px 20px;">Profile</a>
-</li></ul>
+                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2">
+				<li class="u-nav-item"><a class="u-button-style u-nav-link" href="/home" method="get" style="padding: 10px 20px;">Auctione</a></li>
+				<li class="u-nav-item"><a class="u-button-style u-nav-link" href="/profile" method="get" style="padding: 10px 20px;">Profile</a></li>
+				</ul>
               </div>
             </div>
             <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
@@ -66,37 +67,26 @@
       </div></header>
 		<p id="p1"></p>
 		<div class="divchat">
-		<div id="div1"><h2>@messages[1]</h2></div>
-		<script>
-		var [] msg = @messages;
-			loopTest(@lunghezza, msg );
-		</script>
-
-
-
-		<div class="container">
-		  <img src="/w3images/bandmember.jpg" alt="Avatar" style="width:100%;">
-		  <p>Hello. How are you today?</p>
-		  <span class="time-right">11:00</span>
-		</div>
-
-		<div class="container darker">
-		  <img src="/w3images/avatar_g2.jpg" alt="Avatar" class="right" style="width:100%;">
-		  <p>Hey! I'm fine. Thanks for asking!</p>
-		  <span class="time-left">11:01</span>
-		</div>
-
-		<div class="container">
-		  <img src="/w3images/bandmember.jpg" alt="Avatar" style="width:100%;">
-		  <p>Sweet! So, what do you wanna do today?</p>
-		  <span class="time-right">11:02</span>
-		</div>
-
-		<div class="container darker">
-		  <img src="/w3images/avatar_g2.jpg" alt="Avatar" class="right" style="width:100%;">
-		  <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
-		  <span class="time-left">11:05</span>
-		</div>
+		<div id="div1"><h2>@receiver</h2></div>
+		<tbody>
+		
+		 @for (utilities.ChatMessage msg: messages) {
+				@if(msg.getSender() == sender){
+					<div class="container darker">
+						<img src="/w3images/bandmember.jpg" alt="Avatar" class = "right" style="width:100%;">
+						<p class= "chatrighttext" >@(msg.getText())</p>
+						<span class="time-left">@(msg.getTime())</span>
+					</div>
+				}else {
+					<div class="container">
+						<img src="/w3images/bandmember.jpg" alt="Avatar" style="width:100%;">
+						<p calass= "chatlefttext" >@(msg.getText())</p>
+						<span class="time-right" style="right: 10px">@(msg.getTime())</span>
+					</div>
+				
+				}
+			}
+		</tbody>
       <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
         <div class="u-form u-form-1">
           <form action="#" method="POST" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" style="padding: 10px" source="custom" name="form">
@@ -105,7 +95,7 @@
               <textarea placeholder="Enter your message" rows="4" cols="50" id="message-3b9a" name="message" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required=""></textarea>
             </div>
             <div class="u-align-left u-form-group u-form-submit">
-              <a href="/sendMessage?cookie" method="post" class="u-btn u-btn-submit u-button-style">Send</a>
+              <a href="/sendMessage?cookie=@cookie&receiver=@receiver" method="post" class="u-btn u-btn-submit u-button-style">Send</a>
               <input type="submit" value="submit" class="u-form-control-hidden">
             </div>
             <input type="hidden" value="" name="recaptchaResponse">
@@ -113,7 +103,7 @@
         </div>
       </div>
 	</div>
-	    
+</div>   
 
 </body>
 </html>
