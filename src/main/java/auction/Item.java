@@ -4,20 +4,26 @@ import utilities.*;
 import java.util.ArrayList;
 
 public class Item {
-	private String name, descrizione;
-	ArrayList<Image> image;
-	public Item(String name, String descrizione, ArrayList<Image> image) {
+	private String name, description, imgPath;
+	private int itemId;
+	public Item(String name, String description, String image, int itemId) {
 		this.name = name;
-		this.descrizione = descrizione;
-		this.image = image;
+		this.description = description;
+		this.imgPath = image;
+		this.itemId = itemId;
+	}	
+	
+	public int getItemId() {
+		return itemId;
 	}
+
 	public String getName() {
 		return name;
 	}
-	public String getDescrizione() {
-		return descrizione;
+	public String getDescription() {
+		return description;
 	}
-	public ArrayList<Image> getImage() {
-		return image;
+	public String getImage() {
+		return imgPath;
 	}
 }

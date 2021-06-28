@@ -4,9 +4,25 @@ import java.util.ArrayList;
 
 public class Lot {
 	
-	private String name;
-	ArrayList<Item> item;
+	private String name, description;
+	private int lotId;
+	private ArrayList<Item> items = new ArrayList<Item>();
 	
+	
+	public Lot(String name, String description, int LotId) {
+		this.name = name;
+		this.description = description;
+		this.lotId = lotId;
+	}
+
+	
+	
+	public int getLotId() {
+		return lotId;
+	}
+
+
+
 	public Lot(String name) {
 		this.name = name;
 	}
@@ -16,12 +32,16 @@ public class Lot {
 	}
 
 
-	public ArrayList<Item> getItem() {
-		return item;
+	public String getDescription() {
+		return description;
 	}
 
-	public void addItem(Item item) {
-		this.item.add(item);
+	public ArrayList<Item> getItems() {
+		return items;
+	}
+
+	public void addItem(Item it) {
+		items.add(it);
 	}
 	
 	

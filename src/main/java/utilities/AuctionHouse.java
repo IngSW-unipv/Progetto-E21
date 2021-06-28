@@ -1,5 +1,7 @@
 package utilities;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -7,9 +9,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+import auction.Auction;
+import auction.Item;
+import auction.Lot;
 import user.Participant;
 import user.User;
 import user.userDetails.Address;
@@ -154,6 +160,78 @@ public class AuctionHouse {
 	}
 	
 	
+	public ArrayList<Auction> getAuctions() {
+		Connection cn = null;
+		Statement st1, st2, st3;
+		ResultSet rs1, rs2, rs3;
+		String sql1, sql2, sql3;
+		ArrayList<Auction> auctions = new ArrayList<Auction>();
+		Auction a1;
+		Lot l1;
+		Item i1;
+		//___________connesione___________
+        
+		   try {
+			 
+			   cn =  connectDB(); //Establishing connection
+		   	
+			// CREAZIONE AUCTIONS
+	           sql1 = "SELECT * FROM auction;";
+			   st1 = cn.createStatement(); //creo sempre uno statement sulla coneesione		   
+			   rs1 = st1.executeQuery(sql1); //faccio la query su uno statement
+			   
+			   
+			   while(rs1.next() == true) { 
+				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), rs1.getDate("startDate").toLocalDate(), rs1.getDate("endDate").toLocalDate(),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getDouble("highestBid"));
+				  
+				  
+				  //CREAZIONE LOT
+				  sql2 = "SELECT * FROM lot where username = '" + rs1.getString("username") + "' and auctionID = " + rs1.getInt("auctionID") + ";";
+				  st2 = cn.createStatement();
+				  rs2 = st2.executeQuery(sql2);
+				  
+				  
+				  while(rs2.next() == true) {
+					  l1 = new Lot(rs2.getString("name"), rs2.getString("description"), rs2.getInt("lotID"));
+					  
+					  //CREAZIONE ITEM
+					  sql3 = "SELECT * FROM item where username = '" + rs2.getString("username") + "' and auctionID = " + rs2.getInt("auctionID") + " and lotID = " + rs2.getInt("lotID") + ";";
+					  st3 = cn.createStatement();
+					  rs3 = st3.executeQuery(sql3);
+					  
+					  
+					  while(rs3.next() == true) {
+						  
+					      File f =  new File("src/main/resources/imgDB/" + rs3.getString("img"));
+					      String encodstring = null;
+						  try {
+								encodstring = encodeFileToBase64Binary(f);
+						  } catch (Exception e) {
+						    	e.printStackTrace();
+						  }
+						  i1 = new Item(rs3.getString("name"), rs3.getString("description"), encodstring , rs3.getInt("itemID"));
+						  l1.addItem(i1);
+					  }
+					  a1.addLot(l1);
+				  }
+				  auctions.add(a1);
+				  
+			   }
+			   return auctions;
+			   
+		   } catch(SQLException e) {
+			   System.out.println("errore: " + e.getMessage());
+		   } //fine try-catch  
+		return null;
+
+		
+	}
+	
+	
+	
+	
+	
+	
 	
 	public void deleteParticipant(Participant p1) throws SQLException {
 		
@@ -281,5 +359,13 @@ public class AuctionHouse {
 		System.out.println("Connected With the database successfully");
 		return cn;	
 	}
+	
+	private static String encodeFileToBase64Binary(File file) throws Exception{
+	       FileInputStream fileInputStreamReader = new FileInputStream(file);
+	       byte[] bytes = new byte[(int)file.length()];
+	       fileInputStreamReader.read(bytes);
+	       byte[] encodedBytes = Base64.getEncoder().encode(bytes);
+	       return new String(encodedBytes);
+	   }
 	
 }

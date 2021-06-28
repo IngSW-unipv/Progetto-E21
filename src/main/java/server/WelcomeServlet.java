@@ -17,6 +17,7 @@ import org.rythmengine.Rythm;
 
 import com.stevesoft.pat.apps.Message;
 
+import auction.Auction;
 import user.Participant;
 import utilities.AuctionHouse;
 import utilities.ChatMessage;
@@ -32,14 +33,15 @@ public class WelcomeServlet extends HttpServlet {
 			resp.getWriter().write(Rythm.render("register.html"));
 		} else {
 			
-			ChatMessage msg1 = new ChatMessage("Marco","Percy", "Ciao" , "11:53");
+			/*ChatMessage msg1 = new ChatMessage("Marco","Percy", "Ciao" , "11:53");
 			ChatMessage msg2 = new ChatMessage("Percy","Marco", "Ciao" , "11:54");
 			ChatMessage msg3 = new ChatMessage("Marco","Percy", "Patata" , "11:55");
 			ArrayList<ChatMessage> messages = new ArrayList<ChatMessage>();
 			messages.add(msg1);
 			messages.add(msg2);
 			messages.add(msg3);
-			resp.getWriter().write(Rythm.render("chat.html", 1 , "Marco", "Percy", messages));
+			resp.getWriter().write(Rythm.render("chat.html", 1 , "Marco", "Percy", messages));*/
+			resp.getWriter().write(Rythm.render("login.html", ""));
 		}
 		
 		
@@ -69,17 +71,8 @@ public class WelcomeServlet extends HttpServlet {
 				resp.getWriter().write(Rythm.render("login.html", "Username o password errati"));
 			}
 			else {
-		
-				File f =  new File("src/main/resources/imgDB/img1.jpg");
-		        String encodstring = null;
-				try {
-					encodstring = encodeFileToBase64Binary(f);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		        System.out.println(encodstring);
-				resp.getWriter().write(Rythm.render("helloworld.html", auctionHouse.getParticipant(cookie).getUsername(), encodstring)); 
+				
+				resp.getWriter().write(Rythm.render("home.html", cookie, auctionHouse.getAuctions())); 
 			}
 		
 		}
@@ -109,9 +102,10 @@ public class WelcomeServlet extends HttpServlet {
 		
 		
 		else if (req.getPathInfo().equals("/sendMessage")) {
+			String message = req.getParameter("message");
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			String receiverUsername = req.getParameter("receiver");
-			String message = req.getParameter("message");
+			
 			int ok = auctionHouse.saveMessage(cookie, receiverUsername, message);
 			if (ok == -1)
 			{

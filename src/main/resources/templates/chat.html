@@ -89,14 +89,14 @@
 		</tbody>
       <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
         <div class="u-form u-form-1">
-          <form action="#" method="POST" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" style="padding: 10px" source="custom" name="form">
+          <form action="/sendMessage?cookie=@cookie&receiver=@receiver" method="post" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" style="padding: 10px" source="custom" name="form">
             <div class="messagebox u-form-message">
               <label for="message-3b9a" class="u-form-control-hidden u-label">Message</label>
               <textarea placeholder="Enter your message" rows="4" cols="50" id="message-3b9a" name="message" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required=""></textarea>
             </div>
             <div class="u-align-left u-form-group u-form-submit">
-              <a href="/sendMessage?cookie=@cookie&receiver=@receiver" method="post" class="u-btn u-btn-submit u-button-style">Send</a>
-              <input type="submit" value="submit" class="u-form-control-hidden">
+              <button type="submit" href="/sendMessage?cookie=@cookie&receiver=@receiver" class="u-btn u-btn-submit u-button-style">Send</button>
+              <input type="submit"  value="submit" class="u-form-control-hidden">
             </div>
             <input type="hidden" value="" name="recaptchaResponse">
           </form>
