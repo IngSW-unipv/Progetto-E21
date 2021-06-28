@@ -26,7 +26,8 @@ public class WelcomeServlet extends HttpServlet {
 		if (req.getPathInfo().equals("/registerRequest")) {
 			resp.getWriter().write(Rythm.render("register.html"));
 		} else {
-			resp.getWriter().write(Rythm.render("login.html", ""));
+			String[] fruits = { "Apple", "Ananas", "Apple", "Banana", "Kiwi", "Ananas", "Banana", "Kiwi","Apple", "Banana", "Kiwi","Ananas", "Banana", "Kiwi", "Apple", "Banana", "Kiwi"};
+			resp.getWriter().write(Rythm.render("chat.html", 1 , fruits.length, fruits));
 		}
 		
 		
@@ -72,7 +73,7 @@ public class WelcomeServlet extends HttpServlet {
 		}
 		else if (req.getPathInfo().equals("/register")) {
 			java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
-			java.time.LocalDate birthday = java.time.LocalDate.parse("26/03/1987", formatter);
+			java.time.LocalDate birthday = java.time.LocalDate.parse(req.getParameter("bday"), formatter);
 			Participant p1 = new Participant(req.getParameter("firstName"), req.getParameter("lastName"), req.getParameter("email"), req.getParameter("username"), req.getParameter("pwd"), birthday, req.getParameter("mobileNumber"));
 			try {
 				int cookie = auctionHouse.registerParticipantToDB(p1);

@@ -1,9 +1,8 @@
-@args {int cookie, String[] messages}
+@args int cookie, int lunghezza, String[] messages
 
 <!DOCTYPE html>
 <html style="font-size: 16px;">
 <head>
-	<script  type="text/javascript" src="chat.js" ></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <meta name="keywords" content="Post 1 Headline, Post 2 Headline">
@@ -12,17 +11,18 @@
     <title>Messages</title>
     <link rel="stylesheet" href= "https://drive.google.com/uc?id=14bj-3oxU-bKmtNfMEVdJDaXNyAdSNoSI" media="screen">
     <link rel="stylesheet" href="https://drive.google.com/uc?id=13O9pXLHohrOBcBkEQb1Z36mMB2N13j5q" media="screen">
-	<link rel="stylesheet" href="chat.css" >
+	<link rel="stylesheet" href= @chat.css() >
     <script class="u-script" type="text/javascript" href="https://drive.google.com/uc?id=1NedRzl0d4XRzMYzmCx9TjW2iukMYPuCa" defer=""></script>
     <script class="u-script" type="text/javascript" href="https://drive.google.com/uc?id=1m37QWAGG16-ZSewPGNXl8hgLpJ3ISVf5" defer=""></script>
+	<script  type="text/javascript" source= @chat.js() ></script>
     <meta name="generator" content="Nicepage 3.17.5, nicepage.com">
     <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i">
     
     
     
     <script type="application/ld+json">{
-		"@context": "http://schema.org",
-		"@type": "Organization",
+		"@@context": "http://schema.org",
+		"@@type": "Organization",
 		"name": "",
 		"logo": "images/pngwing.com1.png"
 	}</script>
@@ -33,7 +33,7 @@
 <body background="https://www.publicdomainpictures.net/pictures/350000/nahled/scales-wallpaper-pattern-background-1592983526tEw.jpg" class="u-body"><header class="u-clearfix u-custom-color-1 u-header u-header" id="sec-5fa2"><div class="u-clearfix u-sheet u-sheet-1">
         <h3 class="u-text u-text-1">Auction House</h3>
         <a href="https://nicepage.com" class="u-image u-logo u-image-1" data-image-width="512" data-image-height="512">
-          <img src="https://drive.google.com/uc?id=1JCaE2DLg3qk_daWs81GI9r9iGoMEF06x"" class="u-logo-image u-logo-image-1" data-image-width="64">
+          <img src="https://drive.google.com/uc?id=1JCaE2DLg3qk_daWs81GI9r9iGoMEF06x" class="u-logo-image u-logo-image-1" data-image-width="64">
         </a>
         <nav align="right" class="u-menu-dropdown u-offcanvas u-menu-1">
           <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">
@@ -46,9 +46,9 @@
           </div>
           <div class="u-custom-menu u-nav-container">
             <ul class="u-nav u-unstyled u-nav-1">
-			<li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" method="post" href="/home?=@cookie" style="padding: 10px 20px;">Home</a></li>
-			<li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" method="post" href="/messages?=@cookie" style="padding: 10px 20px;">Messages</a></li>
-			<li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" method="post" href="/html?=@cookie" style="padding: 10px 20px;">Profile</a></li>
+			<li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" method="post" href="/auctions?" style="padding: 10px 20px;">Auctions</a></li>
+			<li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" method="post" href="/messages?" style="padding: 10px 20px;">Messages</a></li>
+			<li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" method="post" href="/html?" style="padding: 10px 20px;">Profile</a></li>
 			</ul>
           </div>
           <div class="u-custom-menu u-nav-container-collapse">
@@ -66,15 +66,10 @@
       </div></header>
 		<p id="p1"></p>
 		<div class="divchat">
-		<div id="div1"><h2>@receiver</h2></div>
+		<div id="div1"><h2>@messages[1]</h2></div>
 		<script>
-		
-			var fruits = ["Apple", "Ananas", "Apple", "Banana", "Kiwi", "Ananas", "Banana", "Kiwi","Apple", "Banana", "Kiwi","Ananas", "Banana", "Kiwi","Apple", "Banana", "Kiwi"];
-			var k = fruits.length;
-			console.log("k = " + k);
-			//var k = @messages.lenght
-			//loopTest(@messages, k);
-			loopTest(fruits, k);
+		var [] msg = @messages;
+			loopTest(@lunghezza, msg );
 		</script>
 
 
@@ -110,7 +105,7 @@
               <textarea placeholder="Enter your message" rows="4" cols="50" id="message-3b9a" name="message" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required=""></textarea>
             </div>
             <div class="u-align-left u-form-group u-form-submit">
-              <a href="/sendMessage?cookie=@cookie&msg=@messages[1]" method="post" class="u-btn u-btn-submit u-button-style">Send</a>
+              <a href="/sendMessage?cookie" method="post" class="u-btn u-btn-submit u-button-style">Send</a>
               <input type="submit" value="submit" class="u-form-control-hidden">
             </div>
             <input type="hidden" value="" name="recaptchaResponse">
