@@ -33,7 +33,8 @@ public class WelcomeServlet extends HttpServlet {
 			resp.getWriter().write(Rythm.render("register.html"));	
 		}
 		else if (req.getPathInfo().equals("/productDetails")) {
-			resp.getWriter().write(Rythm.render("register.html"));
+			int cookie = Integer.parseInt(req.getParameter("cookie"));
+			resp.getWriter().write(Rythm.render("productDetails.html", cookie, auctionHouse.getAuction(req.getParameter("auctioner"), req.getParameter("auctionID"))));
 		}
 		else {
 			resp.getWriter().write(Rythm.render("login.html", ""));
@@ -57,23 +58,12 @@ public class WelcomeServlet extends HttpServlet {
 		
 		}
 		else if (req.getPathInfo().equals("/register")) {
-			java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			java.time.LocalDate birthday = java.time.LocalDate.parse(req.getParameter("bday"), formatter);
 			Participant p1 = new Participant(req.getParameter("firstName"), req.getParameter("lastName"), req.getParameter("email"), req.getParameter("username"), req.getParameter("pwd"), birthday, req.getParameter("mobileNumber"));
 			try {
 				int cookie = auctionHouse.registerParticipantToDB(p1);
-				File f =  new File("src/main/resources/imgDB/img1.jpg");
-		        String encodstring = null;
-				try {
-					encodstring = encodeFileToBase64Binary(f);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		        System.out.println(encodstring);
-				resp.getWriter().write(Rythm.render("helloworld.html", auctionHouse.getParticipant(cookie).getUsername(), encodstring)); 
-			
-				 
+				resp.getWriter().write(Rythm.render("home.html", cookie, auctionHouse.getAuctions())); 		 
 			} catch (Exception e) {
 				resp.getWriter().write(Rythm.render("register.html", "Errore durante la registrazione, riprova più tardi"));
 			}

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Auction {
 	private String name, owner, highestBidder = "";
 	private LocalDate sDate, eDate;
-	private double startingPrice, minimumRise, highestBid = 0;
+	private double startingPrice, minimumRise, currentPrice = 0;
 	private int id;
 	private ArrayList<Lot> lots = new ArrayList<Lot>();
 	
@@ -21,7 +21,7 @@ public class Auction {
 		this.startingPrice = startingPrice;
 		this.minimumRise = minimumRise;
 		this.id = id;
-		this.highestBid = highestBid;
+		this.currentPrice = highestBid;
 	}
 	
 	public Auction(String name, String owner, LocalDate sDate, LocalDate eDate, double startingPrice, double minimumRise, int id) {
@@ -33,6 +33,7 @@ public class Auction {
 		this.startingPrice = startingPrice;
 		this.minimumRise = minimumRise;
 		this.id = id;
+		this.currentPrice = startingPrice;
 	}
 	
 	public String getThumbnail() {
@@ -41,7 +42,23 @@ public class Auction {
 	
 	
 	public double getHighestBid() {
-		return highestBid;
+		if (currentPrice > startingPrice)
+		{
+			return currentPrice;
+		}
+		else return startingPrice;
+	}
+	
+	public ArrayList<String> getAllImg(){
+		ArrayList<String> imgs = new ArrayList<String>();
+		for (Lot lot : getLots()) {
+			for (Item itm : lot.getItems()) {
+				imgs.add(itm.getImage());
+			}
+		}
+		
+		return imgs;
+		
 	}
 
 	public ArrayList<Lot> getLots() {
