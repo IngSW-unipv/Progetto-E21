@@ -47,10 +47,18 @@ public class AuctionHouse {
 			   
 		 	rs = st.executeQuery(sql); //faccio la query su uno statement
 		 	while(rs.next() == true) {
-	  	    Address a1 = new Address(rs.getString("city"),rs.getString("road"),rs.getString("postalCode"),rs.getString("number"),rs.getString("country"));
-			Participant p1 = new Participant(rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"), rs.getString("username"), rs.getString("password"), a1, rs.getDate("birthday").toLocalDate(), rs.getString("mobileNumber"));
-			list.add(p1);
-			System.out.println(rs.getNString(1) + "\t" + rs.getNString("lastName") + rs.getDate("birthday"));
+		 		
+		 		File f =  new File("src/main/resources/imgDB/" + rs.getString("img") + ".jpg");
+				   String encodstring = null;
+				   try {
+						encodstring = encodeFileToBase64Binary(f);
+				   } catch (Exception e) {
+					    e.printStackTrace();
+				   }
+		  	    Address a1 = new Address(rs.getString("city"),rs.getString("road"),rs.getString("postalCode"),rs.getString("number"),rs.getString("country"));
+				Participant p1 = new Participant(rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"), rs.getString("username"), rs.getString("password"), a1, rs.getDate("birthday").toLocalDate(), rs.getString("mobileNumber"), encodstring, rs.getString("intro"));
+				list.add(p1);
+				System.out.println(rs.getNString(1) + "\t" + rs.getNString("lastName") + rs.getDate("birthday"));
 		
 			}
 		 	
@@ -146,8 +154,14 @@ public class AuctionHouse {
 			   
 			   rs = st.executeQuery(sql); //faccio la query su uno statement
 			   while(rs.next() == true) {
-
-				  p1 = new Participant(rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"), rs.getString("username"), rs.getString("password"),  rs.getDate("birthday").toLocalDate(), rs.getString("mobileNumber"));
+				   File f =  new File("src/main/resources/imgDB/" + rs.getString("img") + ".jpg");
+				   String encodstring = null;
+				   try {
+						encodstring = encodeFileToBase64Binary(f);
+				   } catch (Exception e) {
+					    e.printStackTrace();
+				   }
+				  p1 = new Participant(rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"), rs.getString("username"), rs.getString("password"),  rs.getDate("birthday").toLocalDate(), rs.getString("mobileNumber"), encodstring, rs.getString("intro"));
 				  return p1;
 			   }
 			   
@@ -226,13 +240,7 @@ public class AuctionHouse {
 
 		
 	}
-	
-	
-	
-	
-	
-	
-	
+		
 	public void deleteParticipant(Participant p1) throws SQLException {
 		
 		
@@ -271,7 +279,6 @@ public class AuctionHouse {
 		
 	}
 
-
 	public int saveMessage(int cookie2, String receiverUsername, String message)  {
 		// TODO Auto-generated method stub
 		Connection cn = null;
@@ -302,7 +309,6 @@ public class AuctionHouse {
 		
 		
 	}
-
 
 	public String[] getMessages(int cookie2, String receiverUsername) throws Exception {
 		// TODO Auto-generated method stub
@@ -415,7 +421,44 @@ public class AuctionHouse {
 	   } 
 		   return null;
 		   
-	}	
+	}
+	
+	public Participant getProfile(String username) {
+		
+		Connection cn = null;
+		Statement st;
+		ResultSet rs;
+		String sql;
+		Participant p1;
+		//___________connesione___________
+        
+		   try {
+			 
+			   cn =  connectDB(); //Establishing connection
+		   	
+	           sql = "SELECT * FROM participant where username = '" + username + "';";
+
+	        
+	        //____________query___________
+			   st = cn.createStatement(); //creo  uno statement sulla coneesione
+			   rs = st.executeQuery(sql); //faccio la query su uno statement
+			   while(rs.next() == true) {
+				   File f =  new File("src/main/resources/imgDB/" + rs.getString("img") + ".jpg");
+				   String encodstring = null;
+				   try {
+						encodstring = encodeFileToBase64Binary(f);
+				   } catch (Exception e) {
+					    e.printStackTrace();
+				   }
+				  p1 = new Participant(rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"), rs.getString("username"), rs.getString("password"),  rs.getDate("birthday").toLocalDate(), rs.getString("mobileNumber"), encodstring, rs.getString("intro"));
+				  return p1;
+			   }
+			   
+		   } catch(SQLException e) {
+			   System.out.println("errore: " + e.getMessage());
+		   } //fine try-catch  
+		return null;
+	}
 		   
 	private Connection connectDB() throws SQLException {
 			Connection cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11421731", "sql11421731", "83bkPjI9Yf");//Establishing connection
@@ -430,5 +473,4 @@ public class AuctionHouse {
 			byte[] encodedBytes = Base64.getEncoder().encode(bytes);
 			return new String(encodedBytes);
 	}
-	
 }

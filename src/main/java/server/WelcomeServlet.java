@@ -34,11 +34,20 @@ public class WelcomeServlet extends HttpServlet {
 		}
 		else if (req.getPathInfo().equals("/productDetails")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
-			resp.getWriter().write(Rythm.render("productDetails.html", cookie, auctionHouse.getAuction(req.getParameter("auctioner"), req.getParameter("auctionID"))));
+			resp.getWriter().write(Rythm.render("productDetails.html", cookie, auctionHouse.getAuction(req.getParameter("auctioner"), req.getParameter("auctionID")), auctionHouse.getProfile(req.getParameter("auctioner")).getImg()));
+		}
+		else if (req.getPathInfo().equals("/home")) {
+			int cookie = Integer.parseInt(req.getParameter("cookie"));
+			resp.getWriter().write(Rythm.render("home.html", cookie, auctionHouse.getAuctions()));
+		}
+		else if (req.getPathInfo().equals("/visitProfile")) {
+			int cookie = Integer.parseInt(req.getParameter("cookie"));
+			resp.getWriter().write(Rythm.render("profile.html", cookie, auctionHouse.getProfile(req.getParameter("profile"))));
 		}
 		else {
 			resp.getWriter().write(Rythm.render("login.html", ""));
 		}
+		
 	}
 		
 	
@@ -92,9 +101,6 @@ public class WelcomeServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				resp.getWriter().write(Rythm.render("error.html", e.getMessage()));
 			}	
-		}
-		else if (req.getPathInfo().equals("/productDetails")) {
-			
 		}
 		
 		                                                

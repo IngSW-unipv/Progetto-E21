@@ -15,7 +15,7 @@ public class InsertTester {
 		java.time.LocalDate birthday = java.time.LocalDate.parse("26/03/1987", formatter);
 		
 			Address a1 = new Address("Milano", "Via Rismondo", "21093", "12", "Italy");
-			Participant p1 = new Participant ("Iron", "Man", "IamIronMan@gmail.com", "iron", "man", a1, birthday, "1234567890");
+			Participant p1 = new Participant ("Iron", "Man", "IamIronMan@gmail.com", "iron", "man", a1, birthday, "1234567890", "default", "Hewwooo");
 			AuctionHouse a = new AuctionHouse("Ebay");
 			
 			System.out.println(birthday);

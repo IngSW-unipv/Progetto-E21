@@ -15,7 +15,7 @@ import user.userDetails.Address;
 
 public class Participant {
 	
-	    private String firstName, lastName, email, username, mobileNumber, password;
+	    private String firstName, lastName, email, username, mobileNumber, password, img, intro;
 	    LocalDate bDay;
 	    Address address;
 	    
@@ -28,11 +28,24 @@ public class Participant {
 			this.mobileNumber = mobileNumber;
 			this.password = password;
 			this.bDay = birthday;
-			this.address = address;
 			
 		}
 	    
- public Participant(String firstName, String lastName, String email, String username, String password, Address address, LocalDate birthday, String mobileNumber) {
+	    public Participant(String firstName, String lastName, String email, String username, String password, LocalDate birthday, String mobileNumber, String img, String intro) {
+			
+			this.firstName = firstName;
+			this.lastName = lastName;
+			this.email = email;
+			this.username = username;
+			this.mobileNumber = mobileNumber;
+			this.password = password;
+			this.bDay = birthday;
+			this.img = img;
+			this.intro = intro;
+		}
+	    
+	    
+	    public Participant(String firstName, String lastName, String email, String username, String password, Address address, LocalDate birthday, String mobileNumber, String img, String intro) {
 			
 			this.firstName = firstName;
 			this.lastName = lastName;
@@ -42,7 +55,8 @@ public class Participant {
 			this.password = password;
 			this.bDay = birthday;
 			this.address = address;
-			
+			this.img = img;
+			this.intro = intro;
 		}
 	    
 	    
@@ -79,6 +93,18 @@ public class Participant {
 		}
 		
 		
+		public String getImg() {
+			return img;
+		}
+
+		public String getIntro() {
+			return intro;
+		}
+
+		public LocalDate getbDay() {
+			return bDay;
+		}
+
 		private void writeResultSet(ResultSet rs) {
 			// TODO Auto-generated method stub
 			
