@@ -104,11 +104,6 @@ public class Participant {
 		public LocalDate getbDay() {
 			return bDay;
 		}
-
-		private void writeResultSet(ResultSet rs) {
-			// TODO Auto-generated method stub
-			
-		}
 		
 			   
 }

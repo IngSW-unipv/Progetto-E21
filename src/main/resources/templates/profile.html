@@ -1,4 +1,4 @@
-@args int cookie,  user.Participant user
+@args int cookie,  user.Participant user, ArrayList<user.userDetails.Review> reviews
 
 
 <!DOCTYPE html>
@@ -57,12 +57,24 @@
             </div>
           </div>
         </div>
-        <h3 class="u-text u-text-palette-4-dark-2 u-text-4"><b style="">Reviews</b>
-        </h3>
+		<h3 class="u-text u-text-palette-4-dark-2 u-text-4"><b style="">Reviews</b></h3>
+		
+		@for (user.userDetails.Review rv: reviews) {
+			<div alt=""  class="u-image u-image-circle u-image-2" data-image-width="1056" data-image-height="1500">
+				<img alt="Errore" class="u-back-image u-image-circle u-image-2 u-expanded u-radius-50 u-shape-round"  src="data:image/png;base64, @(rv.getImg())" data-image-width="1056" data-image-height="1500">
+			</div>
+			<h6 class="u-text u-text-5">@(rv.getSender())</h6>
+			<p class="u-text u-text-6">@(rv.getText())</p>
+      		
+		  }
+		
         <div alt="" class="u-image u-image-circle u-image-2" data-image-width="1056" data-image-height="1500"></div>
         <h6 class="u-text u-text-5">mike perry</h6>
         <p class="u-text u-text-6">"Aenean pulvinar dui ornare, feugiat lorem non, ultrices justo. Mauris efficitur, mauris in auctor euismod, quam elit ultrices urna, eget eleifend arcu risus id metus. Maecenas ex enim, mattis eu velit vitae, blandit mattis sapien. Sed aliquam leo et semper vestibulum."</p>
-      </div>
+      
+	  
+	  
+	  </div>
     </section>
     
     

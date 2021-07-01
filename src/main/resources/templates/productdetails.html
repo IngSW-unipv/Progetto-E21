@@ -103,6 +103,10 @@
 				}			
 		  }
         
+		<script>
+			var price = @(auction.getHighestBid())
+		</script>
+		
         <h6 class="u-text u-text-9" style ="font-weight: bold;">Seller</h6>
 		<a class="u-link" href="/visitProfile?cookie=@cookie&profile=@(auction.getOwner())" method="get">
 			<h6 class="u-text u-text-10" style="left:155px">@(auction.getOwner())</h6>
@@ -111,7 +115,7 @@
           <div class="u-gallery-inner u-gallery-inner-2">
             <div class="u-effect-fade u-gallery-item u-radius-50 u-shape-round">
               <div class="u-back-slide">
-                <img class="u-back-image u-expanded" href="/visitProfile?cookie=@cookie&profile=@(auction.getOwner())" method="get" src="data:image/png;base64, @(pPicture)">
+                <img class="u-back-image u-expanded"  src="data:image/png;base64, @(pPicture)">
               </div>
               <div class="u-over-slide u-shading u-over-slide-4">
                 <h3 class="u-gallery-heading"></h3>

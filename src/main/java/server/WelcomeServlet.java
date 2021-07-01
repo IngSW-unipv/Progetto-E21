@@ -42,7 +42,7 @@ public class WelcomeServlet extends HttpServlet {
 		}
 		else if (req.getPathInfo().equals("/visitProfile")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
-			resp.getWriter().write(Rythm.render("profile.html", cookie, auctionHouse.getProfile(req.getParameter("profile"))));
+			resp.getWriter().write(Rythm.render("profile.html", cookie, auctionHouse.getProfile(req.getParameter("profile")), auctionHouse.getReviews(req.getParameter("profile"))));
 		}
 		else {
 			resp.getWriter().write(Rythm.render("login.html", ""));

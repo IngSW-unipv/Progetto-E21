@@ -19,6 +19,7 @@ import auction.Lot;
 import user.Participant;
 import user.User;
 import user.userDetails.Address;
+import user.userDetails.Review;
 
 public class AuctionHouse {
 	private String name;
@@ -48,7 +49,7 @@ public class AuctionHouse {
 		 	rs = st.executeQuery(sql); //faccio la query su uno statement
 		 	while(rs.next() == true) {
 		 		
-		 		File f =  new File("src/main/resources/imgDB/" + rs.getString("img") + ".jpg");
+		 		File f =  new File("src/main/resources/imgDB/profilePics/" + rs.getString("img") + ".jpg");
 				   String encodstring = null;
 				   try {
 						encodstring = encodeFileToBase64Binary(f);
@@ -67,10 +68,7 @@ public class AuctionHouse {
 	     } //fine try-catch  
 		return list;
 	}
-	
-	
-	
-	
+		
 	public int registerParticipantToDB(Participant p) throws Exception {
 		
 		Connection cn = null;
@@ -132,9 +130,50 @@ public class AuctionHouse {
 
 		return candy;
 	}
+		
+	public ArrayList<Review> getReviews(String username){		
+		Connection cn = null;
+		Statement st;
+		ResultSet rs1, rs2;
+		String sql;
+		ArrayList<Review> list = new ArrayList<Review>();
+		//___________connesione___________
+		try {
+			 
+			cn =  connectDB(); //Establishing connection	
+	        sql = "SELECT * FROM reviews where receiver = '"+ username +"';";
+		   //____________query___________ 
+	        st = cn.createStatement(); //creo sempre uno statement sulla connesione   
+		 	rs1 = st.executeQuery(sql); //faccio la query su uno statement
+		 	while(rs1.next() == true) {
+		 		
+		        sql = "SELECT img FROM participant where username = '"+ rs1.getString("sender") +"';";	
+		        st = cn.createStatement(); //creo sempre uno statement sulla connesione   
+			 	rs2 = st.executeQuery(sql); //faccio la query su uno statement
+			 	while(rs2.next() == true) {
+			 	
+				 	File f =  new File("src/main/resources/imgDB/profilePics/" + rs2.getString("img") + ".jpg");
+					String encodstring = null;
+					try {
+						encodstring = encodeFileToBase64Binary(f);
+					} catch (Exception e) {
+					    e.printStackTrace();
+					}
+					Review r1 = new Review(rs1.getString("sender"), rs1.getString("receiver"), rs1.getString("text"), encodstring);
+					list.add(r1);
+			 	}
+			}
+		 	
+		}catch(SQLException e) {
+			   System.out.println("errore: " + e.getMessage());
+	     } //fine try-catch  
+		
+		
+		return list;
+		
+	}
 	
-	
-	public Participant getParticipant(int cookie2) {
+	public Participant getParticipant(int chocolateChipCookie) {
 		Connection cn = null;
 		Statement st;
 		ResultSet rs;
@@ -146,7 +185,7 @@ public class AuctionHouse {
 			 
 			   cn =  connectDB(); //Establishing connection
 		   	
-	           sql = "SELECT * FROM participant where username = '" + loggedIn.get(cookie2) + "';";
+	           sql = "SELECT * FROM participant where username = '" + loggedIn.get(chocolateChipCookie) + "';";
 
 	        
 	        //____________query___________
@@ -154,7 +193,7 @@ public class AuctionHouse {
 			   
 			   rs = st.executeQuery(sql); //faccio la query su uno statement
 			   while(rs.next() == true) {
-				   File f =  new File("src/main/resources/imgDB/" + rs.getString("img") + ".jpg");
+				   File f =  new File("src/main/resources/imgDB/profilePics/" + rs.getString("img") + ".jpg");
 				   String encodstring = null;
 				   try {
 						encodstring = encodeFileToBase64Binary(f);
@@ -172,8 +211,7 @@ public class AuctionHouse {
 
 		
 	}
-	
-	
+		
 	public ArrayList<Auction> getAuctions() {
 		Connection cn = null;
 		Statement st1, st2, st3;
@@ -216,7 +254,7 @@ public class AuctionHouse {
 					  
 					  while(rs3.next() == true) {
 						  
-					      File f =  new File("src/main/resources/imgDB/" + rs3.getString("img"));
+					      File f =  new File("src/main/resources/imgDB/auctionsPics/" + rs3.getString("img"));
 					      String encodstring = null;
 						  try {
 								encodstring = encodeFileToBase64Binary(f);
@@ -401,7 +439,7 @@ public class AuctionHouse {
 					  
 					  while(rs3.next() == true) {
 						  
-					      File f =  new File("src/main/resources/imgDB/" + rs3.getString("img"));
+					      File f =  new File("src/main/resources/imgDB/auctionsPics/" + rs3.getString("img"));
 					      String encodstring = null;
 						  try {
 								encodstring = encodeFileToBase64Binary(f);
@@ -443,7 +481,7 @@ public class AuctionHouse {
 			   st = cn.createStatement(); //creo  uno statement sulla coneesione
 			   rs = st.executeQuery(sql); //faccio la query su uno statement
 			   while(rs.next() == true) {
-				   File f =  new File("src/main/resources/imgDB/" + rs.getString("img") + ".jpg");
+				   File f =  new File("src/main/resources/imgDB/profilePics/" + rs.getString("img") + ".jpg");
 				   String encodstring = null;
 				   try {
 						encodstring = encodeFileToBase64Binary(f);
