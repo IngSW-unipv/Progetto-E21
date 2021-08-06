@@ -36,6 +36,10 @@ public class WelcomeServlet extends HttpServlet {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			resp.getWriter().write(Rythm.render("productDetails.html", cookie, auctionHouse.getAuction(req.getParameter("auctioner"), req.getParameter("auctionID")), auctionHouse.getProfile(req.getParameter("auctioner")).getImg()));
 		}
+		else if (req.getPathInfo().equals("/createAuction")) {
+			int cookie = Integer.parseInt(req.getParameter("cookie"));
+			resp.getWriter().write(Rythm.render("createAuction.html", cookie));
+		}
 		else if (req.getPathInfo().equals("/home")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			resp.getWriter().write(Rythm.render("home.html", cookie, auctionHouse.getAuctions()));
@@ -74,12 +78,11 @@ public class WelcomeServlet extends HttpServlet {
 				int cookie = auctionHouse.registerParticipantToDB(p1);
 				resp.getWriter().write(Rythm.render("home.html", cookie, auctionHouse.getAuctions())); 		 
 			} catch (Exception e) {
-				resp.getWriter().write(Rythm.render("register.html", "Errore durante la registrazione, riprova piï¿½ tardi"));
+				resp.getWriter().write(Rythm.render("register.html", "Errore durante la registrazione, riprova più tardi"));
 			}
 			
 		}
-		
-		
+
 		else if (req.getPathInfo().equals("/sendMessage")) {
 			String message = req.getParameter("message");
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
@@ -88,7 +91,7 @@ public class WelcomeServlet extends HttpServlet {
 			int ok = auctionHouse.saveMessage(cookie, receiverUsername, message);
 			if (ok == -1)
 			{
-				resp.getWriter().write(Rythm.render("error.html", "Errore nell' invio del messaggio, riprova piï¿½ tardi"));
+				resp.getWriter().write(Rythm.render("error.html", "Errore nell' invio del messaggio, riprova più tardi"));
 			}
 		}
 		else if (req.getPathInfo().equals("/getMessage")) {
