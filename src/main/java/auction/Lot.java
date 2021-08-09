@@ -14,8 +14,6 @@ public class Lot {
 		this.description = description;
 		this.lotId = lotId;
 	}
-
-	
 	
 	public int getLotId() {
 		return lotId;

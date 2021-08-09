@@ -23,7 +23,7 @@ import user.userDetails.Review;
 
 public class AuctionHouse {
 	private String name;
-	private int cookie = 0;
+	private int sessionCookie = 0;
 	private ArrayList<User> users, onlineUsers;
 	Map<Integer, String> loggedIn = new HashMap<>();
 	
@@ -65,7 +65,10 @@ public class AuctionHouse {
 		 	
 		}catch(SQLException e) {
 			   System.out.println("errore: " + e.getMessage());
-	     } //fine try-catch  
+	     }
+		finally {
+			   cn.close();
+		 }  
 		return list;
 	}
 		
@@ -88,21 +91,23 @@ public class AuctionHouse {
 			st.execute(sql);
 			System.out.println("inserted new participant on the DB");
 			System.out.println("connection terminated");
-			cn.close();
-			loggedIn.put(cookie, p.getUsername());
-	        candy = cookie;
-	        cookie +=1;
+			loggedIn.put(sessionCookie, p.getUsername());
+	        candy = sessionCookie;
+	        sessionCookie +=1;
 			return candy;
 			
             
 		} catch (SQLException e) {
 			throw new Exception(e.getMessage());
 		}
+		finally {
+			cn.close();
+		}
 
 		   
 	}
 	
-	public int login(String email, String pwd) {
+	public int login(String email, String pwd) throws SQLException {
 		Connection cn = null;
 		Statement st;
 		ResultSet rs;
@@ -119,19 +124,22 @@ public class AuctionHouse {
 			   
 			   rs = st.executeQuery(sql); //faccio la query su uno statement
 			   while(rs.next() == true) {
-			        loggedIn.put(cookie, rs.getString("username"));
-			        candy = cookie;
-			        cookie +=1;
+			        loggedIn.put(sessionCookie, rs.getString("username"));
+			        candy = sessionCookie;
+			        sessionCookie +=1;
 			   }
 			   
 		   } catch(SQLException e) {
 			   System.out.println("errore: " + e.getMessage());
-		   } //fine try-catch  
+		   }
+		   finally {
+			   cn.close();
+		   }  
 
 		return candy;
 	}
 		
-	public ArrayList<Review> getReviews(String username){		
+	public ArrayList<Review> getReviews(String username) throws SQLException{		
 		Connection cn = null;
 		Statement st;
 		ResultSet rs1, rs2;
@@ -166,14 +174,17 @@ public class AuctionHouse {
 		 	
 		}catch(SQLException e) {
 			   System.out.println("errore: " + e.getMessage());
-	     } //fine try-catch  
+	     }
+		finally {
+			   cn.close();
+		   } 
 		
 		
 		return list;
 		
 	}
 	
-	public Participant getParticipant(int chocolateChipCookie) {
+	public Participant getParticipant(int cookie) throws SQLException {
 		Connection cn = null;
 		Statement st;
 		ResultSet rs;
@@ -185,7 +196,7 @@ public class AuctionHouse {
 			 
 			   cn =  connectDB(); //Establishing connection
 		   	
-	           sql = "SELECT * FROM participant where username = '" + loggedIn.get(chocolateChipCookie) + "';";
+	           sql = "SELECT * FROM participant where username = '" + loggedIn.get(cookie) + "';";
 
 	        
 	        //____________query___________
@@ -206,13 +217,16 @@ public class AuctionHouse {
 			   
 		   } catch(SQLException e) {
 			   System.out.println("errore: " + e.getMessage());
-		   } //fine try-catch  
+		   }
+		   finally {
+			   cn.close();
+		   }
 		return null;
 
 		
 	}
 		
-	public ArrayList<Auction> getAuctions() {
+	public ArrayList<Auction> getAuctions() throws SQLException {
 		Connection cn = null;
 		Statement st1, st2, st3;
 		ResultSet rs1, rs2, rs3;
@@ -269,11 +283,15 @@ public class AuctionHouse {
 				  auctions.add(a1);
 				  
 			   }
+			   cn.close();
 			   return auctions;
 			   
 		   } catch(SQLException e) {
 			   System.out.println("errore: " + e.getMessage());
-		   } //fine try-catch  
+		   }
+		   finally {
+			   cn.close();
+		   }
 		return null;
 
 		
@@ -306,24 +324,22 @@ public class AuctionHouse {
 			   
 		   } catch(SQLException e) {
 			   System.out.println("errore: " + e.getMessage());
-		   } //fine try-catch  
-		   
-		   
-		   //ha dei metodi per leggere/scrivere e modificare il db registration_system
-		   
-		   
-		   cn.close();
+		   }
+		   finally {
+			   cn.close();
+		   }
+
 		   System.out.println("connection terminated"); 
 		
 	}
 
-	public int saveMessage(int cookie2, String receiverUsername, String message)  {
+	public int saveMessage(int cookie, String receiverUsername, String message) throws SQLException  {
 		// TODO Auto-generated method stub
 		Connection cn = null;
 		Statement st;
 		ResultSet rs;
 		String sql;
-		String senderUsername = loggedIn.get(cookie2);
+		String senderUsername = loggedIn.get(cookie);
 	
 		   try {
 			 
@@ -336,26 +352,28 @@ public class AuctionHouse {
 			st.execute(sql);
 			System.out.println("inserted new message on the DB");
 			System.out.println("connection terminated");
-			cn.close();
             
 		} catch (SQLException e) {
 			
 			System.out.println("Error while connecting to the database");
 			return -1;
 		}
+		   finally {
+			   cn.close();
+		   }
 		   return 0;
 		
 		
 	}
 
-	public String[] getMessages(int cookie2, String receiverUsername) throws Exception {
+	public String[] getMessages(int cookie, String receiverUsername) throws Exception {
 		// TODO Auto-generated method stub
 		Connection cn = null;
 		Statement st;
 		ResultSet rs;
 		String sql;
 		String [] messages; 
-		String senderUsername = loggedIn.get(cookie2);
+		String senderUsername = loggedIn.get(cookie);
 	
 		   try {
 			 
@@ -393,12 +411,13 @@ public class AuctionHouse {
 			
 			System.out.println("Error while connecting to the database");
 			throw new Exception("Errore nel caricamento dei messaggi, riprova più tardi");
-		}
-		
+		}finally {
+			   cn.close();
+		   }
 		return messages;
 	}
 	
-	public Auction getAuction(String auctioner, String auctionID) {
+	public Auction getAuction(String auctioner, String auctionID) throws SQLException {
 		Connection cn = null;
 		Statement st1, st2, st3;
 		ResultSet rs1, rs2, rs3;
@@ -456,12 +475,19 @@ public class AuctionHouse {
 			   
 		   } catch(SQLException e) {
 		   System.out.println("errore: " + e.getMessage());
-	   } 
+		   } 
+		   finally {
+			   cn.close();
+		   }
 		   return null;
 		   
 	}
 	
-	public Participant getProfile(String username) {
+	public String getUsername(int cookie) {
+		return loggedIn.get(cookie);
+	}
+	
+	public Participant getProfile(String username) throws SQLException {
 		
 		Connection cn = null;
 		Statement st;
@@ -491,10 +517,12 @@ public class AuctionHouse {
 				  p1 = new Participant(rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"), rs.getString("username"), rs.getString("password"),  rs.getDate("birthday").toLocalDate(), rs.getString("mobileNumber"), encodstring, rs.getString("intro"));
 				  return p1;
 			   }
-			   
 		   } catch(SQLException e) {
 			   System.out.println("errore: " + e.getMessage());
-		   } //fine try-catch  
+		   }
+		   finally {
+			   cn.close();
+		   } 
 		return null;
 	}
 		   
@@ -502,6 +530,65 @@ public class AuctionHouse {
 			Connection cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11421731", "sql11421731", "83bkPjI9Yf");//Establishing connection
 			System.out.println("Connected With the database successfully");
 			return cn;		
+	}
+	
+	//Metodo per modifica intro profilo dell'utente
+	public void updateIntro(int cookie, String intro) throws Exception {
+		
+		Connection cn = null;
+		Statement st;
+		String sql;
+		Participant p1;
+		//___________connesione___________
+        
+		   try {
+			 
+			   cn =  connectDB(); //Establishing connection
+		   	
+			   sql = "update participant set participant.intro = '" + intro + "' where username = '" + loggedIn.get(cookie) + "'";
+
+	        
+	        //____________query___________
+			   st = cn.createStatement(); //creo  uno statement sulla coneesione
+			   st.executeUpdate(sql); //faccio la query su uno statement
+		   }
+		   catch (Exception e) {
+			   throw new Exception(e.getMessage());
+		   }
+		   finally {
+			   cn.close();
+		   }
+	}
+	
+	//Metodo per aggiornare indirizzo
+	public void updateAddress(int cookie, String country, String city, String road, String number, String cap) throws Exception {
+		Connection cn = null;
+		Statement st;
+		String sql;
+		Participant p1;
+		//___________connesione___________
+        
+		   try {
+			 
+			   cn =  connectDB(); //Establishing connection
+			   sql = "delete from address where username = '" + loggedIn.get(cookie) +"'";
+
+	        
+	        //____________query___________
+			   st = cn.createStatement(); //creo  uno statement sulla coneesione
+			   st.executeUpdate(sql); //faccio la query su uno statement
+			   sql = "insert into address(username, city, road, postalCode, number, country) values ('" + loggedIn.get(cookie) + "','" + city + "','" + road + "','" 
+						+ cap + "','" + number + "','" + country + "')";
+			   st.executeUpdate(sql);
+			   cn.close();
+		   }
+		   catch (Exception e) {
+			   throw new Exception(e.getMessage());
+		   }
+		   finally {
+			   cn.close();
+		   }
+		
 	}
 			
 	private static String encodeFileToBase64Binary(File file) throws Exception{
@@ -511,4 +598,10 @@ public class AuctionHouse {
 			byte[] encodedBytes = Base64.getEncoder().encode(bytes);
 			return new String(encodedBytes);
 	}
+
+
+	
+
+
+	
 }
