@@ -2,16 +2,18 @@ package auction;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class Auction {
 	private String name, owner, highestBidder = "";
-	private LocalDate sDate, eDate;
+	private LocalDateTime sDate, eDate;
 	private double startingPrice, minimumRise, currentPrice = 0;
 	private int id;
 	private ArrayList<Lot> lots = new ArrayList<Lot>();
 	
-	public Auction(String name, String owner, String highestBidder, LocalDate sDate, LocalDate eDate, double startingPrice, double minimumRise, int id, double highestBid) {
+	public Auction(String name, String owner, String highestBidder, LocalDateTime sDate, LocalDateTime eDate, double currentPrice, double startingPrice, double minimumRise, int id, double highestBid) {
 		super();
 		this.name = name;
 		this.owner = owner;
@@ -24,7 +26,7 @@ public class Auction {
 		this.currentPrice = highestBid;
 	}
 	
-	public Auction(String name, String owner, LocalDate sDate, LocalDate eDate, double startingPrice, double minimumRise, int id) {
+	public Auction(String name, String owner, LocalDateTime sDate, LocalDateTime eDate, double startingPrice, double minimumRise, int id) {
 		super();
 		this.name = name;
 		this.owner = owner;
@@ -81,11 +83,11 @@ public class Auction {
 		return highestBidder;
 	}
 
-	public LocalDate getsDate() {
+	public LocalDateTime getsDate() {
 		return sDate;
 	}
 
-	public LocalDate geteDate() {
+	public LocalDateTime geteDate() {
 		return eDate;
 	}
 

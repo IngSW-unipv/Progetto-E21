@@ -246,9 +246,15 @@ public class AuctionHouse {
 			   st1 = cn.createStatement(); //creo sempre uno statement sulla coneesione		   
 			   rs1 = st1.executeQuery(sql1); //faccio la query su uno statement
 			   
+			   java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			   String date1, date2;
 			   
 			   while(rs1.next() == true) { 
-				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), rs1.getDate("startDate").toLocalDate(), rs1.getDate("endDate").toLocalDate(),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getDouble("highestBid"));
+				   date1 = "20" + rs1.getTimestamp("startDate").toString();
+					  date2 = "20" + rs1.getTimestamp("endDate").toString();		   
+				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(2, date1.length()-2), formatter);
+				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(2, date1.length()-2), formatter);
+				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate, eDate, rs1.getDouble("currentPrice"),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getDouble("highestBid"));
 				  
 				  
 				  //CREAZIONE LOT
@@ -435,10 +441,15 @@ public class AuctionHouse {
 	           sql1 = "SELECT * FROM auction where username ='" + auctioner +"' and auctionID =" + auctionID +";";
 			   st1 = cn.createStatement(); //creo sempre uno statement sulla coneesione		   
 			   rs1 = st1.executeQuery(sql1); //faccio la query su uno statement
-			   
+			   java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			   String date1, date2;
 			   
 			   while(rs1.next() == true) { 
-				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), rs1.getDate("startDate").toLocalDate(), rs1.getDate("endDate").toLocalDate(),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getDouble("highestBid"));
+				  date1 = "20" + rs1.getTimestamp("startDate").toString();
+				  date2 = "20" + rs1.getTimestamp("endDate").toString();		   
+				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(2, date1.length()-2), formatter);
+				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(2, date1.length()-2), formatter);
+				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate, sDate,  rs1.getDouble("currentPrice"), rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getDouble("highestBid"));
 				  
 				  
 				  //CREAZIONE LOT

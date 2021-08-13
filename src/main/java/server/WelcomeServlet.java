@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -170,10 +171,10 @@ public class WelcomeServlet extends HttpServlet {
 		
 		//Qui vengono gestiti i parametri ricevuti durante la prima fase della creazione di un asta e viene reindirizzato l'utente alla pagina di creazione del primo lotto
 		else if (req.getPathInfo().equals("/createAuction")) {
-			int cookie = Integer.parseInt(req.getParameter("cookie"));
-			java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			java.time.LocalDate sDate = java.time.LocalDate.parse(req.getParameter("sDate"), formatter);
-			java.time.LocalDate eDate = java.time.LocalDate.parse(req.getParameter("eDate"), formatter);
+			int cookie = Integer.parseInt(req.getCookies()[0].getValue());
+			java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+			LocalDateTime sDate = java.time.LocalDateTime.parse(req.getParameter("sDate") +" "+ req.getParameter("sTime") , formatter);
+			LocalDateTime eDate = java.time.LocalDateTime.parse(req.getParameter("eDate") +" "+ req.getParameter("eTime"), formatter);
 			try {
 				Auction pAuction = new Auction(req.getParameter("name"), auctionHouse.getUsername(cookie), sDate, eDate, Double.parseDouble(req.getParameter("sPrice")), Double.parseDouble(req.getParameter("rise")), cookie);
 				pendingAucton.add(pAuction);
@@ -186,7 +187,7 @@ public class WelcomeServlet extends HttpServlet {
 		
 		//Qui vengono gestiti i parametri ricevuti durante la fase di creazione del lotto e viene reindirizzato l'utente alla pagina di creazione del primo oggetto
 		else if (req.getPathInfo().equals("/addLot")) {
-			int cookie = Integer.parseInt(req.getParameter("cookie"));
+			int cookie = Integer.parseInt(req.getCookies()[0].getValue());
 			try {
 				for (int i=0; i< pendingAucton.size(); i++)
 				{
@@ -205,7 +206,7 @@ public class WelcomeServlet extends HttpServlet {
 		
 		//Qui vengono gestiti i parametri ricevuti durante la fase di inserimento di un oggetto e viene reindirizzato l'utente alla pagina di inserimento di un'altro oggetto
 				else if (req.getPathInfo().equals("/addItem")) {
-					int cookie = Integer.parseInt(req.getParameter("cookie"));
+					int cookie = Integer.parseInt(req.getCookies()[0].getValue());
 					try {
 		
 						for (int i=0; i< pendingAucton.size(); i++)
