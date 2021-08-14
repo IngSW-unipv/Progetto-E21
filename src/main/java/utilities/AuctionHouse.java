@@ -2,6 +2,8 @@ package utilities;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -250,11 +252,11 @@ public class AuctionHouse {
 			   String date1, date2;
 			   
 			   while(rs1.next() == true) { 
-				   date1 = "20" + rs1.getTimestamp("startDate").toString();
-					  date2 = "20" + rs1.getTimestamp("endDate").toString();		   
+				  date1 = "20" + rs1.getTimestamp("startDate").toString();
+				  date2 = "20" + rs1.getTimestamp("endDate").toString();		   
 				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(2, date1.length()-2), formatter);
-				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(2, date1.length()-2), formatter);
-				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate, eDate, rs1.getDouble("currentPrice"),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getDouble("highestBid"));
+				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(2, date2.length()-2), formatter);
+				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate, eDate, rs1.getDouble("currentPrice"),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"));
 				  
 				  
 				  //CREAZIONE LOT
@@ -449,7 +451,7 @@ public class AuctionHouse {
 				  date2 = "20" + rs1.getTimestamp("endDate").toString();		   
 				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(2, date1.length()-2), formatter);
 				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(2, date1.length()-2), formatter);
-				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate, sDate,  rs1.getDouble("currentPrice"), rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getDouble("highestBid"));
+				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate, sDate,  rs1.getDouble("currentPrice"), rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"));
 				  
 				  
 				  //CREAZIONE LOT
@@ -583,15 +585,11 @@ public class AuctionHouse {
 			 
 			   cn =  connectDB(); //Establishing connection
 			   sql = "delete from address where username = '" + loggedIn.get(cookie) +"'";
-
-	        
-	        //____________query___________
 			   st = cn.createStatement(); //creo  uno statement sulla coneesione
 			   st.executeUpdate(sql); //faccio la query su uno statement
 			   sql = "insert into address(username, city, road, postalCode, number, country) values ('" + loggedIn.get(cookie) + "','" + city + "','" + road + "','" 
 						+ cap + "','" + number + "','" + country + "')";
 			   st.executeUpdate(sql);
-			   cn.close();
 		   }
 		   catch (Exception e) {
 			   throw new Exception(e.getMessage());
@@ -601,7 +599,83 @@ public class AuctionHouse {
 		   }
 		
 	}
+	
+	
+	
+	//Metodo per l'inserimento di una nuova asta nel database
+	public Auction registerAuctionToDB(int cookie, Auction a) throws Exception {
+		Connection cn = null;
+		Statement st;
+		ResultSet rs;
+		String sql;
+		//___________connesione___________
+        
+		   try {
+			 
+			   cn =  connectDB(); //Establishing connection
+		   	
+			// CREAZIONE AUCTIONS
+	           sql = "select max(auctionID) from auction;";
+			   st = cn.createStatement(); //creo sempre uno statement sulla coneesione		   
+			   rs = st.executeQuery(sql); //faccio la query su uno statement
+			   rs.next();
+			   int id = rs.getInt("max(auctionID)") + 1;
+			   
+			   Boolean ok = a.getTimeExt();
+			   sql = "insert into auction(username, auctionID, name, startDate, endDate, bidder, startingPrice, minimumRise, currentPrice, timeExt) values ('" + loggedIn.get(cookie) +"','" + id + "','" + a.getName() + "','" + a.getsDate() + "','" 
+						+ a.geteDate() + "','" + null  +   "','" + a.getStartingPrice() +  "','" + a.getMinimumRise() +  "','" + a.getStartingPrice() + "','"+ ok.compareTo(false) + "')";
+			   st.executeUpdate(sql);
+			   //cerco da quale numero partire per rinominare le immagini
+			   sql = "select max(img) from item;";
+			   rs = st.executeQuery(sql);
+			   rs.next();
+			   String img = rs.getString("max(img)");
+			   int imgId = Integer.parseInt(img.substring(0, img.length()-4)) + 1;
+			   
+			   //inserisco lotti
+			   for(int i = 0; i < a.getLots().size(); i++)
+			   {
+				   sql = "insert into lot(username, auctionID, lotID, name, description) values ('" + loggedIn.get(cookie) + "','" + id + "','" + i + "','" + a.getLots().get(i).getName() + "','" + a.getLots().get(i).getDescription() + "')";
+				   st.executeUpdate(sql);
+				   
+				   //inserisco oggetti
+				   for(int k = 0; k < a.getLots().get(i).getItems().size(); k++)
+				   {
+					   saveImg(a.getLots().get(i).getItems().get(k).getImgFile(), imgId);
+					   imgId++;
+					   sql = "insert into item(username, auctionID, lotID, itemID, img, name, description) values ('" + loggedIn.get(cookie) + "','" + id + "','" + i + "','" + k + "','" + imgId + ".jpg','" + a.getLots().get(i).getItems().get(k).getName() + "','" + a.getLots().get(i).getItems().get(k).getDescription() + "')";
+					   st.executeUpdate(sql);
+				   }
+				   
+			   }
+			 
+			   
+		   } catch(SQLException e) {
+		   System.out.println("errore: " + e.getMessage());
+		   throw new Exception("Error while connecting to DataBase, try again later");
+		   } 
+		   finally {
+			   cn.close();
+		   }
+		   return null;
+		   
+	}
+	
 			
+	private void saveImg(InputStream imgFile, int id) {
+		File file = new File("src/main/resources/imgDB/auctionsPics/"+id+".jpg");
+		try (FileOutputStream outputStream = new FileOutputStream(file, false)) {
+            int read;
+            byte[] bytes = new byte[imgFile.available()];
+            while ((read = imgFile.read(bytes)) != -1) {
+                outputStream.write(bytes, 0, read);
+            }
+		}catch (Exception e) {
+				System.out.println("errore: " + e.getMessage());
+			}
+	}
+
+
 	private static String encodeFileToBase64Binary(File file) throws Exception{
 	        FileInputStream fileInputStreamReader = new FileInputStream(file);
 	        byte[] bytes = new byte[(int)file.length()];

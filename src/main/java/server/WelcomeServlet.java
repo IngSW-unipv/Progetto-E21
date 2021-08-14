@@ -3,18 +3,25 @@ package server;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
+import org.eclipse.jetty.server.Request;
 import org.rythmengine.Rythm;
 
 import com.stevesoft.pat.apps.Message;
@@ -26,8 +33,11 @@ import user.Participant;
 import utilities.AuctionHouse;
 import utilities.ChatMessage;
 
-
+@WebServlet("/upload")
+@MultipartConfig
 public class WelcomeServlet extends HttpServlet {
+	
+	private static final MultipartConfigElement MULTI_PART_CONFIG = new MultipartConfigElement("./tmp");
 	
 	private AuctionHouse auctionHouse = new AuctionHouse("Il mercationo della sirena");
 	private ArrayList<Auction> pendingAucton = new ArrayList<Auction>();
@@ -165,7 +175,7 @@ public class WelcomeServlet extends HttpServlet {
 				String messages[] =auctionHouse.getMessages(cookie, receiverUsername);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				resp.getWriter().write(Rythm.render("error.html", e.getMessage()));
+				resp.getWriter().write(Rythm.render("error.html", cookie, e.getMessage()));
 			}	
 		}
 		
@@ -176,13 +186,13 @@ public class WelcomeServlet extends HttpServlet {
 			LocalDateTime sDate = java.time.LocalDateTime.parse(req.getParameter("sDate") +" "+ req.getParameter("sTime") , formatter);
 			LocalDateTime eDate = java.time.LocalDateTime.parse(req.getParameter("eDate") +" "+ req.getParameter("eTime"), formatter);
 			try {
-				Auction pAuction = new Auction(req.getParameter("name"), auctionHouse.getUsername(cookie), sDate, eDate, Double.parseDouble(req.getParameter("sPrice")), Double.parseDouble(req.getParameter("rise")), cookie);
+				Auction pAuction = new Auction(req.getParameter("name"), auctionHouse.getUsername(cookie), sDate, eDate, Double.parseDouble(req.getParameter("sPrice")), Double.parseDouble(req.getParameter("rise")), cookie, false);
 				pendingAucton.add(pAuction);
 				resp.getWriter().write(Rythm.render("newLot.html", cookie));
 			}
 			catch (Exception e) {
-				resp.getWriter().write(Rythm.render("error.html", e.getMessage()));
-			}	
+					resp.getWriter().write(Rythm.render("error.html", cookie, e.getMessage()));
+				}	
 		}
 		
 		//Qui vengono gestiti i parametri ricevuti durante la fase di creazione del lotto e viene reindirizzato l'utente alla pagina di creazione del primo oggetto
@@ -192,7 +202,7 @@ public class WelcomeServlet extends HttpServlet {
 				for (int i=0; i< pendingAucton.size(); i++)
 				{
 					if( pendingAucton.get(i).getId() == cookie) {
-						Lot pLot = new Lot(req.getParameter("name"), req.getParameter("descrtiption"), pendingAucton.get(i).getLots().size());
+						Lot pLot = new Lot(req.getParameter("name"), req.getParameter("description"), pendingAucton.get(i).getLots().size());
 						pendingAucton.get(i).addLot(pLot);	
 					}
 				}
@@ -200,7 +210,30 @@ public class WelcomeServlet extends HttpServlet {
 				resp.getWriter().write(Rythm.render("newItem.html", cookie));
 			}
 			catch (Exception e) {
-				resp.getWriter().write(Rythm.render("error.html", e.getMessage()));
+				resp.getWriter().write(Rythm.render("error.html", cookie, e.getMessage()));
+			}	
+		}
+		
+		//Qui vengono gestiti i parametri ricevuti durante la fase di inserimento di un oggetto e viene reindirizzato l'utente alla pagina di inserimento di un'altro lotto
+		else if (req.getPathInfo().equals("/newLot")) {
+			int cookie = Integer.parseInt(req.getCookies()[0].getValue());
+			try {
+
+				for (int i=0; i< pendingAucton.size(); i++)
+				{
+					if( pendingAucton.get(i).getId() == cookie) {
+						req.setAttribute(Request.MULTIPART_CONFIG_ELEMENT, MULTI_PART_CONFIG);	
+						Part filePart = req.getPart("img"); // Retrieves <input type="file" name="file">
+					    String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
+					    InputStream fileContent = filePart.getInputStream();	
+						Item pItem = new Item(req.getParameter("name"), req.getParameter("description"), fileName, fileContent);
+						pendingAucton.get(i).getLots().get(pendingAucton.get(i).getLots().size()-1).getItems().add(pItem);
+					}
+				}
+				resp.getWriter().write(Rythm.render("newLot.html", cookie));
+			}
+			catch (Exception e) {
+				resp.getWriter().write(Rythm.render("error.html", cookie, e.getMessage()));
 			}	
 		}
 		
@@ -212,14 +245,44 @@ public class WelcomeServlet extends HttpServlet {
 						for (int i=0; i< pendingAucton.size(); i++)
 						{
 							if( pendingAucton.get(i).getId() == cookie) {
-										Item pItem = new Item(req.getParameter("name"), req.getParameter("descrtiption"), req.getParameter("image"), pendingAucton.get(i).getLots().get(pendingAucton.get(i).getLots().size()).getItems().size());
-										pendingAucton.get(i).getLots().get(pendingAucton.get(i).getLots().size()).getItems().add(pItem);
+								req.setAttribute(Request.MULTIPART_CONFIG_ELEMENT, MULTI_PART_CONFIG);		
+								Part filePart = req.getPart("img"); // Retrieves <input type="file" name="file">
+							    String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
+							    InputStream fileContent = filePart.getInputStream();	
+								Item pItem = new Item(req.getParameter("name"), req.getParameter("description"), fileName, fileContent);
+								pendingAucton.get(i).getLots().get(pendingAucton.get(i).getLots().size()-1).getItems().add(pItem);
 							}
 						}
 						resp.getWriter().write(Rythm.render("newItem.html", cookie));
 					}
 					catch (Exception e) {
-						resp.getWriter().write(Rythm.render("error.html", e.getMessage()));
+						resp.getWriter().write(Rythm.render("error.html", cookie, e.getMessage()));
+					}	
+				}
+		
+		//Qui vengono gestiti i parametri ricevuti durante la fase di inserimento di un oggetto e creata l'asta
+				else if (req.getPathInfo().equals("/confirmAuction")) {
+					int cookie = Integer.parseInt(req.getCookies()[0].getValue());
+					try {
+		
+						for (int i=0; i< pendingAucton.size(); i++)
+						{
+							if( pendingAucton.get(i).getId() == cookie) {
+								req.setAttribute(Request.MULTIPART_CONFIG_ELEMENT, MULTI_PART_CONFIG);	
+								Part filePart = req.getPart("img"); // Retrieves <input type="file" name="file">
+							    String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
+							    InputStream fileContent = filePart.getInputStream();	
+								Item pItem = new Item(req.getParameter("name"), req.getParameter("description"), fileName, fileContent);
+								pendingAucton.get(i).getLots().get(pendingAucton.get(i).getLots().size()-1).getItems().add(pItem);
+								auctionHouse.registerAuctionToDB(cookie, pendingAucton.get(i));
+								pendingAucton.remove(i);
+							}
+						}
+						resp.getWriter().write(Rythm.render("home.html", cookie, auctionHouse.getAuctions()));
+					}
+					catch (Exception e) {
+						System.out.println(e.getMessage());
+						resp.getWriter().write(Rythm.render("error.html", cookie, e.getMessage()));
 					}	
 				}
 		

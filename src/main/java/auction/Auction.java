@@ -11,9 +11,10 @@ public class Auction {
 	private LocalDateTime sDate, eDate;
 	private double startingPrice, minimumRise, currentPrice = 0;
 	private int id;
+	boolean timeExt = false;
 	private ArrayList<Lot> lots = new ArrayList<Lot>();
 	
-	public Auction(String name, String owner, String highestBidder, LocalDateTime sDate, LocalDateTime eDate, double currentPrice, double startingPrice, double minimumRise, int id, double highestBid) {
+	public Auction(String name, String owner, String highestBidder, LocalDateTime sDate, LocalDateTime eDate, double currentPrice, double startingPrice, double minimumRise, int id , boolean timeExt) {
 		super();
 		this.name = name;
 		this.owner = owner;
@@ -23,10 +24,10 @@ public class Auction {
 		this.startingPrice = startingPrice;
 		this.minimumRise = minimumRise;
 		this.id = id;
-		this.currentPrice = highestBid;
+		this.currentPrice=currentPrice;
 	}
 	
-	public Auction(String name, String owner, LocalDateTime sDate, LocalDateTime eDate, double startingPrice, double minimumRise, int id) {
+	public Auction(String name, String owner, LocalDateTime sDate, LocalDateTime eDate, double startingPrice, double minimumRise, int id, boolean timeExt) {
 		super();
 		this.name = name;
 		this.owner = owner;
@@ -36,12 +37,16 @@ public class Auction {
 		this.minimumRise = minimumRise;
 		this.id = id;
 		this.currentPrice = startingPrice;
+		this.timeExt = timeExt;
 	}
 	
 	public String getThumbnail() {
 		return lots.get(0).getItems().get(0).getImage();	
 	}
 	
+	public boolean getTimeExt() {
+		return timeExt;
+	}
 	
 	public double getHighestBid() {
 		if (currentPrice > startingPrice)
