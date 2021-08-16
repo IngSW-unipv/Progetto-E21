@@ -642,8 +642,8 @@ public class AuctionHouse {
 				   for(int k = 0; k < a.getLots().get(i).getItems().size(); k++)
 				   {
 					   saveImg(a.getLots().get(i).getItems().get(k).getImgFile(), imgId);
-					   imgId++;
 					   sql = "insert into item(username, auctionID, lotID, itemID, img, name, description) values ('" + loggedIn.get(cookie) + "','" + id + "','" + i + "','" + k + "','" + imgId + ".jpg','" + a.getLots().get(i).getItems().get(k).getName() + "','" + a.getLots().get(i).getItems().get(k).getDescription() + "')";
+					   imgId++;
 					   st.executeUpdate(sql);
 				   }
 				   

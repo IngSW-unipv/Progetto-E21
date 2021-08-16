@@ -186,7 +186,8 @@ public class WelcomeServlet extends HttpServlet {
 			LocalDateTime sDate = java.time.LocalDateTime.parse(req.getParameter("sDate") +" "+ req.getParameter("sTime") , formatter);
 			LocalDateTime eDate = java.time.LocalDateTime.parse(req.getParameter("eDate") +" "+ req.getParameter("eTime"), formatter);
 			try {
-				Auction pAuction = new Auction(req.getParameter("name"), auctionHouse.getUsername(cookie), sDate, eDate, Double.parseDouble(req.getParameter("sPrice")), Double.parseDouble(req.getParameter("rise")), cookie, false);
+				Boolean check = ((req.getParameter("timeExtension") == null) ? false : true);
+				Auction pAuction = new Auction(req.getParameter("name"), auctionHouse.getUsername(cookie), sDate, eDate, Double.parseDouble(req.getParameter("sPrice")), Double.parseDouble(req.getParameter("rise")), cookie, check);
 				pendingAucton.add(pAuction);
 				resp.getWriter().write(Rythm.render("newLot.html", cookie));
 			}
@@ -275,10 +276,12 @@ public class WelcomeServlet extends HttpServlet {
 								Item pItem = new Item(req.getParameter("name"), req.getParameter("description"), fileName, fileContent);
 								pendingAucton.get(i).getLots().get(pendingAucton.get(i).getLots().size()-1).getItems().add(pItem);
 								auctionHouse.registerAuctionToDB(cookie, pendingAucton.get(i));
+								resp.getWriter().write(Rythm.render("productDetails.html", cookie, pendingAucton.get(i), auctionHouse.getProfile(auctionHouse.getUsername(cookie)).getImg()));
 								pendingAucton.remove(i);
 							}
 						}
 						resp.getWriter().write(Rythm.render("home.html", cookie, auctionHouse.getAuctions()));
+						resp.getWriter().write(Rythm.render("error.html", cookie, "Auction already created"));
 					}
 					catch (Exception e) {
 						System.out.println(e.getMessage());
