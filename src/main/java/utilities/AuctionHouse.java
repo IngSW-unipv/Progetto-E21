@@ -661,6 +661,66 @@ public class AuctionHouse {
 		   
 	}
 	
+
+
+	public void updateCard(int cookie, String fName, String lName, String date, String number, String cvv) throws Exception {
+		Connection cn = null;
+		Statement st;
+		String sql;
+		Participant p1;
+		//___________connesione___________
+        
+		   try {
+			 
+			   cn =  connectDB(); //Establishing connection
+			   sql = "delete from address where username = '" + loggedIn.get(cookie) +"'";
+			   st = cn.createStatement(); //creo  uno statement sulla coneesione
+			   st.executeUpdate(sql); //faccio la query su uno statement
+			   sql = "insert into cCard(username, fName, lName, date, number, cvv) values ('" + loggedIn.get(cookie) + "','" + fName + "','" + lName + "','" 
+						+ date + "','" + number + "','" + cvv + "')";
+			   st.executeUpdate(sql);
+		   }
+		   catch (Exception e) {
+			   throw new Exception(e.getMessage());
+		   }
+		   finally {
+			   cn.close();
+		   }
+		
+	}
+	
+	
+	
+	public void updateImg(int cookie, InputStream fileContent) throws Exception {
+		Connection cn = null;
+		Statement st;
+		ResultSet rs;
+		String sql;
+		try {
+			 
+			cn =  connectDB(); //Establishing connection	
+	        sql = "SELECT img FROM participant where username = '"+ loggedIn.get(cookie) +"';";
+	        st = cn.createStatement(); //creo sempre uno statement sulla connesione   
+		 	rs = st.executeQuery(sql); //faccio la query su uno statement
+		 	rs.next();
+			File file = new File("src/main/resources/imgDB/profilePics/" + rs.getString("img") + ".jpg");
+			FileOutputStream outputStream = new FileOutputStream(file, false);
+	        int read;
+	        byte[] bytes = new byte[fileContent.available()];
+	        while ((read = fileContent.read(bytes)) != -1) {
+	             outputStream.write(bytes, 0, read);
+	        }
+
+		} catch (SQLException e) {
+			System.out.println("errore: " + e.getMessage());
+			   throw new Exception("Error while connecting to DataBase, try again later");
+		}
+		finally {
+		   cn.close();
+	   }
+		
+	}
+	
 			
 	private void saveImg(InputStream imgFile, int id) {
 		File file = new File("src/main/resources/imgDB/auctionsPics/"+id+".jpg");
@@ -683,6 +743,10 @@ public class AuctionHouse {
 			byte[] encodedBytes = Base64.getEncoder().encode(bytes);
 			return new String(encodedBytes);
 	}
+
+
+
+	
 
 
 	

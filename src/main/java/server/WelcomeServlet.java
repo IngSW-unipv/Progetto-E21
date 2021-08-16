@@ -167,6 +167,38 @@ public class WelcomeServlet extends HttpServlet {
 				resp.getWriter().write(Rythm.render("editProfile.html", cookie, e.getMessage(), "", "", "" ));
 			}	
 		}
+		
+		//metodo per aggiornamento immagine profilo
+		else if (req.getPathInfo().equals("/saveImg")) {
+			int cookie = Integer.parseInt(req.getCookies()[0].getValue());
+			try {
+				req.setAttribute(Request.MULTIPART_CONFIG_ELEMENT, MULTI_PART_CONFIG);	
+				Part filePart = req.getPart("img"); // Retrieves <input type="file" name="file">
+			    String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
+			    InputStream fileContent = filePart.getInputStream();
+				auctionHouse.updateImg(cookie, fileContent);
+				resp.getWriter().write(Rythm.render("editProfile.html", cookie, "", "", "", "Updated" ));
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				resp.getWriter().write(Rythm.render("editProfile.html", cookie, "", "", "", e.getMessage() ));
+			}	
+		}
+		
+		//metodo per aggiornamento carta di credito
+		else if (req.getPathInfo().equals("/saveCard")) {
+			int cookie = Integer.parseInt(req.getCookies()[0].getValue());
+			try {
+				auctionHouse.updateCard(cookie, req.getParameter("fName"), req.getParameter("lName"), req.getParameter("date"), req.getParameter("number"), req.getParameter("cvv"));
+				resp.getWriter().write(Rythm.render("editProfile.html", cookie, "", "Updated", "", "" ));
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				resp.getWriter().write(Rythm.render("editProfile.html", cookie, "", e.getMessage(), "", "" ));
+			}	
+		}
+		
+		
 		else if (req.getPathInfo().equals("/getMessage")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			String receiverUsername = req.getParameter("receiver");
