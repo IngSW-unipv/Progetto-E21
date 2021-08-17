@@ -9,18 +9,19 @@ import java.util.ArrayList;
 public class Auction {
 	private String name, owner, highestBidder = "";
 	private LocalDateTime sDate, eDate;
+	String sDateStr, eDateStr;
 	private double startingPrice, minimumRise, currentPrice = 0;
 	private int id;
 	boolean timeExt = false;
 	private ArrayList<Lot> lots = new ArrayList<Lot>();
 	
-	public Auction(String name, String owner, String highestBidder, LocalDateTime sDate, LocalDateTime eDate, double currentPrice, double startingPrice, double minimumRise, int id , boolean timeExt) {
+	public Auction(String name, String owner, String highestBidder, String sDate,String eDate, double currentPrice, double startingPrice, double minimumRise, int id , boolean timeExt) {
 		super();
 		this.name = name;
 		this.owner = owner;
 		this.highestBidder = highestBidder;
-		this.sDate = sDate;
-		this.eDate = eDate;
+		this.sDateStr = sDate;
+		this.eDateStr = eDate;
 		this.startingPrice = startingPrice;
 		this.minimumRise = minimumRise;
 		this.id = id;
@@ -92,6 +93,10 @@ public class Auction {
 		return sDate;
 	}
 
+	public String geteDateStr() {
+		return eDateStr;
+	}
+	
 	public LocalDateTime geteDate() {
 		return eDate;
 	}

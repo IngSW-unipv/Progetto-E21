@@ -72,7 +72,7 @@ public class WelcomeServlet extends HttpServlet {
 		else if (req.getPathInfo().equals("/home")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			try {
-				resp.getWriter().write(Rythm.render("home.html", cookie, auctionHouse.getAuctions()));
+				resp.getWriter().write(Rythm.render("home.html", cookie, auctionHouse.getOpenAuctions()));
 			} catch (Exception e) {
 				e.printStackTrace();
 			} 
@@ -116,7 +116,7 @@ public class WelcomeServlet extends HttpServlet {
 				}
 				else {
 					
-					resp.getWriter().write(Rythm.render("home.html", cookie, auctionHouse.getAuctions())); 
+					resp.getWriter().write(Rythm.render("home.html", cookie, auctionHouse.getOpenAuctions())); 
 				}
 			}catch (Exception e) {
 				e.printStackTrace();
@@ -129,7 +129,7 @@ public class WelcomeServlet extends HttpServlet {
 			Participant p1 = new Participant(req.getParameter("firstName"), req.getParameter("lastName"), req.getParameter("email"), req.getParameter("username"), req.getParameter("pwd"), birthday, req.getParameter("mobileNumber"));
 			try {
 				int cookie = auctionHouse.registerParticipantToDB(p1);
-				resp.getWriter().write(Rythm.render("home.html", cookie, auctionHouse.getAuctions())); 		 
+				resp.getWriter().write(Rythm.render("home.html", cookie, auctionHouse.getOpenAuctions())); 		 
 			} catch (Exception e) {
 				resp.getWriter().write(Rythm.render("register.html", "Errore durante la registrazione, riprova più tardi"));
 			}
@@ -317,7 +317,7 @@ public class WelcomeServlet extends HttpServlet {
 								pendingAucton.remove(i);
 							}
 						}
-						resp.getWriter().write(Rythm.render("home.html", cookie, auctionHouse.getAuctions()));
+						resp.getWriter().write(Rythm.render("home.html", cookie, auctionHouse.getOpenAuctions()));
 						resp.getWriter().write(Rythm.render("error.html", cookie, "Auction already created"));
 					}
 					catch (Exception e) {

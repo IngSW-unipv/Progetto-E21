@@ -9,9 +9,12 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -229,7 +232,7 @@ public class AuctionHouse {
 		
 	}
 		
-	public ArrayList<Auction> getAuctions() throws SQLException {
+	public ArrayList<Auction> getOpenAuctions() throws SQLException, ParseException {
 		Connection cn = null;
 		Statement st1, st2, st3;
 		ResultSet rs1, rs2, rs3;
@@ -245,7 +248,7 @@ public class AuctionHouse {
 			   cn =  connectDB(); //Establishing connection
 		   	
 			// CREAZIONE AUCTIONS
-	           sql1 = "SELECT * FROM auction;";
+	           sql1 = "SELECT * FROM auction where status = 'open';";
 			   st1 = cn.createStatement(); //creo sempre uno statement sulla coneesione		   
 			   rs1 = st1.executeQuery(sql1); //faccio la query su uno statement
 			   
@@ -253,43 +256,52 @@ public class AuctionHouse {
 			   String date1, date2;
 			   
 			   while(rs1.next() == true) { 
-				  date1 = "20" + rs1.getTimestamp("startDate").toString();
-				  date2 = "20" + rs1.getTimestamp("endDate").toString();		   
-				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(2, date1.length()-2), formatter);
-				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(2, date2.length()-2), formatter);
-				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate, eDate, rs1.getDouble("currentPrice"),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"));
-				  
-				  
-				  //CREAZIONE LOT
-				  sql2 = "SELECT * FROM lot where username = '" + rs1.getString("username") + "' and auctionID = " + rs1.getInt("auctionID") + ";";
-				  st2 = cn.createStatement();
-				  rs2 = st2.executeQuery(sql2);
-				  
-				  
-				  while(rs2.next() == true) {
-					  l1 = new Lot(rs2.getString("name"), rs2.getString("description"), rs2.getInt("lotID"));
-					  
-					  //CREAZIONE ITEM
-					  sql3 = "SELECT * FROM item where username = '" + rs2.getString("username") + "' and auctionID = " + rs2.getInt("auctionID") + " and lotID = " + rs2.getInt("lotID") + ";";
-					  st3 = cn.createStatement();
-					  rs3 = st3.executeQuery(sql3);
+				  date1 =rs1.getTimestamp("startDate").toString();
+				  date2 =rs1.getTimestamp("endDate").toString();		   
+				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(0, date1.length()-2), formatter);
+				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(0, date2.length()-2), formatter);
+				  LocalDateTime currentDate = LocalDateTime.parse(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), formatter);
+				 
+				  if(currentDate.isBefore(eDate)) {
+					  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), rs1.getDouble("currentPrice"),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"));
 					  
 					  
-					  while(rs3.next() == true) {
+					  //CREAZIONE LOT
+					  sql2 = "SELECT * FROM lot where username = '" + rs1.getString("username") + "' and auctionID = " + rs1.getInt("auctionID") + ";";
+					  st2 = cn.createStatement();
+					  rs2 = st2.executeQuery(sql2);
+					  
+					  
+					  while(rs2.next() == true) {
+						  l1 = new Lot(rs2.getString("name"), rs2.getString("description"), rs2.getInt("lotID"));
 						  
-					      File f =  new File("src/main/resources/imgDB/auctionsPics/" + rs3.getString("img"));
-					      String encodstring = null;
-						  try {
-								encodstring = encodeFileToBase64Binary(f);
-						  } catch (Exception e) {
-						    	e.printStackTrace();
+						  //CREAZIONE ITEM
+						  sql3 = "SELECT * FROM item where username = '" + rs2.getString("username") + "' and auctionID = " + rs2.getInt("auctionID") + " and lotID = " + rs2.getInt("lotID") + ";";
+						  st3 = cn.createStatement();
+						  rs3 = st3.executeQuery(sql3);
+						  
+						  
+						  while(rs3.next() == true) {
+							  
+						      File f =  new File("src/main/resources/imgDB/auctionsPics/" + rs3.getString("img"));
+						      String encodstring = null;
+							  try {
+									encodstring = encodeFileToBase64Binary(f);
+							  } catch (Exception e) {
+							    	e.printStackTrace();
+							  }
+							  i1 = new Item(rs3.getString("name"), rs3.getString("description"), encodstring , rs3.getInt("itemID"));
+							  l1.addItem(i1);
 						  }
-						  i1 = new Item(rs3.getString("name"), rs3.getString("description"), encodstring , rs3.getInt("itemID"));
-						  l1.addItem(i1);
+						  a1.addLot(l1);
 					  }
-					  a1.addLot(l1);
+					  auctions.add(a1);
+				   }
+				  else { 
+					   sql2 = "update auction set auction.status = 'closed' where auctionID = '" + rs1.getInt("auctionID") + "'";
+					   st2 = cn.createStatement(); //creo sempre uno statement sulla coneesione		   
+					   st2.executeUpdate(sql2); //faccio la query su uno statement
 				  }
-				  auctions.add(a1);
 				  
 			   }
 			   cn.close();
@@ -451,7 +463,7 @@ public class AuctionHouse {
 				  date2 = "20" + rs1.getTimestamp("endDate").toString();		   
 				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(2, date1.length()-2), formatter);
 				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(2, date1.length()-2), formatter);
-				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate, sDate,  rs1.getDouble("currentPrice"), rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"));
+				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0,10), sDate.toString().substring(0,10),  rs1.getDouble("currentPrice"), rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"));
 				  
 				  
 				  //CREAZIONE LOT
@@ -670,13 +682,11 @@ public class AuctionHouse {
 					   imgId++;
 					   st.executeUpdate(sql);
 				   }
-				   
 			   }
-			 
 			   
 		   } catch(SQLException e) {
-		   System.out.println("errore: " + e.getMessage());
-		   throw new Exception("Error while connecting to DataBase, try again later");
+			   System.out.println("errore: " + e.getMessage());
+			   throw new Exception("Error while connecting to DataBase, try again later");
 		   } 
 		   finally {
 			   cn.close();
