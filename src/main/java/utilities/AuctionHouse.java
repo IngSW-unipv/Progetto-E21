@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import auction.Auction;
 import auction.Item;
@@ -699,8 +700,10 @@ public class AuctionHouse {
 			   sql = "delete from address where username = '" + loggedIn.get(cookie) +"'";
 			   st = cn.createStatement(); //creo  uno statement sulla coneesione
 			   st.executeUpdate(sql); //faccio la query su uno statement
-			   sql = "insert into cCard(username, fName, lName, date, number, cvv) values ('" + loggedIn.get(cookie) + "','" + fName + "','" + lName + "','" 
-						+ date + "','" + number + "','" + cvv + "')";
+			   Random r = new Random();
+			   double randomValue = 1999999999 * r.nextDouble();
+			   sql = "insert into cCard(username, fName, lName, date, number, cvv, founds) values ('" + loggedIn.get(cookie) + "','" + fName + "','" + lName + "','" 
+						+ date + "','" + number + "','" + cvv + "','" + randomValue + "')";
 			   st.executeUpdate(sql);
 		   }
 		   catch (Exception e) {
