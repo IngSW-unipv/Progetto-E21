@@ -425,7 +425,7 @@ public class AuctionHouse {
 		return messages;
 	}
 	
-	public Auction getAuction(String auctioner, String auctionID) throws SQLException {
+	public Auction getAuction(String auctionID) throws SQLException {
 		Connection cn = null;
 		Statement st1, st2, st3;
 		ResultSet rs1, rs2, rs3;
@@ -436,11 +436,10 @@ public class AuctionHouse {
 		//___________connesione___________
         
 		   try {
-			 
 			   cn =  connectDB(); //Establishing connection
 		   	
 			// CREAZIONE AUCTIONS
-	           sql1 = "SELECT * FROM auction where username ='" + auctioner +"' and auctionID =" + auctionID +";";
+	           sql1 = "SELECT * FROM auction where auctionID =" + auctionID +";";
 			   st1 = cn.createStatement(); //creo sempre uno statement sulla coneesione		   
 			   rs1 = st1.executeQuery(sql1); //faccio la query su uno statement
 			   java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -487,13 +486,37 @@ public class AuctionHouse {
 			   return a1;
 			   
 		   } catch(SQLException e) {
-		   System.out.println("errore: " + e.getMessage());
+			   System.out.println("errore: " + e.getMessage());
 		   } 
 		   finally {
 			   cn.close();
 		   }
-		   return null;
-		   
+		   return null;	   
+	}
+	
+
+	public String placeBid(int cookie, String auctionID) throws Exception {
+		try {
+			Auction a = getAuction(auctionID);
+			String usename = loggedIn.get(cookie);
+			if (!loggedIn.get(cookie).equals(a.getHighestBidder()))
+				{
+				   Connection cn = null;
+				   Statement st;
+				   ResultSet rs;
+				   String sql;
+				   cn =  connectDB(); //Establishing connection
+				   double bid = a.getHighestBid() + a.getMinimumRise();
+				   sql = "update auction set auction.currentPrice = '" + bid + "' , auction.bidder = '" +  loggedIn.get(cookie) +"' where auctionID = '" + auctionID + "'";
+			       st = cn.createStatement(); //creo sempre uno statement sulla coneesione
+		           st.executeUpdate(sql); //faccio la query su uno statement
+		           return "You placed a bid";
+				}
+			else return "You have already placed the highest bid on this auction";
+		} catch (SQLException e) {
+			System.out.println("errore: " + e.getMessage());
+			return e.getMessage();
+		}
 	}
 	
 	public String getUsername(int cookie) {
@@ -743,6 +766,7 @@ public class AuctionHouse {
 			byte[] encodedBytes = Base64.getEncoder().encode(bytes);
 			return new String(encodedBytes);
 	}
+
 
 
 

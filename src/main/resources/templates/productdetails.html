@@ -1,4 +1,4 @@
-@args int cookie, auction.Auction auction, String pPicture
+@args int cookie, auction.Auction auction, String pPicture, String msg
 
 
 <!DOCTYPE html>
@@ -93,7 +93,8 @@
 		
 		<div style="position:relative">
         <h2 style="top:0; margin-left: 650px; margin-right: 150px;" class="u-text u-text-6">@(auction.getHighestBid())$ + @(auction.getMinimumRise())$</h2>
-		<a href="https://nicepage.com/k/exam-html-templates" class="u-btn u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-btn-1" style = "bottom:0">Place bid: <br></a>
+		<a href="/placeBid?cookie=@cookie&auctionID=@(auction.getId())&auctioner=@(auction.getOwner())" class="u-btn u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-btn-1" style = "bottom:0">Place bid: <br></a>
+		<p style="margin-top:60px; margin-left: 650px; margin-right: 150px; color:red" class="">@msg</p>
 		</div>
 		@for (auction.Lot lot: auction.getLots()) {
 				<p class="u-text u-text-8" style ="font-weight: bold;  font-size: 40px;">@(lot.getName())</p>

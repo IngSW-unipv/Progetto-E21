@@ -44,15 +44,14 @@ public class WelcomeServlet extends HttpServlet {
  
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		if (req.getPathInfo().equals("/registerRequest")) {
+		if (req.getPathInfo().equals("/registerRequest")) {					//Gestione richiesta pagina di registrazione
 			resp.getWriter().write(Rythm.render("register.html"));	
 		}
 		else if (req.getPathInfo().equals("/productDetails")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			try {
-				resp.getWriter().write(Rythm.render("productDetails.html", cookie, auctionHouse.getAuction(req.getParameter("auctioner"), req.getParameter("auctionID")), auctionHouse.getProfile(req.getParameter("auctioner")).getImg()));
+				resp.getWriter().write(Rythm.render("productDetails.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), auctionHouse.getProfile(req.getParameter("auctioner")).getImg(), ""));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -60,12 +59,21 @@ public class WelcomeServlet extends HttpServlet {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			resp.getWriter().write(Rythm.render("createAuction.html", cookie));
 		}
+		else if (req.getPathInfo().equals("/placeBid")) {
+			int cookie = Integer.parseInt(req.getParameter("cookie"));
+			try {
+				String msg = auctionHouse.placeBid(cookie, req.getParameter("auctionID"));
+				resp.getWriter().write(Rythm.render("productDetails.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), auctionHouse.getProfile(req.getParameter("auctioner")).getImg(), msg));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
 		else if (req.getPathInfo().equals("/home")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			try {
 				resp.getWriter().write(Rythm.render("home.html", cookie, auctionHouse.getAuctions()));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} 
 		}
@@ -74,7 +82,6 @@ public class WelcomeServlet extends HttpServlet {
 			try {
 				resp.getWriter().write(Rythm.render("profile.html", cookie, auctionHouse.getProfile(req.getParameter("profile")), auctionHouse.getReviews(req.getParameter("profile"))));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} 
 		}
@@ -88,14 +95,12 @@ public class WelcomeServlet extends HttpServlet {
 			try {
 				resp.getWriter().write(Rythm.render("myProfile.html", cookie, auctionHouse.getProfile(pr), auctionHouse.getReviews(pr)));
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} 
 		}
-		else {
-			resp.getWriter().write(Rythm.render("login.html", ""));
-		}
-		
+		else {								
+			resp.getWriter().write(Rythm.render("login.html", ""));			//Gestione richiesta pagina di login e default
+		}	
 	}
 		
 	
@@ -319,11 +324,7 @@ public class WelcomeServlet extends HttpServlet {
 						System.out.println(e.getMessage());
 						resp.getWriter().write(Rythm.render("error.html", cookie, e.getMessage()));
 					}	
-				}
-		
-		
-		
-		                                                
+				}                                                
 	}
 	//metodo per la conversione in base64 di un immagine
 	 private static String encodeFileToBase64Binary(File file) throws Exception{
