@@ -702,7 +702,7 @@ public class AuctionHouse {
 			   st.executeUpdate(sql); //faccio la query su uno statement
 			   Random r = new Random();
 			   double randomValue = 1999999999 * r.nextDouble();
-			   sql = "insert into cCard(username, fName, lName, date, number, cvv, founds) values ('" + loggedIn.get(cookie) + "','" + fName + "','" + lName + "','" 
+			   sql = "insert into cCard(username, fName, lName, date, number, cvv, funds) values ('" + loggedIn.get(cookie) + "','" + fName + "','" + lName + "','" 
 						+ date + "','" + number + "','" + cvv + "','" + randomValue + "')";
 			   st.executeUpdate(sql);
 		   }
