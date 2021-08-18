@@ -49,12 +49,31 @@
                 </div>
               </div>
               <div class="u-container-style u-layout-cell u-size-42 u-layout-cell-2">
-                <div class="u-container-layout u-container-layout-2">
-                  <h4 class="u-text u-text-palette-4-dark-2 u-text-2">About me</h4>
-                  <p class="u-text u-text-3">@(user.getIntro())</p>
-                </div>
-              </div>
+                <div class = "u-container-layout row">
+                  <div class="u-container-layout u-container-layout-2">
+                    <h4 class="u-text u-text-palette-4-dark-2 u-text-2">About me</h4>
+                    <p class="u-text u-text-3">@(user.getIntro())</p>
+                  </div>
+                  <div class="u-container-layout u-container-layout-2">
+                    <h4 class="u-text u-text-palette-4-dark-2 u-text-2">Type here your message</h4>
+					  
+					  <form action="#" method="POST" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" style="padding: 10px" source="custom" name="form">
+            <input type="hidden" id="siteId" name="siteId" value="237012660">
+            <input type="hidden" id="pageId" name="pageId" value="156201848">
+            <div class="u-form-group u-form-message">
+              <label for="message-00e5" class="u-form-control-hidden u-label">Message</label>
+              <textarea placeholder="Message" rows="4" cols="50" id="message-00e5" name="message" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required=""></textarea>
             </div>
+            <div class="u-align-left u-form-group u-form-submit">
+              <a href="#" class="u-btn u-btn-submit u-button-style">Send</a>
+              <input type="submit" value="submit" class="u-form-control-hidden">
+            </div>
+<input type="hidden" value="" name="recaptchaResponse">
+          </form>
+</div>
+                </div>
+</div>
+</div>
           </div>
         </div>
 		<h3 class="u-text u-text-palette-4-dark-2 u-text-4"><b style="">Reviews</b></h3>
