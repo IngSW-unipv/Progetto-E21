@@ -231,6 +231,48 @@ public class AuctionHouse {
 
 		
 	}
+	public Object getMyAuctions(int cookie) throws SQLException {
+		Connection cn = null;
+		Statement st;
+		ResultSet rs;
+		String sql;
+		ArrayList<Auction> auctions = new ArrayList<Auction>();
+		Auction a1;
+		Lot l1;
+		Item i1;
+		//___________connesione___________
+        
+		   try {
+			 
+			   cn =  connectDB(); //Establishing connection
+		   	
+			// CREAZIONE AUCTIONS
+	           sql = "SELECT * FROM auction where (username = '"+ loggedIn.get(cookie) +"' or bidder = '" + loggedIn.get(cookie) + "') and status != 'open';";
+			   st = cn.createStatement(); //creo sempre uno statement sulla coneesione		   
+			   rs = st.executeQuery(sql); //faccio la query su uno statement
+			   
+			   java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			   String date1, date2;
+			   
+			   while(rs.next() == true) { 
+				  date1 =rs.getTimestamp("startDate").toString();
+				  date2 =rs.getTimestamp("endDate").toString();		   
+				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(0, date1.length()-2), formatter);
+				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(0, date2.length()-2), formatter);
+				  LocalDateTime currentDate = LocalDateTime.parse(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), formatter);
+				  a1 = new Auction(rs.getString("name"), rs.getString("username"), rs.getString("bidder"), sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), rs.getDouble("currentPrice"),  rs.getDouble("startingPrice"), rs.getDouble("minimumRise"), rs.getInt("auctionID"), rs.getBoolean("timeExt"));
+			   }
+		   }
+		   catch (Exception e) {
+			   System.out.println("errore: " + e.getMessage()); 
+		   }
+		   finally {
+			   cn.close();
+		   }
+		   
+		
+		return null;
+	}
 		
 	public ArrayList<Auction> getOpenAuctions() throws SQLException, ParseException {
 		Connection cn = null;
@@ -779,6 +821,9 @@ public class AuctionHouse {
 			byte[] encodedBytes = Base64.getEncoder().encode(bytes);
 			return new String(encodedBytes);
 	}
+
+
+
 
 
 

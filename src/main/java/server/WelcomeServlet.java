@@ -63,11 +63,18 @@ public class WelcomeServlet extends HttpServlet {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			try {
 				String msg = auctionHouse.placeBid(cookie, req.getParameter("auctionID"));
-				resp.getWriter().write(Rythm.render("productDetails.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), auctionHouse.getProfile(req.getParameter("auctioner")).getImg(), msg));
+				resp.getWriter().write(Rythm.render("productDetails.html", cookie, auctionHouse.getMyAuctions(cookie), auctionHouse.getUsername(cookie)));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+		}
+		else if (req.getPathInfo().equals("/getPayments")) {
+			int cookie = Integer.parseInt(req.getParameter("cookie"));
+			try {
+				resp.getWriter().write(Rythm.render("payments.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), auctionHouse.getProfile(req.getParameter("auctioner")).getImg(), ""));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		else if (req.getPathInfo().equals("/home")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
