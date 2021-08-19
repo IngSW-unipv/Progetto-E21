@@ -62,7 +62,7 @@ public class WelcomeServlet extends HttpServlet {
 		else if (req.getPathInfo().equals("/placeBid")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			try {
-				String msg = auctionHouse.placeBid(cookie, req.getParameter("auctionID"));
+				String msg = auctionHouse.placeBid(auctionHouse.getUsername(cookie), req.getParameter("auctionID"));
 				resp.getWriter().write(Rythm.render("productDetails.html", cookie, auctionHouse.getMyAuctions(cookie), auctionHouse.getUsername(cookie)));
 			} catch (Exception e) {
 				e.printStackTrace();

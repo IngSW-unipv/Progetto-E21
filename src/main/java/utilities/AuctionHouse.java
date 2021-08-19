@@ -550,11 +550,10 @@ public class AuctionHouse {
 	}
 	
 
-	public String placeBid(int cookie, String auctionID) throws Exception {
+	public String placeBid(String username , String auctionID) throws Exception {
 		try {
 			Auction a = getAuction(auctionID);
-			String usename = loggedIn.get(cookie);
-			if (!loggedIn.get(cookie).equals(a.getHighestBidder()))
+			if (!username.equals(a.getHighestBidder()))
 				{
 				   Connection cn = null;
 				   Statement st;
@@ -562,7 +561,7 @@ public class AuctionHouse {
 				   String sql;
 				   cn =  connectDB(); //Establishing connection
 				   double bid = a.getHighestBid() + a.getMinimumRise();
-				   sql = "update auction set auction.currentPrice = '" + bid + "' , auction.bidder = '" +  loggedIn.get(cookie) +"' where auctionID = '" + auctionID + "'";
+				   sql = "update auction set auction.currentPrice = '" + bid + "' , auction.bidder = '" +  username +"' where auctionID = '" + auctionID + "'";
 			       st = cn.createStatement(); //creo sempre uno statement sulla coneesione
 		           st.executeUpdate(sql); //faccio la query su uno statement
 		           return "You placed a bid";
