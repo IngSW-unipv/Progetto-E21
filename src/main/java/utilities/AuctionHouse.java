@@ -231,11 +231,11 @@ public class AuctionHouse {
 
 		
 	}
-	public Object getMyAuctions(int cookie) throws SQLException {
+	public  ArrayList<Auction> getMyClosedAuctions(int cookie) throws SQLException {
 		Connection cn = null;
-		Statement st;
-		ResultSet rs;
-		String sql;
+		Statement st1, st2, st3;
+		ResultSet rs1, rs2, rs3;
+		String sql1, sql2, sql3;
 		ArrayList<Auction> auctions = new ArrayList<Auction>();
 		Auction a1;
 		Lot l1;
@@ -247,31 +247,64 @@ public class AuctionHouse {
 			   cn =  connectDB(); //Establishing connection
 		   	
 			// CREAZIONE AUCTIONS
-	           sql = "SELECT * FROM auction where (username = '"+ loggedIn.get(cookie) +"' or bidder = '" + loggedIn.get(cookie) + "') and status != 'open';";
-			   st = cn.createStatement(); //creo sempre uno statement sulla coneesione		   
-			   rs = st.executeQuery(sql); //faccio la query su uno statement
+	           sql1 = "SELECT * FROM auction where username = '"+ loggedIn.get(cookie) +"' and status != 'open';";
+			   st1 = cn.createStatement(); //creo sempre uno statement sulla coneesione		   
+			   rs1 = st1.executeQuery(sql1); //faccio la query su uno statement
 			   
 			   java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 			   String date1, date2;
 			   
-			   while(rs.next() == true) { 
-				  date1 =rs.getTimestamp("startDate").toString();
-				  date2 =rs.getTimestamp("endDate").toString();		   
+			   while(rs1.next() == true) { 
+				  date1 =rs1.getTimestamp("startDate").toString();
+				  date2 =rs1.getTimestamp("endDate").toString();		   
 				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(0, date1.length()-2), formatter);
 				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(0, date2.length()-2), formatter);
 				  LocalDateTime currentDate = LocalDateTime.parse(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), formatter);
-				  a1 = new Auction(rs.getString("name"), rs.getString("username"), rs.getString("bidder"), sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), rs.getDouble("currentPrice"),  rs.getDouble("startingPrice"), rs.getDouble("minimumRise"), rs.getInt("auctionID"), rs.getBoolean("timeExt"));
+				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), rs1.getDouble("currentPrice"),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"));
+				
+				  //CREAZIONE LOT
+				  sql2 = "SELECT * FROM lot where username = '" + rs1.getString("username") + "' and auctionID = " + rs1.getInt("auctionID") + ";";
+				  st2 = cn.createStatement();
+				  rs2 = st2.executeQuery(sql2);
+				  
+				  
+				  while(rs2.next() == true) {
+					  l1 = new Lot(rs2.getString("name"), rs2.getString("description"), rs2.getInt("lotID"));
+					  
+					  //CREAZIONE ITEM
+					  sql3 = "SELECT * FROM item where username = '" + rs2.getString("username") + "' and auctionID = " + rs2.getInt("auctionID") + " and lotID = " + rs2.getInt("lotID") + ";";
+					  st3 = cn.createStatement();
+					  rs3 = st3.executeQuery(sql3);
+					  
+					  
+					  while(rs3.next() == true) {
+						  
+					      File f =  new File("src/main/resources/imgDB/auctionsPics/" + rs3.getString("img"));
+					      String encodstring = null;
+						  try {
+								encodstring = encodeFileToBase64Binary(f);
+						  } catch (Exception e) {
+						    	e.printStackTrace();
+						  }
+						  i1 = new Item(rs3.getString("name"), rs3.getString("description"), encodstring , rs3.getInt("itemID"));
+						  l1.addItem(i1);
+					  }
+					  a1.addLot(l1);
+				  }
+				  auctions.add(a1);
 			   }
+			   return auctions;
 		   }
 		   catch (Exception e) {
 			   System.out.println("errore: " + e.getMessage()); 
+			   return null;
 		   }
 		   finally {
 			   cn.close();
 		   }
 		   
 		
-		return null;
+		
 	}
 		
 	public ArrayList<Auction> getOpenAuctions() throws SQLException, ParseException {

@@ -71,7 +71,9 @@ public class WelcomeServlet extends HttpServlet {
 		else if (req.getPathInfo().equals("/getPayments")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			try {
-				resp.getWriter().write(Rythm.render("payments.html", cookie, auctionHouse.getMyAuctions(cookie), auctionHouse.getUsername(cookie)));
+				ArrayList<Auction> ar = auctionHouse.getMyClosedAuctions(cookie);
+				String un = auctionHouse.getUsername(cookie);
+				resp.getWriter().write(Rythm.render("payments.html", cookie, auctionHouse.getMyClosedAuctions(cookie), auctionHouse.getUsername(cookie)));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
