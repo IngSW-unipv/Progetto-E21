@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import org.apache.commons.lang3.time.DateUtils;
+
 import auction.Auction;
 import auction.Item;
 import auction.Lot;
@@ -260,7 +262,7 @@ public class AuctionHouse {
 				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(0, date1.length()-2), formatter);
 				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(0, date2.length()-2), formatter);
 				  LocalDateTime currentDate = LocalDateTime.parse(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), formatter);
-				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), rs1.getDouble("currentPrice"),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"));
+				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), rs1.getDouble("currentPrice"),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"), eDate);
 				
 				  //CREAZIONE LOT
 				  sql2 = "SELECT * FROM lot where username = '" + rs1.getString("username") + "' and auctionID = " + rs1.getInt("auctionID") + ";";
@@ -337,8 +339,8 @@ public class AuctionHouse {
 				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(0, date2.length()-2), formatter);
 				  LocalDateTime currentDate = LocalDateTime.parse(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), formatter);
 				 
-				  if(currentDate.isBefore(eDate)) {
-					  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), rs1.getDouble("currentPrice"),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"));
+				  if(currentDate.isBefore(eDate) && currentDate.isAfter(sDate)) {
+					  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), rs1.getDouble("currentPrice"),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"), eDate);
 					  
 					  
 					  //CREAZIONE LOT
@@ -538,7 +540,7 @@ public class AuctionHouse {
 				  date2 = "20" + rs1.getTimestamp("endDate").toString();		   
 				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(2, date1.length()-2), formatter);
 				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(2, date1.length()-2), formatter);
-				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0,10), sDate.toString().substring(0,10),  rs1.getDouble("currentPrice"), rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"));
+				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0,10), eDate.toString().substring(0,10),  rs1.getDouble("currentPrice"), rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"), eDate);
 				  
 				  
 				  //CREAZIONE LOT
@@ -586,20 +588,37 @@ public class AuctionHouse {
 	public String placeBid(String username , String auctionID) throws Exception {
 		try {
 			Auction a = getAuction(auctionID);
-			if (!username.equals(a.getHighestBidder()))
+			if (!username.equals(a.getHighestBidder()) && !username.equals(a.getOwner()))
 				{
 				   Connection cn = null;
 				   Statement st;
 				   ResultSet rs;
 				   String sql;
 				   cn =  connectDB(); //Establishing connection
-				   double bid = a.getHighestBid() + a.getMinimumRise();
-				   sql = "update auction set auction.currentPrice = '" + bid + "' , auction.bidder = '" +  username +"' where auctionID = '" + auctionID + "'";
+				   
+				   sql = "select timeExt from auction where auctionID = '" + auctionID + "'";
 			       st = cn.createStatement(); //creo sempre uno statement sulla coneesione
-		           st.executeUpdate(sql); //faccio la query su uno statement
-		           return "You placed a bid";
+				   rs = st.executeQuery(sql); //faccio la query su uno statement
+				   rs.next();
+				   int extension = rs.getInt("timeExt");
+				   if (extension == 0)
+				   {
+					   double bid = a.getHighestBid() + a.getMinimumRise();
+					   sql = "update auction set auction.currentPrice = '" + bid + "' , auction.bidder = '" +  username +"' where auctionID = '" + auctionID + "'";
+			           st.executeUpdate(sql); 
+			           return "You placed a bid";
+				   }
+				   else {
+					   double bid = a.getHighestBid() + a.getMinimumRise();
+					   LocalDateTime newDate = a.geteDate();
+					   newDate = newDate.plusDays(1);
+					   sql = "update auction set auction.endDate = '" + newDate + "' , auction.currentPrice = '" + bid + "' , auction.bidder = '" +  username +"' where auctionID = '" + auctionID + "'";
+			           st.executeUpdate(sql); 
+			           return "You placed a bid";
+				   }
 				}
-			else return "You have already placed the highest bid on this auction";
+			else if (username.equals(a.getHighestBidder())) return "You have already placed the highest bid on this auction";
+			else return "You can't blace bids on your auctions";
 		} catch (SQLException e) {
 			System.out.println("errore: " + e.getMessage());
 			return e.getMessage();
@@ -713,7 +732,7 @@ public class AuctionHouse {
 	
 	
 	//Metodo per l'inserimento di una nuova asta nel database
-	public Auction registerAuctionToDB(int cookie, Auction a) throws Exception {
+	public Auction registerAuctionToDB(String username, Auction a) throws Exception {
 		Connection cn = null;
 		Statement st;
 		ResultSet rs;
@@ -732,7 +751,7 @@ public class AuctionHouse {
 			   int id = rs.getInt("max(auctionID)") + 1;
 			   
 			   Boolean ok = a.getTimeExt();
-			   sql = "insert into auction(username, auctionID, name, startDate, endDate, bidder, startingPrice, minimumRise, currentPrice, timeExt) values ('" + loggedIn.get(cookie) +"','" + id + "','" + a.getName() + "','" + a.getsDate() + "','" 
+			   sql = "insert into auction(username, auctionID, name, startDate, endDate, bidder, startingPrice, minimumRise, currentPrice, timeExt) values ('" + username +"','" + id + "','" + a.getName() + "','" + a.getsDate() + "','" 
 						+ a.geteDate() + "','" + null  +   "','" + a.getStartingPrice() +  "','" + a.getMinimumRise() +  "','" + a.getStartingPrice() + "','"+ ok.compareTo(false) + "')";
 			   st.executeUpdate(sql);
 			   //cerco da quale numero partire per rinominare le immagini
@@ -745,14 +764,14 @@ public class AuctionHouse {
 			   //inserisco lotti
 			   for(int i = 0; i < a.getLots().size(); i++)
 			   {
-				   sql = "insert into lot(username, auctionID, lotID, name, description) values ('" + loggedIn.get(cookie) + "','" + id + "','" + i + "','" + a.getLots().get(i).getName() + "','" + a.getLots().get(i).getDescription() + "')";
+				   sql = "insert into lot(username, auctionID, lotID, name, description) values ('" + username + "','" + id + "','" + i + "','" + a.getLots().get(i).getName() + "','" + a.getLots().get(i).getDescription() + "')";
 				   st.executeUpdate(sql);
 				   
 				   //inserisco oggetti
 				   for(int k = 0; k < a.getLots().get(i).getItems().size(); k++)
 				   {
 					   saveImg(a.getLots().get(i).getItems().get(k).getImgFile(), imgId);
-					   sql = "insert into item(username, auctionID, lotID, itemID, img, name, description) values ('" + loggedIn.get(cookie) + "','" + id + "','" + i + "','" + k + "','" + imgId + ".jpg','" + a.getLots().get(i).getItems().get(k).getName() + "','" + a.getLots().get(i).getItems().get(k).getDescription() + "')";
+					   sql = "insert into item(username, auctionID, lotID, itemID, img, name, description) values ('" + username + "','" + id + "','" + i + "','" + k + "','" + imgId + ".jpg','" + a.getLots().get(i).getItems().get(k).getName() + "','" + a.getLots().get(i).getItems().get(k).getDescription() + "')";
 					   imgId++;
 					   st.executeUpdate(sql);
 				   }
@@ -813,14 +832,31 @@ public class AuctionHouse {
 	        st = cn.createStatement(); //creo sempre uno statement sulla connesione   
 		 	rs = st.executeQuery(sql); //faccio la query su uno statement
 		 	rs.next();
-			File file = new File("src/main/resources/imgDB/profilePics/" + rs.getString("img") + ".jpg");
-			FileOutputStream outputStream = new FileOutputStream(file, false);
-	        int read;
-	        byte[] bytes = new byte[fileContent.available()];
-	        while ((read = fileContent.read(bytes)) != -1) {
-	             outputStream.write(bytes, 0, read);
-	        }
-
+		 	if(!rs.getString("img").equals("0"))
+		 	{
+				File file = new File("src/main/resources/imgDB/profilePics/" + rs.getString("img") + ".jpg");
+				FileOutputStream outputStream = new FileOutputStream(file, false);
+		        int read;
+		        byte[] bytes = new byte[fileContent.available()];
+		        while ((read = fileContent.read(bytes)) != -1) {
+		             outputStream.write(bytes, 0, read);
+		        }
+		 	}
+		 	else {
+		 		sql = "select max(img) from participant;";	   
+				rs = st.executeQuery(sql); //faccio la query su uno statement
+				rs.next();
+				int imgId = Integer.parseInt(rs.getString("max(img)")) + 1;
+				File file = new File("src/main/resources/imgDB/profilePics/" + imgId + ".jpg");
+				FileOutputStream outputStream = new FileOutputStream(file, false);
+		        int read;
+		        byte[] bytes = new byte[fileContent.available()];
+		        while ((read = fileContent.read(bytes)) != -1) {
+		             outputStream.write(bytes, 0, read);
+		        }
+		        sql = "update participant set participant.img = '" + imgId + "' where username = '" + loggedIn.get(cookie) + "'";
+				st.executeUpdate(sql); //faccio la query su uno statement
+		 	}
 		} catch (SQLException e) {
 			System.out.println("errore: " + e.getMessage());
 			   throw new Exception("Error while connecting to DataBase, try again later");

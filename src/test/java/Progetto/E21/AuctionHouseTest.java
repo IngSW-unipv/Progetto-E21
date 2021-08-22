@@ -3,6 +3,10 @@ package Progetto.E21;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Date;
+
 import auction.*;
 import utilities.*;
 import user.*;
@@ -30,7 +34,12 @@ public class AuctionHouseTest {
 		lot1.addItem(item2);
 		lot2.addItem(item3);
 		lot2.addItem(item4);
-		auction = new Auction("auction123", "owner", "user1", null, null, 100.0, 10.0, 1.0, 100, true);
+		java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		String date1 = "2020-02-12 10:11:00";
+		String date2 = "2020-03-12 10:11:00";		   
+		LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(0, date1.length()-2), formatter);
+		LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(0, date2.length()-2), formatter);
+		auction = new Auction("auction123", "owner", "user1", sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), 100.0, 10.0, 1.0, 100, true, eDate);
 		auction.addLot(lot1);
 		auction.addLot(lot2);
 		house = new AuctionHouse("Auction House");
@@ -40,8 +49,8 @@ public class AuctionHouseTest {
     public void placeBidTest() {
     	init();
     	try {
-			house.registerAuctionToDB(100, auction);
-			house.placeBid(100, "100");
+			house.registerAuctionToDB("user", auction);
+			house.placeBid("IronMan", "100");
 			auction = house.getAuction("100");
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -15,13 +15,14 @@ public class Auction {
 	boolean timeExt = false;
 	private ArrayList<Lot> lots = new ArrayList<Lot>();
 	
-	public Auction(String name, String owner, String highestBidder, String sDate,String eDate, double currentPrice, double startingPrice, double minimumRise, int id , boolean timeExt) {
+	public Auction(String name, String owner, String highestBidder, String sDateStr,String eDateStr, double currentPrice, double startingPrice, double minimumRise, int id , boolean timeExt, LocalDateTime eDate) {
 		super();
 		this.name = name;
 		this.owner = owner;
 		this.highestBidder = highestBidder;
-		this.sDateStr = sDate;
-		this.eDateStr = eDate;
+		this.sDateStr = sDateStr;
+		this.eDateStr = eDateStr;
+		this.eDate = eDate;
 		this.startingPrice = startingPrice;
 		this.minimumRise = minimumRise;
 		this.id = id;
