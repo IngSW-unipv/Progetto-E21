@@ -39,7 +39,7 @@ public class AuctionHouseTest {
 		String date2 = "2020-03-12 10:11:00";		   
 		LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(0, date1.length()-2), formatter);
 		LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(0, date2.length()-2), formatter);
-		auction = new Auction("auction123", "owner", "user1", sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), 100.0, 10.0, 1.0, 100, true, eDate);
+		auction = new Auction("auction123", "owner", "user1", sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), 100.0, 10.0, 1.0, 100, true, eDate, "open");
 		auction.addLot(lot1);
 		auction.addLot(lot2);
 		house = new AuctionHouse("Auction House");
@@ -61,8 +61,8 @@ public class AuctionHouseTest {
     @Test
     public void userDeleteTest() {
     	init();
-    	Participant p1 = new Participant("bhon1", "bhos1", "a@a.com", "bhobho1", "bho", null, "12345");
-    	Participant p2 = new Participant("bhon2", "bhos2", "a@a.com", "bhobho2", "bho", null, "6789");
+    	Participant p1 = new Participant("test1", "test1", "a@a.com", "test1", "test", null, "1234567891");
+    	Participant p2 = new Participant("test2", "test2", "b@a.com", "test2", "test", null, "6789562738");
     	try {
 			house.registerParticipantToDB(p1);
 			house.registerParticipantToDB(p2);

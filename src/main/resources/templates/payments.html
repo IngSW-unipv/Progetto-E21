@@ -24,7 +24,7 @@
 		"logo": "images/LOGO.png"
 }</script>
 <script>	
-	document.cookie = "cookie = @cookie"
+	document.cookie = "cookie = @cookie" 
 </script>
     <meta name="theme-color" content="#478ac9">
     <meta property="og:title" content="payments">
@@ -46,7 +46,7 @@
 	    <h4 class="u-text u-text-default u-text-1">Outgoing<span style="font-size: 1.875rem;"></span></h4>
 	  
 	   @for (auction.Auction ac: auctions) {
-				@if(ac.getHighestBidder() == username){
+				@if(s().eq(ac.getHighestBidder(),username)){
 					 <div class="u-container-style u-group u-palette-1-light-3 u-shape-rectangle u-group-1">
 						<div class="u-container-layout u-container-layout-1">
 							<img class="u-image u-image-default u-image-1" src="data:image/png;base64, @(ac.getThumbnail())" alt="" data-image-width="1000" data-image-height="1500">
@@ -62,15 +62,17 @@
 		<h4 class="u-text u-text-default u-text-1">Incoming<span style="font-size: 1.875rem;"></span></h4>
 
 		 @for (auction.Auction ac: auctions) {
-					 <div class="u-container-style u-group u-palette-1-light-3 u-shape-rectangle u-group-1">
-						<div class="u-container-layout u-container-layout-1">
-							<img class="u-image u-image-default u-image-1" src="data:image/png;base64, @(ac.getThumbnail())" alt="" data-image-width="1000" data-image-height="1500">
-							<h5 class="u-text u-text-default u-text-palette-4-dark-2 u-text-2">@(ac.getName())<br>
-							</h5>
-							<a href="/checkPayment/cookie=@cookie&auctionID=@(ac.getId())" class="u-border-none u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-radius-50 u-btn-1">check payment<br>
-							</a>
+			 @if(s().eq(ac.getOwner(),username)){
+						 <div class="u-container-style u-group u-palette-1-light-3 u-shape-rectangle u-group-1">
+							<div class="u-container-layout u-container-layout-1">
+								<img class="u-image u-image-default u-image-1" src="data:image/png;base64, @(ac.getThumbnail())" alt="" data-image-width="1000" data-image-height="1500">
+								<h5 class="u-text u-text-default u-text-palette-4-dark-2 u-text-2">@(ac.getName())<br>
+								</h5>
+								<a href="/checkPayment/cookie=@cookie&auctionID=@(ac.getId())" class="u-border-none u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-radius-50 u-btn-1">check payment<br>
+								</a>
+							</div>
 						</div>
-					</div>
+				}
 			}
       </div>
     </section>

@@ -234,7 +234,7 @@ public class AuctionHouse {
 
 		
 	}
-	public  ArrayList<Auction> getMyClosedAuctions(int cookie) throws SQLException {
+	public  ArrayList<Auction> getClosedAuctions(int cookie) throws SQLException {
 		Connection cn = null;
 		Statement st1, st2, st3;
 		ResultSet rs1, rs2, rs3;
@@ -250,7 +250,7 @@ public class AuctionHouse {
 			   cn =  connectDB(); //Establishing connection
 		   	
 			// CREAZIONE AUCTIONS
-	           sql1 = "SELECT * FROM auction where username = '"+ loggedIn.get(cookie) +"' and status != 'open';";
+	           sql1 = "SELECT * FROM auction where (username = '"+ loggedIn.get(cookie) +"' or bidder = '"+ loggedIn.get(cookie)+ "' )  and status != 'open';";
 			   st1 = cn.createStatement(); //creo sempre uno statement sulla coneesione		   
 			   rs1 = st1.executeQuery(sql1); //faccio la query su uno statement
 			   
@@ -263,7 +263,7 @@ public class AuctionHouse {
 				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(0, date1.length()-2), formatter);
 				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(0, date2.length()-2), formatter);
 				  LocalDateTime currentDate = LocalDateTime.parse(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), formatter);
-				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), rs1.getDouble("currentPrice"),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"), eDate);
+				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), rs1.getDouble("currentPrice"),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"), eDate, rs1.getString("status") );
 				
 				  //CREAZIONE LOT
 				  sql2 = "SELECT * FROM lot where username = '" + rs1.getString("username") + "' and auctionID = " + rs1.getInt("auctionID") + ";";
@@ -341,7 +341,7 @@ public class AuctionHouse {
 				  LocalDateTime currentDate = LocalDateTime.parse(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), formatter);
 				 
 				  if(currentDate.isBefore(eDate) && currentDate.isAfter(sDate)) {
-					  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), rs1.getDouble("currentPrice"),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"), eDate);
+					  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), rs1.getDouble("currentPrice"),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"), eDate, rs1.getString("status"));
 					  
 					  
 					  //CREAZIONE LOT
@@ -550,7 +550,7 @@ public class AuctionHouse {
 				  date2 = "20" + rs1.getTimestamp("endDate").toString();		   
 				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(2, date1.length()-2), formatter);
 				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(2, date1.length()-2), formatter);
-				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0,10), eDate.toString().substring(0,10),  rs1.getDouble("currentPrice"), rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"), eDate);
+				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0,10), eDate.toString().substring(0,10),  rs1.getDouble("currentPrice"), rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"), eDate, rs1.getString("status"));
 				  
 				  
 				  //CREAZIONE LOT
