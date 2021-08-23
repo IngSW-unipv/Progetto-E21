@@ -12,6 +12,7 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
@@ -438,12 +439,17 @@ public class AuctionHouse {
 		ResultSet rs;
 		String sql;
 		String senderUsername = loggedIn.get(cookie);
+		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm");
+		String nowFormatted = now.format(formatter);
+
+
+		ChatMessage msg = new ChatMessage(senderUsername, receiverUsername, message, nowFormatted);
 	
 		   try {
 			 
 			cn =  connectDB(); //Establishing connection
-			sql = "insert into messages(sender, receiver, message, time) values ('" + senderUsername + "','" + receiverUsername + "','" + message + "','" 
-					+ LocalDateTime.now().getHour() + ":" + LocalDateTime.now().getMinute() + "')";
+			sql = "insert into messages(sender, receiver, message, time) values ('" + msg.getSender() + "','" + msg.getReceiver() + "','" + msg.getText() + "','" + msg.getTime() + "')";
 			
 			st = cn.createStatement();
 			
@@ -453,7 +459,11 @@ public class AuctionHouse {
             
 		} catch (SQLException e) {
 			
-			System.out.println("Error while connecting to the database");
+			System.out.println("Error while connecting to the database for chat");
+			System.out.println(msg.getReceiver());
+			   System.out.println(msg.getSender());
+			   System.out.println(msg.getText());
+			   System.out.println(msg.getTime());
 			return -1;
 		}
 		   finally {
@@ -508,7 +518,7 @@ public class AuctionHouse {
 		} catch (SQLException e) {
 			
 			System.out.println("Error while connecting to the database");
-			throw new Exception("Errore nel caricamento dei messaggi, riprova più tardi");
+			throw new Exception("Errore nel caricamento dei messaggi, riprova piï¿½ tardi");
 		}finally {
 			   cn.close();
 		   }

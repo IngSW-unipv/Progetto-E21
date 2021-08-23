@@ -147,7 +147,7 @@ public class WelcomeServlet extends HttpServlet {
 		//SEND MESSAGE DA FINIRE
 		else if (req.getPathInfo().equals("/sendMessage")) {
 			int cookie = Integer.parseInt(req.getCookies()[0].getValue());
-			String receiverUsername = req.getParameter("username");
+			String receiverUsername = req.getParameter("profile");
 			String text = req.getParameter("message");
 			try {
 				auctionHouse.saveMessage(cookie, receiverUsername, text);
