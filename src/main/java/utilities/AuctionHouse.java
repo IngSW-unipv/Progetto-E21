@@ -410,16 +410,10 @@ public class AuctionHouse {
 			cn =  connectDB(); //Establishing connection	
 		    String email = p1.getEmail();
 	        sql = "DELETE FROM PARTICIPANT WHERE EMAIL= " + email;
-		   //____________query___________
 	        
 			   st = cn.createStatement(); //creo sempre uno statement sulla coneesione
 			   
-			   rs = st.executeQuery(sql); //faccio la query su uno statement
-			   while(rs.next() == true) {
-				   
-				   System.out.println(rs.getNString(1) + "\t" + rs.getNString("email") );
-		
-			   }
+			   st.executeUpdate(sql); //faccio la query su uno statement
 			   
 		   } catch(SQLException e) {
 			   System.out.println("errore: " + e.getMessage());

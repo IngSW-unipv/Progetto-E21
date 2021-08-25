@@ -4,6 +4,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -37,8 +38,8 @@ public class AuctionHouseTest {
 		java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String date1 = "2020-02-12 10:11:00";
 		String date2 = "2020-03-12 10:11:00";		   
-		LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(0, date1.length()-2), formatter);
-		LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(0, date2.length()-2), formatter);
+		LocalDateTime sDate = java.time.LocalDateTime.parse(date1, formatter);
+		LocalDateTime eDate = java.time.LocalDateTime.parse(date2, formatter);
 		auction = new Auction("auction123", "owner", "user1", sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), 100.0, 10.0, 1.0, 100, true, eDate, "open");
 		auction.addLot(lot1);
 		auction.addLot(lot2);
@@ -61,8 +62,13 @@ public class AuctionHouseTest {
     @Test
     public void userDeleteTest() {
     	init();
-    	Participant p1 = new Participant("test1", "test1", "a@a.com", "test1", "test", null, "1234567891");
-    	Participant p2 = new Participant("test2", "test2", "b@a.com", "test2", "test", null, "6789562738");
+    	java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String date1 = "2000-02-12";
+		String date2 = "2000-03-12";		   
+		LocalDate sDate = java.time.LocalDate.parse(date1, formatter);
+		LocalDate eDate = java.time.LocalDate.parse(date2, formatter);
+    	Participant p1 = new Participant("test1", "test1", "a@a.com", "test1", "test", sDate, "1234567891");
+    	Participant p2 = new Participant("test2", "test2", "b@a.com", "test2", "test", eDate, "6789562738");
     	try {
 			house.registerParticipantToDB(p1);
 			house.registerParticipantToDB(p2);
