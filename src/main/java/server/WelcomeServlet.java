@@ -106,6 +106,14 @@ public class WelcomeServlet extends HttpServlet {
 				e.printStackTrace();
 			} 
 		}
+		else if (req.getPathInfo().equals("/checkPayment")) {
+			int cookie = Integer.parseInt(req.getParameter("cookie"));
+			try {
+				resp.getWriter().write(Rythm.render("checkPayment.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), auctionHouse.getUsername(cookie)));
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
+		}
 		else {								
 			resp.getWriter().write(Rythm.render("login.html", ""));			//Gestione richiesta pagina di login e default
 		}	

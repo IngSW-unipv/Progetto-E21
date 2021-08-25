@@ -41,8 +41,11 @@
             <h5 class="u-text u-text-default u-text-palette-4-dark-2 u-text-1">@(auction.getName())<br>
             </h5>
 			@if(s().eq(auction.getHighestBidder(),username)){
+				<h6 class="u-text" style="margin-left:235px">Seller: @(auction.getOwner())</h6>
+				<h6 class="u-text" style="margin-left:235px">Final Price: @(auction.getHighestBid())</h6>
+				<h6 class="u-text" style="margin-left:235px">Status: @(auction.getStatus())</h6>
 				@if(s().eq(auction.getStatus(), "closed")){
-					<a href="/paymentUtil?cookie=@cookie&auctionID=@(auction.getId())" class="u-border-none u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-radius-50 u-btn-1">PAY<br> </a>
+					<a href="/paymentUtil?cookie=@cookie&auctionID=@(auction.getId())" style="margin : 0 0 0 auto" class="u-border-none u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-radius-50 u-btn-1">PAY<br> </a>
 				}
 				else if (s().eq(auction.getStatus(), "processing")){
 					<a href="/paymentUtil?cookie=@cookie&auctionID=@(auction.getId())" class="u-border-none u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-radius-50 u-btn-1">CONFIRM DELIVERY<br> </a>
@@ -50,20 +53,11 @@
 				else if (s().eq(auction.getStatus(), "paid")){
 					<a href="/paymentUtil?cookie=@cookie&auctionID=@(auction.getId())" class="u-border-none u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-radius-50 u-btn-1">REVIEW<br> </a>
 				}
-				<h6 class="u-text u-text-2">Seller:</h6>
-				<h6 class="u-text u-text-3">@(auction.getOwner())</h6>
-				<h6 class="u-text u-text-4">Final Price:</h6>
-				<h6 class="u-text u-text-5">@(auction.getHighestBid())</h6>
-				<h6 class="u-text u-text-6">Status:</h6>
-				<h6 class="u-text u-text-7">@(auction.getStatus())</h6>
 			}		
 			else{
-				<h6 class="u-text u-text-2">Bidder:</h6>
-				<h6 class="u-text u-text-3">@(auction.getHighestBidder())</h6>
-				<h6 class="u-text u-text-4">Final Price:</h6>
-				<h6 class="u-text u-text-5">@(auction.getHighestBid())</h6>
-				<h6 class="u-text u-text-6">Status:</h6>
-				<h6 class="u-text u-text-7">@(auction.getStatus())</h6>
+				<h6 class="u-text" style="margin-left:235px">Bidder: @(auction.getHighestBidder())</h6>
+				<h6 class="u-text" style="margin-left:235px">Final Price: @(auction.getHighestBid())</h6>
+				<h6 class="u-text" style="margin-left:235px">Status: @(auction.getStatus())</h6>
 			}
           </div>
         </div>
