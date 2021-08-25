@@ -68,7 +68,7 @@ public class AuctionHouse {
 		  	    Address a1 = new Address(rs.getString("city"),rs.getString("road"),rs.getString("postalCode"),rs.getString("number"),rs.getString("country"));
 				Participant p1 = new Participant(rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"), rs.getString("username"), rs.getString("password"), a1, rs.getDate("birthday").toLocalDate(), rs.getString("mobileNumber"), encodstring, rs.getString("intro"));
 				list.add(p1);
-				System.out.println(rs.getNString(1) + "\t" + rs.getNString("lastName") + rs.getDate("birthday"));
+				System.out.println(rs.getString(1) + "\t" + rs.getString("lastName") + rs.getDate("birthday"));
 		
 			}
 		 	
@@ -409,11 +409,10 @@ public class AuctionHouse {
 			 
 			cn =  connectDB(); //Establishing connection	
 		    String email = p1.getEmail();
-	        sql = "DELETE FROM PARTICIPANT WHERE EMAIL= " + email;
-	        
-			   st = cn.createStatement(); //creo sempre uno statement sulla coneesione
-			   
-			   st.executeUpdate(sql); //faccio la query su uno statement
+	        sql = "delete from participant where email= '" + email + "'";	        
+			st = cn.createStatement(); //creo sempre uno statement sulla coneesione
+			st.executeUpdate(sql); //faccio la query su uno statement
+			System.out.println("User eliminato");
 			   
 		   } catch(SQLException e) {
 			   System.out.println("errore: " + e.getMessage());

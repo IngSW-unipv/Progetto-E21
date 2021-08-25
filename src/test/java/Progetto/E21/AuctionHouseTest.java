@@ -68,12 +68,11 @@ public class AuctionHouseTest {
 		LocalDate sDate = java.time.LocalDate.parse(date1, formatter);
 		LocalDate eDate = java.time.LocalDate.parse(date2, formatter);
     	Participant p1 = new Participant("test1", "test1", "a@a.com", "test1", "test", sDate, "1234567891");
-    	Participant p2 = new Participant("test2", "test2", "b@a.com", "test2", "test", eDate, "6789562738");
     	try {
+    		int users = house.getAllParticipant().size();
 			house.registerParticipantToDB(p1);
-			house.registerParticipantToDB(p2);
-			house.deleteParticipant(p2);
-			assertEquals(1, house.getAllParticipant().size(), 0);
+			house.deleteParticipant(p1);
+			assertEquals(users, house.getAllParticipant().size(), 0);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
