@@ -114,6 +114,15 @@ public class WelcomeServlet extends HttpServlet {
 				e.printStackTrace();
 			} 
 		}
+		//DA COMPLETARE NON FUNZIONA ANCORA 
+		else if (req.getPathInfo().equals("/chatList")) {
+			int cookie = Integer.parseInt(req.getParameter("cookie"));
+			try {
+				resp.getWriter().write(Rythm.render("chatList.html", cookie, auctionHouse.getMessageList(cookie)));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		else {								
 			resp.getWriter().write(Rythm.render("login.html", ""));			//Gestione richiesta pagina di login e default
 		}	

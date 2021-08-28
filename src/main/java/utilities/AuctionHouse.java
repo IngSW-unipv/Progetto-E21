@@ -453,10 +453,6 @@ public class AuctionHouse {
 		} catch (SQLException e) {
 			
 			System.out.println("Error while connecting to the database for chat");
-			System.out.println(msg.getReceiver());
-			   System.out.println(msg.getSender());
-			   System.out.println(msg.getText());
-			   System.out.println(msg.getTime());
 			return -1;
 		}
 		   finally {
@@ -465,6 +461,50 @@ public class AuctionHouse {
 		   return 0;
 		
 		
+	}
+
+	// METODO PER PRENDERE LA LISTA DI USERNAME CON CUI HAI SCAMBIATO MESSAGGI
+	public String[] getMessageList(int cookie) throws SQLException {
+
+		Connection cn = null;
+		Statement st;
+		ResultSet rs;
+		String sql;
+		String senderUsername = loggedIn.get(cookie);
+		String[] messageList;
+
+		try {
+
+			cn = connectDB();
+
+			sql = "select distinct receiver from messages where sender = '" + senderUsername + "'";
+
+			st = cn.createStatement();
+			rs = st.executeQuery(sql);
+
+			//conto i messaggi
+			int rowcount = 0;
+			if (rs.last()) {
+				rowcount = rs.getRow();
+				rs.beforeFirst();
+			}
+
+			messageList = new String[rowcount];
+
+			for (int count = 0; count < messageList.length; count++) {
+				messageList[count] = rs.getString("receiver");
+			}
+
+			return messageList;
+			
+
+		} catch (SQLException e) {
+			e.getMessage();
+		} finally {
+			cn.close();
+		}
+
+		return null;
 	}
 
 	public String[] getMessages(int cookie, String receiverUsername) throws Exception {
