@@ -464,14 +464,15 @@ public class AuctionHouse {
 	}
 
 	// METODO PER PRENDERE LA LISTA DI USERNAME CON CUI HAI SCAMBIATO MESSAGGI
-	public String[] getMessageList(int cookie) throws SQLException {
+	public ArrayList<String> getMessageList(int cookie) throws SQLException {
 
 		Connection cn = null;
 		Statement st;
 		ResultSet rs;
 		String sql;
 		String senderUsername = loggedIn.get(cookie);
-		String[] messageList;
+		String receiver;
+		ArrayList<String> messageList = new ArrayList<>();
 
 		try {
 
@@ -482,17 +483,16 @@ public class AuctionHouse {
 			st = cn.createStatement();
 			rs = st.executeQuery(sql);
 
-			//conto i messaggi
+			/*conto i messaggi
 			int rowcount = 0;
 			if (rs.last()) {
 				rowcount = rs.getRow();
 				rs.beforeFirst();
-			}
+			}*/
 
-			messageList = new String[rowcount];
-
-			for (int count = 0; count < messageList.length; count++) {
-				messageList[count] = rs.getString("receiver");
+			while (rs.next() == true) {
+				receiver = rs.getString("receiver");
+				messageList.add(receiver);
 			}
 
 			return messageList;
