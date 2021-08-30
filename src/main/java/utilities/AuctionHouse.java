@@ -794,8 +794,8 @@ public class AuctionHouse {
 			   int id = rs.getInt("max(auctionID)") + 1;
 			   
 			   Boolean ok = a.getTimeExt();
-			   sql = "insert into auction(username, auctionID, name, startDate, endDate, bidder, startingPrice, minimumRise, currentPrice, timeExt) values ('" + username +"','" + id + "','" + a.getName() + "','" + a.getsDate() + "','" 
-						+ a.geteDate() + "','" + null  +   "','" + a.getStartingPrice() +  "','" + a.getMinimumRise() +  "','" + a.getStartingPrice() + "','"+ ok.compareTo(false) + "')";
+			   sql = "insert into auction(username, auctionID, name, startDate, endDate, bidder, startingPrice, minimumRise, currentPrice, timeExt, status, approved) values ('" + username +"','" + id + "','" + a.getName() + "','" + a.getsDate() + "','" 
+						+ a.geteDate() + "','" + null  +   "','" + a.getStartingPrice() +  "','" + a.getMinimumRise() +  "','" + a.getStartingPrice() + "','"+ ok.compareTo(false) + "', 'open' , 'no')";
 			   st.executeUpdate(sql);
 			   //cerco da quale numero partire per rinominare le immagini
 			   sql = "select max(img) from item;";
@@ -931,6 +931,79 @@ public class AuctionHouse {
 			fileInputStreamReader.read(bytes);
 			byte[] encodedBytes = Base64.getEncoder().encode(bytes);
 			return new String(encodedBytes);
+	}
+
+
+	public int paymentNextStep(int cookie, String auctionID) throws Exception {
+		Auction a = getAuction(auctionID);
+		if (a.getStatus().equals("closed"))
+		{
+			Connection cn = null;
+			Statement st;
+			String sql;
+			ResultSet rs;
+			Participant p1;
+			//___________connesione___________
+	        
+			   try { 
+				   cn =  connectDB(); //Establishing connection
+				   sql = "select funds from cCard where username = '" + a.getHighestBidder() +"'";
+				   st = cn.createStatement(); //creo  uno statement sulla coneesione
+				   rs = st.executeQuery(sql); //faccio la query su uno statement
+				   rs.next();
+				   if(rs.getDouble("funds") >= a.getHighestBid()){	
+					   	sql = "update cCard set funds = '"+ (rs.getDouble("funds") - a.getHighestBid()) + "' where username = '" + a.getHighestBidder()+ "'";
+				   		st.executeUpdate(sql);
+				   }
+				   else{
+					   throw new Exception("Insufficient funds on card, please recharge and try again");
+				   }
+				   sql = "update auctionHouse set amount = amount +" + a.getHighestBid();
+			   	   st.executeUpdate(sql); 
+			   	   sql = "update auction set status = 'on delivery' where auctionID ='" + a.getId() + "'";
+			   	   st.executeUpdate(sql); 
+			   	   return 0;
+			   }
+			   catch (Exception e) {
+				   throw new Exception(e.getMessage());
+			   }
+			   finally {
+				   cn.close();
+			   }
+		}
+		else if (a.getStatus().equals("on delivery"))
+		{
+			Connection cn = null;
+			Statement st;
+			String sql;
+			ResultSet rs;
+			Participant p1;
+			//___________connesione___________
+	        
+			   try { 
+				   cn =  connectDB(); //Establishing connection
+				   sql = "update auctionHouse set amount = amount -" + a.getHighestBid();
+				   st = cn.createStatement(); 
+			   	   st.executeUpdate(sql); 
+			   	   sql = "update cCard set funds = funds + " + a.getHighestBid() + " where username = '" + a.getOwner()+ "'";
+				   st.executeUpdate(sql);
+			   	   sql = "update auction set status = 'paid' where auctionID ='" + a.getId() + "'";
+			   	   st.executeUpdate(sql); 
+			   	   return 0;
+			   }
+			   catch (Exception e) {
+				   throw new Exception(e.getMessage());
+			   }
+			   finally {
+				   cn.close();
+			   }
+		}
+		else if (a.getStatus().equals("paid"))
+		{
+			return 1;
+		}
+		
+		return -1;
 	}
 
 

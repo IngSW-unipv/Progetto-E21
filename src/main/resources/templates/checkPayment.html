@@ -48,11 +48,11 @@
 				@if(s().eq(auction.getStatus(), "closed")){
 					<a href="/paymentUtil?cookie=@cookie&auctionID=@(auction.getId())" style="margin : 0 0 0 auto" class="u-border-none u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-radius-50 u-btn-1">PAY<br> </a>
 				}
-				else if (s().eq(auction.getStatus(), "processing")){
-					<a href="/paymentUtil?cookie=@cookie&auctionID=@(auction.getId())" class="u-border-none u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-radius-50 u-btn-1">CONFIRM DELIVERY<br> </a>
+				else if (s().eq(auction.getStatus(), "on delivery")){
+					<a href="/paymentUtil?cookie=@cookie&auctionID=@(auction.getId())" style="margin : 0 0 0 auto" class="u-border-none u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-radius-50 u-btn-1">CONFIRM DELIVERY<br> </a>
 				}
 				else if (s().eq(auction.getStatus(), "paid")){
-					<a href="/paymentUtil?cookie=@cookie&auctionID=@(auction.getId())" class="u-border-none u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-radius-50 u-btn-1">REVIEW<br> </a>
+					<a href="/paymentUtil?cookie=@cookie&auctionID=@(auction.getId())" style="margin : 0 0 0 auto" class="u-border-none u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-radius-50 u-btn-1">REVIEW<br> </a>
 				}
 			}		
 			else{

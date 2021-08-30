@@ -109,7 +109,7 @@ public class WelcomeServlet extends HttpServlet {
 		else if (req.getPathInfo().equals("/checkPayment")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			try {
-				resp.getWriter().write(Rythm.render("checkPayment.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), auctionHouse.getUsername(cookie)));
+				resp.getWriter().write(Rythm.render("checkPayment.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), auctionHouse.getUsername(cookie), ""));
 			} catch (Exception e) {
 				e.printStackTrace();
 			} 
@@ -122,6 +122,27 @@ public class WelcomeServlet extends HttpServlet {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		
+		else if (req.getPathInfo().equals("/paymentUtil")) {
+			int cookie = Integer.parseInt(req.getParameter("cookie"));
+			try {
+				int operation = auctionHouse.paymentNextStep(cookie, req.getParameter("auctionID"));
+				if (operation == 0){
+					resp.getWriter().write(Rythm.render("checkPayment.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), auctionHouse.getUsername(cookie), ""));
+				}
+				else if (operation == 1){
+					resp.getWriter().write(Rythm.render("writeReview.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID"))));
+				}
+				else
+				{
+					resp.getWriter().write(Rythm.render("checkPayment.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), auctionHouse.getUsername(cookie), "Error connecting to database, please try again later"));
+				}
+				
+			} catch (Exception e) {
+				resp.getWriter().write(Rythm.render("error.html", cookie, e.getMessage()));
+				e.printStackTrace();
+			} 
 		}
 		else {								
 			resp.getWriter().write(Rythm.render("login.html", ""));			//Gestione richiesta pagina di login e default
@@ -342,8 +363,6 @@ public class WelcomeServlet extends HttpServlet {
 								pendingAucton.remove(i);
 							}
 						}
-						resp.getWriter().write(Rythm.render("home.html", cookie, auctionHouse.getOpenAuctions()));
-						resp.getWriter().write(Rythm.render("error.html", cookie, "Auction already created"));
 					}
 					catch (Exception e) {
 						System.out.println(e.getMessage());
