@@ -114,7 +114,6 @@ public class WelcomeServlet extends HttpServlet {
 				e.printStackTrace();
 			} 
 		}
-		//DA COMPLETARE NON FUNZIONA ANCORA 
 		else if (req.getPathInfo().equals("/chatList")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			try {
@@ -123,7 +122,17 @@ public class WelcomeServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
-		
+		else if (req.getPathInfo().equals("/chat")) {
+			int cookie = Integer.parseInt(req.getParameter("cookie"));
+			String senderUsername = auctionHouse.getUsername(cookie);
+			String receiverUsername = req.getParameter("receiver");
+			try {
+				resp.getWriter().write(Rythm.render("chat.html", cookie, senderUsername,
+						receiverUsername, auctionHouse.getMessages(cookie, receiverUsername)));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		else if (req.getPathInfo().equals("/paymentUtil")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			try {
@@ -181,7 +190,7 @@ public class WelcomeServlet extends HttpServlet {
 			}
 			
 		}
-		//SEND MESSAGE DA FINIRE
+		//SEND MESSAGE
 		else if (req.getPathInfo().equals("/sendMessage")) {
 			int cookie = Integer.parseInt(req.getCookies()[0].getValue());
 			String receiverUsername = req.getParameter("profile");

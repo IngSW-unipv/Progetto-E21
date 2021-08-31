@@ -1,6 +1,7 @@
-@args int cookie, ArrayList<String> username
+@args int cookie, ArrayList<user.Participant> users
 <!DOCTYPE html>
 <html style="font-size: 16px;">
+
    <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
@@ -29,13 +30,13 @@
     <section class="u-clearfix u-image u-section-1" id="sec-1f52" data-image-width="1834" data-image-height="1080">
       <div class="u-align-left u-clearfix u-sheet u-sheet-1">
         <h4 class="u-text u-text-default u-text-1">CHAT</h4>
-        @for (String s : username) {
-        <div class="u-container-style u-group u-palette-1-light-3 u-shape-rectangle u-group-1">
+        @for (user.Participant user : users) {
+        <div class="u-container-style u-palette-1-light-3 u-shape-rectangle u-list-item u-repeater-item">
           <div class="u-container-layout u-container-layout-1">
-            <img class="u-image u-image-default u-image-1" src="images/pexels-photo-5599044.jpeg" alt="" data-image-width="1000" data-image-height="1500">
-            <h5 class="u-text u-text-default u-text-palette-4-dark-2 u-text-2">@s<br>
+            <img alt="Error" src = "data:image/png;base64, @(user.getImg())"  class="u-border-9 u-border-white u-image u-image-circle u-image-1" data-image-width="700" data-image-height="700"></img>           
+             <h5 class="u-text u-text-default u-text-palette-4-dark-2 u-text-2">@(user.getUsername())<br>
             </h5>
-            <a href="https://nicepage.com/k/arabic-style-html-templates" class="u-border-none u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-radius-50 u-btn-1">OPEN<br>
+            <a href="/chat?cookie=@cookie&receiver=@(user.getUsername())" method="post" class="u-border-none u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-radius-50 u-btn-1">OPEN<br>
             </a>
           </div>
         </div>

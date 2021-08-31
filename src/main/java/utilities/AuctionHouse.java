@@ -464,7 +464,7 @@ public class AuctionHouse {
 	}
 
 	// METODO PER PRENDERE LA LISTA DI USERNAME CON CUI HAI SCAMBIATO MESSAGGI
-	public ArrayList<String> getMessageList(int cookie) throws SQLException {
+	public ArrayList<Participant> getMessageList(int cookie) throws SQLException {
 
 		Connection cn = null;
 		Statement st;
@@ -472,7 +472,7 @@ public class AuctionHouse {
 		String sql;
 		String senderUsername = loggedIn.get(cookie);
 		String receiver;
-		ArrayList<String> messageList = new ArrayList<>();
+		ArrayList<Participant> users = new ArrayList<>();
 
 		try {
 
@@ -483,19 +483,11 @@ public class AuctionHouse {
 			st = cn.createStatement();
 			rs = st.executeQuery(sql);
 
-			/*conto i messaggi
-			int rowcount = 0;
-			if (rs.last()) {
-				rowcount = rs.getRow();
-				rs.beforeFirst();
-			}*/
-
-			while (rs.next() == true) {
-				receiver = rs.getString("receiver");
-				messageList.add(receiver);
+			while (rs.next()) {
+				users.add(getProfile(rs.getString("receiver")));
 			}
 
-			return messageList;
+			return users;
 			
 
 		} catch (SQLException e) {
