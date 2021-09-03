@@ -25,6 +25,11 @@ public class ChatMessage {
 	public String getTime() {
 		return time;
 	}
+
+	public String output() {
+		return "Sender: " + sender + " Receiver: " + receiver + "Text: " + text + "Time: " + time;
+
+	}
 	
 	
 

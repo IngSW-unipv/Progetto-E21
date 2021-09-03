@@ -4,11 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -470,21 +466,25 @@ public class AuctionHouse {
 		Statement st;
 		ResultSet rs;
 		String sql;
-		String senderUsername = loggedIn.get(cookie);
-		String receiver;
+		String logged = loggedIn.get(cookie);
 		ArrayList<Participant> users = new ArrayList<>();
 
 		try {
 
 			cn = connectDB();
 
-			sql = "select distinct receiver from messages where sender = '" + senderUsername + "'";
+			sql = "select distinct sender, receiver from messages where sender = '" + logged  + "' or receiver = '" + logged + "'";
 
 			st = cn.createStatement();
 			rs = st.executeQuery(sql);
 
 			while (rs.next()) {
-				users.add(getProfile(rs.getString("receiver")));
+				if (logged.equals(rs.getString("receiver"))) {
+					users.add(getProfile(rs.getString("sender")));
+				} else if (loggedIn.equals(rs.getString("sender"))) {
+
+					users.add(getProfile(rs.getString("receiver")));
+				}
 			}
 
 			return users;
@@ -499,55 +499,38 @@ public class AuctionHouse {
 		return null;
 	}
 
-	public String[] getMessages(int cookie, String receiverUsername) throws Exception {
-		// TODO Auto-generated method stub
+
+	public ArrayList<ChatMessage> getMessages(int cookie, String receiverUsername) throws SQLException {
 		Connection cn = null;
 		Statement st;
 		ResultSet rs;
 		String sql;
-		String [] messages; 
+		ArrayList<ChatMessage> messages = new ArrayList<>();
 		String senderUsername = loggedIn.get(cookie);
-	
-		   try {
-			 
-			cn =  connectDB(); //Establishing connection
-			
-			//prendo tutti i messaggi inviati e ricevuti da una coppia di utenti
-			sql = "select count* from messages where (sender = " + senderUsername + " and receiver = " + receiverUsername + ") or ( receiver = " + senderUsername + " and sender =" + receiverUsername + ");" ;
-			
+
+		try {
+
+			cn = connectDB();
+			sql = "select * from messages where (sender = '" + senderUsername + "' and receiver = '" + receiverUsername + "') or ( receiver = '" + senderUsername + "' and sender = '" + receiverUsername + " ')";
+
 			st = cn.createStatement();
 			rs = st.executeQuery(sql);
-			
-			//conto i messaggi
-			int rowcount = 0;
-			System.out.println("got messages");
-			if (rs.last()) {
-				  rowcount = rs.getRow();
-				  rs.beforeFirst();
+
+			while(rs.next()) {
+				messages.add(new ChatMessage(rs.getString("sender"), rs.getString("receiver"),
+						rs.getString("message"), rs.getString("time")));
 			}
-			//creo array della dimensione dei messaggi + 2 (per identificare sender e receiver)
-			rowcount = (rowcount *3) + 2 ;
-			messages = new String[rowcount];
-			messages[0]= senderUsername;
-			messages[1]= receiverUsername;
-			int count = 2;
-			while(rs.next() == true) {
-				  messages[count] = rs.getString("sender");
-				  messages[count+1] = rs.getString("message");
-				  messages[count+1] = rs.getString("time");
-			   }
-			
-			System.out.println("connection terminated");
-			cn.close();
-            
+			System.out.println("Connection terminated.");
+
+			return messages;
+
 		} catch (SQLException e) {
-			
 			System.out.println("Error while connecting to the database");
-			throw new Exception("Errore nel caricamento dei messaggi, riprova pi� tardi");
-		}finally {
-			   cn.close();
-		   }
-		return messages;
+		} finally {
+			cn.close();
+		}
+
+		return null;
 	}
 	
 	public Auction getAuction(String auctionID) throws SQLException {

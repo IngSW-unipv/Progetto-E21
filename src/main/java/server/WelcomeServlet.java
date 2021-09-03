@@ -259,7 +259,7 @@ public class WelcomeServlet extends HttpServlet {
 		}
 		
 		
-		else if (req.getPathInfo().equals("/getMessage")) {
+		/*else if (req.getPathInfo().equals("/getMessage")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			String receiverUsername = req.getParameter("receiver");
 			
@@ -269,7 +269,7 @@ public class WelcomeServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				resp.getWriter().write(Rythm.render("error.html", cookie, e.getMessage()));
 			}	
-		}
+		}*/
 		
 		//Qui vengono gestiti i parametri ricevuti durante la prima fase della creazione di un asta e viene reindirizzato l'utente alla pagina di creazione del primo lotto
 		else if (req.getPathInfo().equals("/createAuction")) {
