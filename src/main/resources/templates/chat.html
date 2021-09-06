@@ -1,4 +1,4 @@
-@args int cookie, String sender, String receiver, ArrayList<utilities.ChatMessage> messages
+@args int cookie, String sender, String receiver, ArrayList<utilities.ChatMessage> messages, user.Participant senderParticipant, user.Participant receiverParticipant
 		
 
 <!DOCTYPE html>
@@ -20,8 +20,13 @@
     <meta property="og:title" content="productdetails">
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#478ac9">
+    <script>    
+      document.cookie = "cookie = @cookie"
+    </script>
 </head>
-<body background="https://www.publicdomainpictures.net/pictures/350000/nahled/scales-wallpaper-pattern-background-1592983526tEw.jpg" class="u-body"><header class="u-clearfix u-custom-color-1 u-header u-header" id="sec-5fa2"><div class="u-clearfix u-sheet u-sheet-1">
+<body background="https://drive.google.com/uc?id=1zWqNFwlhP6bVOsuspOEZV5aQHYY56BII" class="u-body u-image" style="background-position: 50% 50% ; background-attachment: fixed;">
+  <header class="u-clearfix u-custom-color-1 u-header u-header" id="sec-5fa2">
+    <div class="u-clearfix u-sheet u-sheet-1">
         <h3 class="u-text u-text-1">Auction House</h3>
         <a href="https://nicepage.com" class="u-image u-logo u-image-1" data-image-width="512" data-image-height="512">
           <img src="https://drive.google.com/uc?id=1JCaE2DLg3qk_daWs81GI9r9iGoMEF06x" class="u-logo-image u-logo-image-1" data-image-width="64">
@@ -64,14 +69,14 @@
 		 @for (utilities.ChatMessage msg: messages) {
 				@if(msg.getSender().equals(sender)){
 		  <div class="container darker">
-						<img src="/w3images/bandmember.jpg" alt="Avatar" class = "right" style="width:100%;">
+						<img src = "data:image/png;base64, @(senderParticipant.getImg())" alt="Avatar" class = "right" style="width:100%;">
 						<h5 class = "chatrighttext" >@(msg.getSender())</h5>
 						<p class= "chatrighttext" >@(msg.getText())</p>
 						<span class="time-left">@(msg.getTime())</span>
 					</div>
 				}else {
 		  <div class="container">
-						<img src="/w3images/bandmember.jpg" alt="Avatar" style="width:100%;">
+						<img src = "data:image/png;base64, @(receiverParticipant.getImg())" alt="Avatar" style="width:100%;">
 						
 						<p calass= "chatlefttext" >@(msg.getText())</p>
 						<span class="time-right" style="right: 10px">@(msg.getTime())</span>

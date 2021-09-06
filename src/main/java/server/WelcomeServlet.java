@@ -126,9 +126,12 @@ public class WelcomeServlet extends HttpServlet {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			String senderUsername = auctionHouse.getUsername(cookie);
 			String receiverUsername = req.getParameter("receiver");
+
 			try {
+				Participant sender = auctionHouse.getProfile(senderUsername);
+				Participant receiver = auctionHouse.getProfile(receiverUsername);
 				resp.getWriter().write(Rythm.render("chat.html", cookie, senderUsername,
-						receiverUsername, auctionHouse.getMessages(cookie, receiverUsername)));
+						receiverUsername, auctionHouse.getMessages(cookie, receiverUsername), sender, receiver));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -197,8 +200,9 @@ public class WelcomeServlet extends HttpServlet {
 			String text = req.getParameter("message");
 			try {
 				auctionHouse.saveMessage(cookie, receiverUsername, text);
-				resp.getWriter().write(Rythm.render("profile.html", cookie, auctionHouse.getProfile(req.getParameter("profile")), auctionHouse.getReviews(req.getParameter("profile"))));
-
+				resp.getWriter().write(Rythm.render("chat.html", cookie, auctionHouse.getUsername(cookie),
+						receiverUsername, auctionHouse.getMessages(cookie, receiverUsername), auctionHouse.getProfile(auctionHouse.getUsername(cookie)),
+						auctionHouse.getProfile(receiverUsername)));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				resp.getWriter().write(Rythm.render("error.html", cookie, e.getMessage()));
@@ -257,19 +261,6 @@ public class WelcomeServlet extends HttpServlet {
 				resp.getWriter().write(Rythm.render("editProfile.html", cookie, "", e.getMessage(), "", "" ));
 			}	
 		}
-		
-		
-		/*else if (req.getPathInfo().equals("/getMessage")) {
-			int cookie = Integer.parseInt(req.getParameter("cookie"));
-			String receiverUsername = req.getParameter("receiver");
-			
-			try {
-				String messages[] =auctionHouse.getMessages(cookie, receiverUsername);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				resp.getWriter().write(Rythm.render("error.html", cookie, e.getMessage()));
-			}	
-		}*/
 		
 		//Qui vengono gestiti i parametri ricevuti durante la prima fase della creazione di un asta e viene reindirizzato l'utente alla pagina di creazione del primo lotto
 		else if (req.getPathInfo().equals("/createAuction")) {

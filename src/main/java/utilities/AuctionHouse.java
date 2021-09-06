@@ -466,25 +466,21 @@ public class AuctionHouse {
 		Statement st;
 		ResultSet rs;
 		String sql;
-		String logged = loggedIn.get(cookie);
+		String loggedUsername = loggedIn.get(cookie);
 		ArrayList<Participant> users = new ArrayList<>();
 
 		try {
 
-			cn = connectDB();
+			cn = connectDB();	// Establishing connection
 
-			sql = "select distinct sender, receiver from messages where sender = '" + logged  + "' or receiver = '" + logged + "'";
+			sql = "select distinct sender as userlist from messages where receiver = '" + loggedUsername + "' union select distinct receiver as userlist from messages where sender = '" + loggedUsername + "'";
 
 			st = cn.createStatement();
-			rs = st.executeQuery(sql);
+			rs = st.executeQuery(sql);	// Eseguo la stringa SQL
 
+			// Scorro tutti i risultati e aggiungo i corrispondenti Participant all'array
 			while (rs.next()) {
-				if (logged.equals(rs.getString("receiver"))) {
-					users.add(getProfile(rs.getString("sender")));
-				} else if (loggedIn.equals(rs.getString("sender"))) {
-
-					users.add(getProfile(rs.getString("receiver")));
-				}
+				users.add(getProfile(rs.getString("userlist")));
 			}
 
 			return users;
@@ -516,6 +512,7 @@ public class AuctionHouse {
 			st = cn.createStatement();
 			rs = st.executeQuery(sql);
 
+			// Scorro i risultati e li aggiungo ad un array di ChatMessage
 			while(rs.next()) {
 				messages.add(new ChatMessage(rs.getString("sender"), rs.getString("receiver"),
 						rs.getString("message"), rs.getString("time")));
