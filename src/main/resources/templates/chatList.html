@@ -14,6 +14,7 @@
       <title>Conversations</title>
       <link rel="stylesheet" href="https://drive.google.com/uc?id=1PjOz0t4R1DDs9_j_mLc90MPUli5jMHe1" media="screen">
       <link rel="stylesheet" href="https://drive.google.com/uc?id=15x2Qk76I5aPnfw-76nobjVl3F4kXok7e" media="screen">
+      <link rel="stylesheet" href="https://drive.google.com/uc?id=16L_8ML38eh9P3L-UR4Hj3h2j8wJDAvWM" media="screen">
       <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i">
       <script class="u-script" type="text/javascript" href="https://drive.google.com/uc?id=1R_LsPlojTBfKjaLFZsmz_XHGwcFToW0Z" defer=""></script>
       <script class="u-script" type="text/javascript" href="https://drive.google.com/uc?id=1SYflZJXCCYgbtTTUu0RkyWSDFG3BhIir" defer=""></script>
@@ -34,21 +35,24 @@
     <section class="u-clearfix u-image u-section-1" id="sec-1f52" data-image-width="1834" data-image-height="1080">
       <div class="u-align-left u-clearfix u-sheet u-sheet-1">
         <h4 class="u-text u-text-default u-text-1">CHAT</h4>
+
         @for (user.Participant user : users) {
-        <div class="u-container-style u-palette-1-light-3 u-shape-rectangle u-list-item u-repeater-item">
-          <div class="u-container-layout u-container-layout-1">
-            <img alt="Error" src = "data:image/png;base64, @(user.getImg())"  class="u-border-9 u-border-white u-image u-image-circle u-image-1" data-image-width="700" data-image-height="700"></img>           
-             <h5 class="u-text u-text-default u-text-palette-4-dark-2 u-text-2">@(user.getUsername())<br>
-            </h5>
-            <a href="/chat?cookie=@cookie&receiver=@(user.getUsername())" method="post" class="u-border-none u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-radius-50 u-btn-1">OPEN<br>
-            </a>
-          </div>
-        </div>
-    }
+             <div class="u-container-style u-group u-palette-1-light-3 u-shape-rectangle u-group-1">
+              <div class="u-container-layout u-container-layout-1">
+                <img class="u-image u-image-circle u-image-2" src="data:image/png;base64, @(user.getImg())" alt="" data-image-width="1000" data-image-height="1500">
+                <h5 class="u-text u-text-default u-text-palette-4-dark-2 u-text-2">@(user.getUsername())<br>
+                </h5>
+                <a href="/chat?cookie=@cookie&receiver=@(user.getUsername())" class="u-border-none u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-radius-50 u-btn-1">Open<br>
+                </a>
+              </div>
+            </div>
+          }
+        
+
+
+
       </div>
     </section>
-    
-    
     
     <section class="u-backlink u-clearfix u-grey-80">
       <a class="u-link" href="https://nicepage.com/web-design" target="_blank">

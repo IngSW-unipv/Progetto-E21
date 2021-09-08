@@ -15,7 +15,7 @@
     <script class="u-script" type="text/javascript" src="https://drive.google.com/uc?id=1DoQx0wTHKw59h_oEe1q44n--jYbhJLZl" defer=""></script>
     <script class="u-script" type="text/javascript" src="https://drive.google.com/uc?id=1z3PWHaKMTrp1SojVK6OlQyznaulLqLQY" defer=""></script>
     <meta name="theme-color" content="#478ac9">
-    <meta property="og:title" content="CHAT">
+    <meta property="og:title" content="productdetails">
     <meta property="og:type" content="website">
     <script>    
       document.cookie = "cookie = @cookie"
@@ -36,15 +36,15 @@
    </header>
     <section class="u-clearfix u-image u-section-1" id="sec-1f52" data-image-width="1834" data-image-height="1080">
       <div class="u-align-left u-clearfix u-sheet u-sheet-1">
-        <div class="u-container-style u-group u-palette-4-light-3 u-radius-50 u-shape-round u-group-1">
-          <div class="u-container-layout u-container-layout-1 divchat">
+        <div class="u-container-style u-group u-palette-4-light-3 u-radius-50 u-shape-round u-group-1 divchat">
+          <div class="u-container-layout u-container-layout-1 ">
             <h2 class="u-text u-text-default u-text-palette-4-dark-2 u-text-1">@receiver</h2>
             @for (utilities.ChatMessage msg: messages) {
               @if(msg.getSender().equals(sender)){
             <div class="u-container-style u-group u-radius-50 u-shape-round u-white u-group-2">
               <div class="u-container-layout u-container-layout-2">
                 <img style="top: 20%;" class="u-image u-image-circle u-preserve-proportions u-image-1" src="data:image/png;base64, @(senderParticipant.getImg())" alt="Avatar" data-image-width="700" data-image-height="700">
-                <p class="u-text u-text-3">@(msg.getText())</p>
+                <p class="u-text u-text-2" style="top: 25%;">@(msg.getText())</p>
                 <span style="position:absolute ; bottom:0; right:50px;" class="time-left">@(msg.getTime())</span>
               </div>
             </div>
@@ -52,7 +52,7 @@
             <div class="u-container-style u-group u-palette-3-light-3 u-radius-50 u-shape-round u-group-3">
               <div class="u-container-layout u-container-layout-3">
                 <img style="top: 20%;" class="u-image u-image-circle u-image-2" src="data:image/png;base64, @(receiverParticipant.getImg())" alt="Avatar" data-image-width="1056" data-image-height="1500">
-                <p class="u-text u-text-3" style="margin-left: 115px; top:0%;">@(msg.getText())</p>
+                <p class="u-text u-text-2" style="margin-left: 115px; top:25%;">@(msg.getText())</p>
                 <span style="position:absolute ; bottom:0; left:50px;" class="time-right" style="right: 10px">@(msg.getTime())</span>
               </div>
             </div>
@@ -61,8 +61,7 @@
             <h3 class="u-text u-text-default u-text-palette-4-dark-2 u-text-5">Message</h3>
             <div class="u-form u-form-1">
               <form action="/sendMessage" method="POST" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form" style="padding: 10px;">
-                <input type="hidden" id="siteId" name="siteId" value="204969748">
-                <input type="hidden" id="pageId" name="pageId" value="1806300686">
+                <input type="hidden" id="profile" name="profile" value="@receiver">
                 <div class="u-form-group u-form-message">
                   <label for="message-550c" class="u-form-control-hidden u-label"></label>
                   <textarea placeholder="Type here your message" rows="4" cols="50" id="message-550c" name="message" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-50 u-white" required="" maxlength="100"></textarea>
@@ -84,6 +83,5 @@
         <span>Team progetto E-21</span>
       </a>. 
     </section>
-  </body>
   </body>
 </html>
