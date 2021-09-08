@@ -49,14 +49,16 @@ public class AuctionHouseTest {
     @Test
     public void placeBidTest() {
     	init();
+    	double bid = 0;
     	try {
-			house.registerAuctionToDB("user", auction);
-			house.placeBid("IronMan", "100");
-			auction = house.getAuction("100");
+			auction = house.getAuction("2");
+			house.placeBid("IronMan", "2");
+			bid = auction.getHighestBid();
+			house.placeBid("user", "2");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    	assertEquals(110.0, auction.getHighestBid(), 0);
+    	assertEquals(bid, auction.getHighestBid(), 0);
     }
     
     @Test
