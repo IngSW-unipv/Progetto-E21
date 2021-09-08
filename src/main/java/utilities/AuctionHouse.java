@@ -259,7 +259,7 @@ public class AuctionHouse {
 				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(0, date1.length()-2), formatter);
 				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(0, date2.length()-2), formatter);
 				  LocalDateTime currentDate = LocalDateTime.parse(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), formatter);
-				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), rs1.getDouble("currentPrice"),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"), eDate, rs1.getString("status") );
+				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), rs1.getDouble("currentPrice"),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"), sDate, eDate, rs1.getString("status") );
 				
 				  //CREAZIONE LOT
 				  sql2 = "SELECT * FROM lot where username = '" + rs1.getString("username") + "' and auctionID = " + rs1.getInt("auctionID") + ";";
@@ -337,7 +337,7 @@ public class AuctionHouse {
 				  LocalDateTime currentDate = LocalDateTime.parse(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), formatter);
 				 
 				  if(currentDate.isBefore(eDate) && currentDate.isAfter(sDate)) {
-					  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), rs1.getDouble("currentPrice"),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"), eDate, rs1.getString("status"));
+					  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), rs1.getDouble("currentPrice"),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"), sDate, eDate, rs1.getString("status"));
 					  
 					  
 					  //CREAZIONE LOT
@@ -588,7 +588,7 @@ public class AuctionHouse {
 				  date2 = "20" + rs1.getTimestamp("endDate").toString();		   
 				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(2, date1.length()-2), formatter);
 				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(2, date1.length()-2), formatter);
-				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0,10), eDate.toString().substring(0,10),  rs1.getDouble("currentPrice"), rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"), eDate, rs1.getString("status"));
+				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0,10), eDate.toString().substring(0,10),  rs1.getDouble("currentPrice"), rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"), sDate, eDate, rs1.getString("status"));
 				  
 				  
 				  //CREAZIONE LOT
@@ -1054,7 +1054,7 @@ public class AuctionHouse {
 		   	   sql = "update auction set approved = 'yes' where auctionID ='" + auctionID + "'";
 		   	   st.executeUpdate(sql); 
 		   	   Auction a = getAuction(auctionID);
-		   	   auctionHouseSendMsg(a.getOwner(), "Asta: " + a.getName() + " approvata");
+		   	   auctionHouseSendMsg(a.getOwner(), "Auction: " + a.getName() + " approved");
 		   }
 		   catch (Exception e) {
 			   throw new Exception(e.getMessage());
@@ -1073,6 +1073,8 @@ public class AuctionHouse {
 		//___________connesione___________
         
 		   try { 
+			   Auction a = getAuction(auctionID);
+		   	   auctionHouseSendMsg(a.getOwner(), "Auction: " + a.getName() + " rejected");
 			   cn =  connectDB(); //Establishing connection
 			   st = cn.createStatement(); 
 		   	   sql = "delete auction where auctionID ='" + auctionID + "'";

@@ -9,13 +9,13 @@ import java.util.ArrayList;
 public class Auction {
 	private String name, owner, status, highestBidder = "";
 	private LocalDateTime sDate, eDate;
-	String sDateStr, eDateStr;
+	private String sDateStr, eDateStr;
 	private double startingPrice, minimumRise, currentPrice = 0;
 	private int id;
 	boolean timeExt = false;
 	private ArrayList<Lot> lots = new ArrayList<Lot>();
 	
-	public Auction(String name, String owner, String highestBidder, String sDateStr,String eDateStr, double currentPrice, double startingPrice, double minimumRise, int id , boolean timeExt, LocalDateTime eDate, String status) {
+	public Auction(String name, String owner, String highestBidder, String sDateStr,String eDateStr, double currentPrice, double startingPrice, double minimumRise, int id , boolean timeExt, LocalDateTime sDate, LocalDateTime eDate, String status) {
 		super();
 		this.name = name;
 		this.owner = owner;
@@ -24,6 +24,7 @@ public class Auction {
 		this.sDateStr = sDateStr;
 		this.eDateStr = eDateStr;
 		this.eDate = eDate;
+		this.sDate = sDate;
 		this.startingPrice = startingPrice;
 		this.minimumRise = minimumRise;
 		this.id = id;
