@@ -1,118 +1,89 @@
 @args int cookie, String sender, String receiver, ArrayList<utilities.ChatMessage> messages, user.Participant senderParticipant, user.Participant receiverParticipant
-		
-
 <!DOCTYPE html>
 <html style="font-size: 16px;">
-<head>
+
+  <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="Post 1 Headline, Post 2 Headline">
+    <meta name="keywords" content="Auction House">
     <meta name="description" content="">
     <meta name="page_type" content="np-template-header-footer-from-plugin">
-    <title>Messages</title>
-    <link rel="stylesheet" href= "https://drive.google.com/uc?id=14bj-3oxU-bKmtNfMEVdJDaXNyAdSNoSI" media="screen">
-    <link rel="stylesheet" href="https://drive.google.com/uc?id=13O9pXLHohrOBcBkEQb1Z36mMB2N13j5q" media="screen">
-	<link rel="stylesheet" href= "https://drive.google.com/uc?id=15OdDeOhLLuV976XyAcP2piWhbGIO_4ar" >
-    <script class="u-script" type="text/javascript" href="https://drive.google.com/uc?id=1NedRzl0d4XRzMYzmCx9TjW2iukMYPuCa" defer=""></script>
-    <script class="u-script" type="text/javascript" href="https://drive.google.com/uc?id=1m37QWAGG16-ZSewPGNXl8hgLpJ3ISVf5" defer=""></script>
-    <meta name="generator" content="Nicepage 3.17.5, nicepage.com">
+    <title>messages</title>
+    <link rel="stylesheet" href="https://drive.google.com/uc?id=1AXjBrqqINoMh2QVIYvSfvvJnso3gkPVa" media="screen">
+    <link rel="stylesheet" href="https://drive.google.com/uc?id=156x8TGWEg7mkFzySz-FoSt4pr-FUoMOw" media="screen">
     <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i">
-    <meta property="og:title" content="productdetails">
-    <meta property="og:type" content="website">
+    <script class="u-script" type="text/javascript" src="https://drive.google.com/uc?id=1DoQx0wTHKw59h_oEe1q44n--jYbhJLZl" defer=""></script>
+    <script class="u-script" type="text/javascript" src="https://drive.google.com/uc?id=1z3PWHaKMTrp1SojVK6OlQyznaulLqLQY" defer=""></script>
     <meta name="theme-color" content="#478ac9">
+    <meta property="og:title" content="CHAT">
+    <meta property="og:type" content="website">
     <script>    
       document.cookie = "cookie = @cookie"
     </script>
-</head>
-<body background="https://drive.google.com/uc?id=1zWqNFwlhP6bVOsuspOEZV5aQHYY56BII" class="u-body u-image" style="background-position: 50% 50% ; background-attachment: fixed;">
-  <header class="u-clearfix u-custom-color-1 u-header u-header" id="sec-5fa2">
+  </head>
+
+  <body background="https://drive.google.com/uc?id=1zWqNFwlhP6bVOsuspOEZV5aQHYY56BII" class="u-body" style="background-position: 50% 50% ; background-attachment: fixed;">
+   <header class="u-clearfix u-header u-palette-4-dark-2 u-header" id="sec-b42a">
     <div class="u-clearfix u-sheet u-sheet-1">
-        <h3 class="u-text u-text-1">Auction House</h3>
-        <a href="https://nicepage.com" class="u-image u-logo u-image-1" data-image-width="512" data-image-height="512">
-          <img src="https://drive.google.com/uc?id=1JCaE2DLg3qk_daWs81GI9r9iGoMEF06x" class="u-logo-image u-logo-image-1" data-image-width="64">
+        <a href="/home?cookie=@cookie" class="u-image u-logo u-image-1" data-image-width="512" data-image-height="512">
+          <img src="https://drive.google.com/uc?id=1JCaE2DLg3qk_daWs81GI9r9iGoMEF06x" class="u-logo-image u-logo-image-1" data-image-width="89.95">
         </a>
-        <nav align="right" class="u-menu-dropdown u-offcanvas u-menu-1">
-          <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">
-            <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="#">
-              <svg><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#menu-hamburger"></use></svg>
-              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><symbol id="menu-hamburger" viewBox="0 0 16 16" style="width: 16px; height: 16px;"><rect y="1" width="16" height="2"></rect><rect y="7" width="16" height="2"></rect><rect y="13" width="16" height="2"></rect>
-</symbol>
-</defs></svg>
-            </a>
-          </div>
-          <div class="u-custom-menu u-nav-container">
-            <ul class="u-nav u-unstyled u-nav-1">
-			<li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" method="post" href="/auctions?cookie=@cookie" style="padding: 10px 20px;">Auctions</a></li>
-			<li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" method="post" href="/messages?cookie=@cookie" style="padding: 10px 20px;">Messages</a></li>
-			<li class="u-nav-item"><a class="u-button-style u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" method="post" href="/html?cookie=@cookie" style="padding: 10px 20px;">Profile</a></li>
-			</ul>
-          </div>
-          <div class="u-custom-menu u-nav-container-collapse">
-            <div class="u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
-              <div class="u-sidenav-overflow">
-                <div class="u-menu-close"></div>
-                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2">
-				<li class="u-nav-item"><a class="u-button-style u-nav-link" href="/home" method="get" style="padding: 10px 20px;">Auctione</a></li>
-				<li class="u-nav-item"><a class="u-button-style u-nav-link" href="/profile" method="get" style="padding: 10px 20px;">Profile</a></li>
-				</ul>
+        <h2 class="u-text u-text-1">Auction House</h2>
+        <a href="/home?cookie=@cookie" class="u-border-none u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-radius-50 u-text-palette-4-dark-2 u-white u-btn-1">HOME</a>
+        <a href="/myProfile?cookie=@cookie" class="u-border-none u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-radius-50 u-text-palette-4-dark-2 u-white u-btn-2">PROFILE</a>
+        <a href="/chatList?cookie=@cookie" class="u-border-none u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-radius-50 u-text-palette-4-dark-2 u-white u-btn-3">CHAT</a>
+      </div>
+   </header>
+    <section class="u-clearfix u-image u-section-1" id="sec-1f52" data-image-width="1834" data-image-height="1080">
+      <div class="u-align-left u-clearfix u-sheet u-sheet-1">
+        <div class="u-container-style u-group u-palette-4-light-3 u-radius-50 u-shape-round u-group-1">
+          <div class="u-container-layout u-container-layout-1 divchat">
+            <h2 class="u-text u-text-default u-text-palette-4-dark-2 u-text-1">@receiver</h2>
+            @for (utilities.ChatMessage msg: messages) {
+              @if(msg.getSender().equals(sender)){
+            <div class="u-container-style u-group u-radius-50 u-shape-round u-white u-group-2">
+              <div class="u-container-layout u-container-layout-2">
+                <img style="top: 20%;" class="u-image u-image-circle u-preserve-proportions u-image-1" src="data:image/png;base64, @(senderParticipant.getImg())" alt="Avatar" data-image-width="700" data-image-height="700">
+                <p class="u-text u-text-3">@(msg.getText())</p>
+                <span style="position:absolute ; bottom:0; right:50px;" class="time-left">@(msg.getTime())</span>
               </div>
             </div>
-            <div class="u-black u-menu-overlay u-opacity u-opacity-70"></div>
+          }else{
+            <div class="u-container-style u-group u-palette-3-light-3 u-radius-50 u-shape-round u-group-3">
+              <div class="u-container-layout u-container-layout-3">
+                <img style="top: 20%;" class="u-image u-image-circle u-image-2" src="data:image/png;base64, @(receiverParticipant.getImg())" alt="Avatar" data-image-width="1056" data-image-height="1500">
+                <p class="u-text u-text-3" style="margin-left: 115px; top:0%;">@(msg.getText())</p>
+                <span style="position:absolute ; bottom:0; left:50px;" class="time-right" style="right: 10px">@(msg.getTime())</span>
+              </div>
+            </div>
+             }
+            }
+            <h3 class="u-text u-text-default u-text-palette-4-dark-2 u-text-5">Message</h3>
+            <div class="u-form u-form-1">
+              <form action="/sendMessage" method="POST" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form" style="padding: 10px;">
+                <input type="hidden" id="siteId" name="siteId" value="204969748">
+                <input type="hidden" id="pageId" name="pageId" value="1806300686">
+                <div class="u-form-group u-form-message">
+                  <label for="message-550c" class="u-form-control-hidden u-label"></label>
+                  <textarea placeholder="Type here your message" rows="4" cols="50" id="message-550c" name="message" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-50 u-white" required="" maxlength="100"></textarea>
+                </div>
+                <div class="u-align-right u-form-group u-form-submit">
+                  <button href="/sendMessage" class="u-border-none u-btn u-btn-round u-btn-submit u-button-style u-palette-4-dark-2 u-radius-50 u-btn-1">SEND<br>
+                  </button>
+                  <input type="submit" value="submit" class="u-form-control-hidden">
+                </div>
+              </form>
+            </div>
           </div>
-        </nav>
-      </div></header>
-		<p id="p1"></p>
-		<div class="divchat">
-		<div id="div1"><h2>@receiver</h2></div>
-		
-		
-		 @for (utilities.ChatMessage msg: messages) {
-				@if(msg.getSender().equals(sender)){
-		  <div class="container darker">
-						<img src = "data:image/png;base64, @(senderParticipant.getImg())" alt="Avatar" class = "right" style="width:100%;">
-						<h5 class = "chatrighttext" >@(msg.getSender())</h5>
-						<p class= "chatrighttext" >@(msg.getText())</p>
-						<span class="time-left">@(msg.getTime())</span>
-					</div>
-				}else {
-		  <div class="container">
-						<img src = "data:image/png;base64, @(receiverParticipant.getImg())" alt="Avatar" style="width:100%;">
-						
-						<p calass= "chatlefttext" >@(msg.getText())</p>
-						<span class="time-right" style="right: 10px">@(msg.getTime())</span>
-					</div>
-				
-				}
-			}	
-			
-			<div class="u-container-layout u-container-layout-2">
-                <div class="u-form u-radius-30">
-  <h4 class="u-text u-text-palette-4-dark-2 u-text-2">Type here your message</h4>
-                  <form action="/sendMessage" method="POST" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form-2" style="padding: 10px;">
-                        <input type="hidden" id="siteId" name="siteId" value="204969748">
-                        <input type="hidden" id="pageId" name="pageId" value="12296394">
-                        <input type="hidden" id="profile" name="profile" value="@receiver">
-                        <div class="u-form-group u-form-message u-form-group-1">
-                          <label for="message-4853" class="u-form-control-hidden u-label"></label>
-                          <textarea placeholder="Description" rows="4" cols="50" id="message-4853" name="message" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white" required=""></textarea>
-                        </div>
-                        <div class="u-align-right u-form-group u-form-submit u-form-group-2">
-                          <button href="/sendMessage" class="u-border-none u-btn u-btn-round u-btn-submit u-button-style u-palette-4-dark-2 u-radius-50 u-btn-1">Send</button>
-                          <input type="submit" value="submit" class="u-form-control-hidden">
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-			
-	</div>
-</div>   
-</section> 
-    <footer class="u-align-center u-clearfix u-footer u-grey-80 u-footer" id="sec-1c9f"></footer>
+        </div>
+      </div>
+    </section>
     <section class="u-backlink u-clearfix u-grey-80">
         <span>Powered by</span>
       <a class="u-link" href="https://github.com/IngSW-unipv/Progetto-E21" target="_blank">
         <span>Team progetto E-21</span>
       </a>. 
     </section>
-</body>
+  </body>
+  </body>
 </html>
