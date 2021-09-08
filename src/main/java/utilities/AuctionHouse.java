@@ -77,7 +77,7 @@ public class AuctionHouse {
 		return list;
 	}
 		
-	public int registerParticipantToDB(Participant p) throws Exception {
+	public synchronized int registerParticipantToDB(Participant p) throws Exception {
 		
 		Connection cn = null;
 		Statement st;
@@ -454,7 +454,7 @@ public class AuctionHouse {
 		return 0;
 	}
 
-	public int saveMessage(int cookie, String receiverUsername, String message) throws SQLException  {
+	public  int saveMessage(int cookie, String receiverUsername, String message) throws SQLException  {
 		// TODO Auto-generated method stub
 		Connection cn = null;
 		Statement st;
@@ -633,7 +633,7 @@ public class AuctionHouse {
 	}
 	
 
-	public String placeBid(String username , String auctionID) throws Exception {
+	public synchronized String placeBid(String username , String auctionID) throws Exception {
 		try {
 			Auction a = getAuction(auctionID);
 			if (!username.equals(a.getHighestBidder()) && !username.equals(a.getOwner()))
@@ -723,7 +723,7 @@ public class AuctionHouse {
 	}
 	
 	//Metodo per modifica intro profilo dell'utente
-	public void updateIntro(int cookie, String intro) throws Exception {
+	public  void updateIntro(int cookie, String intro) throws Exception {
 		
 		Connection cn = null;
 		Statement st;
@@ -751,7 +751,7 @@ public class AuctionHouse {
 	}
 	
 	//Metodo per aggiornare indirizzo
-	public void updateAddress(int cookie, String country, String city, String road, String number, String cap) throws Exception {
+	public  void updateAddress(int cookie, String country, String city, String road, String number, String cap) throws Exception {
 		Connection cn = null;
 		Statement st;
 		String sql;
@@ -780,7 +780,7 @@ public class AuctionHouse {
 	
 	
 	//Metodo per l'inserimento di una nuova asta nel database
-	public Auction registerAuctionToDB(String username, Auction a) throws Exception {
+	public  Auction registerAuctionToDB(String username, Auction a) throws Exception {
 		Connection cn = null;
 		Statement st;
 		ResultSet rs;
@@ -838,7 +838,7 @@ public class AuctionHouse {
 	
 
 
-	public void updateCard(int cookie, String fName, String lName, String date, String number, String cvv) throws Exception {
+	public  void updateCard(int cookie, String fName, String lName, String date, String number, String cvv) throws Exception {
 		Connection cn = null;
 		Statement st;
 		String sql;
@@ -1064,28 +1064,16 @@ public class AuctionHouse {
 		   }	
 	}
 
-	public void rejectAuction(String auctionID) throws Exception {
-		Connection cn = null;
-		Statement st;
-		String sql;
-		ResultSet rs;
-		Participant p1;
-		//___________connesione___________
-        
+	public void rejectAuction(String auctionID) throws Exception {        
 		   try { 
 			   Auction a = getAuction(auctionID);
 		   	   auctionHouseSendMsg(a.getOwner(), "Auction: " + a.getName() + " rejected");
-			   cn =  connectDB(); //Establishing connection
-			   st = cn.createStatement(); 
-		   	   sql = "delete auction where auctionID ='" + auctionID + "'";
-		   	   st.executeUpdate(sql); 
+		   	   deleteAuction(auctionID);
+
 		   }
 		   catch (Exception e) {
 			   throw new Exception(e.getMessage());
 		   }
-		   finally {
-			   cn.close();
-		   }	
 	}
 
 	public void auctionHouseSendMsg(String receiver, String msg) throws Exception
