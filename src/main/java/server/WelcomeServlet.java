@@ -195,7 +195,6 @@ public class WelcomeServlet extends HttpServlet {
 		}
 		// Metodo per inviare una review all'utente
 		else if (req.getPathInfo().equals("/sendReview")) {
-			System.out.println("Porcodio");
 			int cookie = Integer.parseInt(req.getCookies()[0].getValue());
 			String receiverUsername = req.getParameter("username");
 			String text = req.getParameter("message");
