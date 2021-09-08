@@ -35,9 +35,7 @@
           <img src="https://drive.google.com/uc?id=1JCaE2DLg3qk_daWs81GI9r9iGoMEF06x" class="u-logo-image u-logo-image-1" data-image-width="89.95">
         </a>
         <h2 class="u-text u-text-1">Auction House</h2>
-        <a href="/home?cookie=@cookie" method="post" class="u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-radius-50 u-text-palette-4-dark-2 u-white u-btn-1">HOME<br></a>
-        <a href="/myProfile?cookie=@cookie" method="post" class="u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-radius-50 u-text-palette-4-dark-2 u-white u-btn-2">PROFILE</a>
-        <a href="https://nicepage.com/k/business-card-html-templates" class="u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-radius-50 u-text-palette-4-dark-2 u-white u-btn-3">CHAT</a>
+     
       </div></header>
     <section class="u-align-center u-clearfix u-section-1" id="sec-b461">
       <div class="u-clearfix u-sheet u-sheet-1">
@@ -94,8 +92,10 @@
 		</script>
 		
 		<div style="position:relative">
-        <h2 style="top:0; margin-left: 650px; margin-right: 150px;" class="u-text u-text-6">@(auction.getHighestBid())$ + @(auction.getMinimumRise())$</h2>
-		<a href="/placeBid?cookie=@cookie&auctionID=@(auction.getId())&auctioner=@(auction.getOwner())" class="u-btn u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-btn-1" style = "bottom:0">Place bid: <br></a>
+		<a width = 100px href="/placeBid?cookie=@cookie&auctionID=@(auction.getId())&auctioner=@(auction.getOwner())" class="u-btn u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-btn-1" style = "bottom:0">Approve Auction: <br></a>  <br><br><br>
+		
+		<a width = 100px href="/placeBid?cookie=@cookie&auctionID=@(auction.getId())&auctioner=@(auction.getOwner())" class="u-btn u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-btn-1" style = "bottom:0">Reject Auction: <br></a>
+		
 		<p style="margin-top:60px; margin-left: 650px; margin-right: 150px; color:red" class="">@msg</p>
 		</div>
 		@for (auction.Lot lot: auction.getLots()) {
@@ -110,23 +110,10 @@
 			var price = @(auction.getHighestBid())
 		</script>
 		
-        <h6 class="u-text u-text-9" style ="font-weight: bold;">Seller</h6>
-		<a class="u-link" href="/visitProfile?cookie=@cookie&profile=@(auction.getOwner())" method="get">
-			<h6 class="u-text u-text-10" style="left:155px">@(auction.getOwner())</h6>
-		</a>
-        <div class="u-gallery u-layout-grid u-lightbox u-no-transition u-show-text-on-hover u-gallery-2">
-          <div class="u-gallery-inner u-gallery-inner-2">
-            <div class="u-effect-fade u-gallery-item u-radius-50 u-shape-round">
-              <div class="u-back-slide">
-                <img class="u-back-image u-expanded"  src="data:image/png;base64, @(pPicture)">
-              </div>
-              <div class="u-over-slide u-shading u-over-slide-4">
-                <h3 class="u-gallery-heading"></h3>
-                <p class="u-gallery-text"></p>
-              </div>
-            </div>
-          </div>
-        </div>
+   
+		
+		
+   
       </div>
     </section>
 
