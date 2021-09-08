@@ -170,7 +170,7 @@ public class WelcomeServlet extends HttpServlet {
 				int cookie = auctionHouse.login(req.getParameter("email"), req.getParameter("password"));			
 				
 				if (cookie == -1) {
-					resp.getWriter().write(Rythm.render("login.html", "Username o password errati"));
+					resp.getWriter().write(Rythm.render("login.html", "Username or password not found"));
 				}
 				else {
 					
@@ -189,13 +189,12 @@ public class WelcomeServlet extends HttpServlet {
 				int cookie = auctionHouse.registerParticipantToDB(p1);
 				resp.getWriter().write(Rythm.render("home.html", cookie, auctionHouse.getOpenAuctions())); 		 
 			} catch (Exception e) {
-				resp.getWriter().write(Rythm.render("register.html", "Errore durante la registrazione, riprova pi� tardi"));
+				resp.getWriter().write(Rythm.render("register.html", "An error has occured during the registration process, please try again later"));
 			}
 			
 		}
 		// Metodo per inviare una review all'utente
 		else if (req.getPathInfo().equals("/sendReview")) {
-			System.out.println("Porcodio");
 			int cookie = Integer.parseInt(req.getCookies()[0].getValue());
 			String receiverUsername = req.getParameter("username");
 			String text = req.getParameter("message");
