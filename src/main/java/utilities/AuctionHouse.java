@@ -28,9 +28,10 @@ import user.userDetails.Review;
 
 public class AuctionHouse {
 	private String name;
-	private int sessionCookie = 0;
+	private int sessionCookie = 0, moderatorCookie = 0;
 	private ArrayList<User> users, onlineUsers;
 	Map<Integer, String> loggedIn = new HashMap<>();
+	Map<Integer, String> moderatorLoggedIn = new HashMap<>();
 	
 	public AuctionHouse(String name) {
 		this.name = name;
@@ -322,7 +323,7 @@ public class AuctionHouse {
 			   cn =  connectDB(); //Establishing connection
 		   	
 			// CREAZIONE AUCTIONS
-	           sql1 = "SELECT * FROM auction where status = 'open';";
+	           sql1 = "SELECT * FROM auction where status = 'open' and approved = 'yes';";
 			   st1 = cn.createStatement(); //creo sempre uno statement sulla coneesione		   
 			   rs1 = st1.executeQuery(sql1); //faccio la query su uno statement
 			   
@@ -1099,6 +1100,117 @@ public class AuctionHouse {
 		   finally {
 			   cn.close();
 		   }
+	}
+
+
+	public int loginModerator(String username, String pwd) throws SQLException {
+		Connection cn = null;
+		Statement st;
+		ResultSet rs;
+		String sql;
+		 int candy = -1;
+		//___________connesione___________
+		   try {
+			 
+			cn =  connectDB(); //Establishing connection
+	        sql = "SELECT username FROM moderator where username = '" + username + "' and password = '" + pwd + "';";
+	       
+		   //____________query_________
+			   st = cn.createStatement(); //creo sempre uno statement sulla coneesione
+			   
+			   rs = st.executeQuery(sql); //faccio la query su uno statement
+			   while(rs.next() == true) {
+			        moderatorLoggedIn.put(moderatorCookie, rs.getString("username"));
+			        candy = moderatorCookie;
+			        moderatorCookie +=1;
+			   }
+			   
+		   } catch(SQLException e) {
+			   System.out.println("errore: " + e.getMessage());
+		   }
+		   finally {
+			   cn.close();
+		   }  
+
+		return candy;
+	}
+
+
+	public ArrayList<Auction> getPendingAuctions() throws SQLException {
+		Connection cn = null;
+		Statement st1, st2, st3;
+		ResultSet rs1, rs2, rs3;
+		String sql1, sql2, sql3;
+		ArrayList<Auction> auctions = new ArrayList<Auction>();
+		Auction a1;
+		Lot l1;
+		Item i1;
+		//___________connesione___________
+        
+		   try {
+			 
+			   cn =  connectDB(); //Establishing connection
+		   	
+			// CREAZIONE AUCTIONS
+	           sql1 = "SELECT * FROM auction where approved = 'no';";
+			   st1 = cn.createStatement(); //creo sempre uno statement sulla coneesione		   
+			   rs1 = st1.executeQuery(sql1); //faccio la query su uno statement
+			   
+			   java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			   String date1, date2;
+			   
+			   while(rs1.next() == true) { 
+				  date1 =rs1.getTimestamp("startDate").toString();
+				  date2 =rs1.getTimestamp("endDate").toString();		   
+				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(0, date1.length()-2), formatter);
+				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(0, date2.length()-2), formatter);
+				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), rs1.getDouble("currentPrice"),  rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"), sDate, eDate, rs1.getString("status"));
+					  
+					  
+				  //CREAZIONE LOT
+				  sql2 = "SELECT * FROM lot where username = '" + rs1.getString("username") + "' and auctionID = " + rs1.getInt("auctionID") + ";";
+				  st2 = cn.createStatement();
+				  rs2 = st2.executeQuery(sql2);
+					  
+					  
+				  while(rs2.next() == true) {
+					  l1 = new Lot(rs2.getString("name"), rs2.getString("description"), rs2.getInt("lotID"));
+						  
+					  //CREAZIONE ITEM
+					  sql3 = "SELECT * FROM item where username = '" + rs2.getString("username") + "' and auctionID = " + rs2.getInt("auctionID") + " and lotID = " + rs2.getInt("lotID") + ";";
+					  st3 = cn.createStatement();
+					  rs3 = st3.executeQuery(sql3);
+						  
+						  
+					  while(rs3.next() == true) {
+							  
+					      File f =  new File("src/main/resources/imgDB/auctionsPics/" + rs3.getString("img"));
+					      String encodstring = null;
+						  try {
+								encodstring = encodeFileToBase64Binary(f);
+						  } catch (Exception e) {
+						    	e.printStackTrace();
+						  }
+						  i1 = new Item(rs3.getString("name"), rs3.getString("description"), encodstring , rs3.getInt("itemID"));
+						  l1.addItem(i1);
+					  }
+					  a1.addLot(l1);
+				  }
+				  auctions.add(a1);
+				  
+			   }
+			   cn.close();
+			   return auctions;
+			   
+		   } catch(SQLException e) {
+			   System.out.println("errore: " + e.getMessage());
+		   }
+		   finally {
+			   cn.close();
+		   }
+		return null;
+
+		
 	}
 
 

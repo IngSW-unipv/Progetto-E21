@@ -88,14 +88,14 @@ public class WelcomeServletModerator extends HttpServlet {
 		
 		if (req.getPathInfo().equals("/login")) {
 			try {
-				int cookie = auctionHouse.login(req.getParameter("username"), req.getParameter("password"));			
+				int cookie = auctionHouse.loginModerator(req.getParameter("username"), req.getParameter("password"));			
 				
 				if (cookie == -1) {
 					resp.getWriter().write(Rythm.render("loginModerator.html", "Username o password errati"));
 				}
 				else {
 					
-					resp.getWriter().write(Rythm.render("homeModerator.html", cookie, auctionHouse.getOpenAuctions())); 
+					resp.getWriter().write(Rythm.render("homeModerator.html", cookie, auctionHouse.getPendingAuctions())); 
 				}
 			}catch (Exception e) {
 				e.printStackTrace();
