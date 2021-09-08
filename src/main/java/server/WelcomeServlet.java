@@ -193,6 +193,21 @@ public class WelcomeServlet extends HttpServlet {
 			}
 			
 		}
+		// Metodo per inviare una review all'utente
+		else if (req.getPathInfo().equals("/sendReview")) {
+			System.out.println("Porcodio");
+			int cookie = Integer.parseInt(req.getCookies()[0].getValue());
+			String receiverUsername = req.getParameter("username");
+			String text = req.getParameter("message");
+			try {
+				auctionHouse.saveReview(cookie, receiverUsername, text);
+				resp.getWriter().write(Rythm.render("profile.html", cookie, auctionHouse.getProfile(req.getParameter("username")),
+						auctionHouse.getReviews(req.getParameter("username"))));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				resp.getWriter().write(Rythm.render("error.html", cookie, e.getMessage()));
+			}
+		}
 		//SEND MESSAGE
 		else if (req.getPathInfo().equals("/sendMessage")) {
 			int cookie = Integer.parseInt(req.getCookies()[0].getValue());
