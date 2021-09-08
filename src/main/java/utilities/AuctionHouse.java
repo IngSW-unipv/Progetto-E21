@@ -1011,9 +1011,105 @@ public class AuctionHouse {
 		return -1;
 	}
 
+	public void deleteAuction(String auctionID) throws Exception {
+		Connection cn = null;
+		Statement st;
+		ResultSet rs;
+		String sql;
+		 try { 
+			   cn =  connectDB(); //Establishing connection
+			   sql = "delete from item where auctionID = '" + auctionID + "'";
+			   st = cn.createStatement(); 
+		   	   st.executeUpdate(sql); 
+			   sql = "delete from lot where auctionID = '" + auctionID + "'";
+			   st.executeUpdate(sql);
+			   sql = "delete from auction where auctionID = '" + auctionID + "'";
+		   	   st.executeUpdate(sql); 
+		   }
+		   catch (Exception e) {
+			   throw new Exception(e.getMessage());
+		   }
+		   finally {
+			   cn.close();
+		   }
+		
+	}
+	
+	
 
+//METODI MODERATOR
+	
 
+	public void approveAuction(String auctionID) throws Exception {
+		Connection cn = null;
+		Statement st;
+		String sql;
+		ResultSet rs;
+		Participant p1;
+		//___________connesione___________
+        
+		   try { 
+			   cn =  connectDB(); //Establishing connection
+			   st = cn.createStatement(); 
+		   	   sql = "update auction set approved = 'yes' where auctionID ='" + auctionID + "'";
+		   	   st.executeUpdate(sql); 
+		   	   Auction a = getAuction(auctionID);
+		   	   auctionHouseSendMsg(a.getOwner(), "Asta: " + a.getName() + " approvata");
+		   }
+		   catch (Exception e) {
+			   throw new Exception(e.getMessage());
+		   }
+		   finally {
+			   cn.close();
+		   }	
+	}
 
+	public void rejectAuction(String auctionID) throws Exception {
+		Connection cn = null;
+		Statement st;
+		String sql;
+		ResultSet rs;
+		Participant p1;
+		//___________connesione___________
+        
+		   try { 
+			   cn =  connectDB(); //Establishing connection
+			   st = cn.createStatement(); 
+		   	   sql = "delete auction where auctionID ='" + auctionID + "'";
+		   	   st.executeUpdate(sql); 
+		   }
+		   catch (Exception e) {
+			   throw new Exception(e.getMessage());
+		   }
+		   finally {
+			   cn.close();
+		   }	
+	}
+
+	public void auctionHouseSendMsg(String receiver, String msg) throws Exception
+	{
+		
+		Connection cn = null;
+		Statement st;
+		String sql;
+		ResultSet rs;
+		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm");
+		String nowFormatted = now.format(formatter);
+		   try {
+			 
+			cn =  connectDB(); //Establishing connection
+			sql = "insert into messages(sender, receiver, message, time) values ('AuctionHouse','" + receiver + "','" + msg + "','" + nowFormatted + "')";
+			st = cn.createStatement();
+			st.execute(sql);
+		   }
+		   catch (Exception e) {
+			   throw new Exception(e.getMessage());
+		   }
+		   finally {
+			   cn.close();
+		   }
+	}
 
 
 

@@ -58,6 +58,24 @@ public class WelcomeServletModerator extends HttpServlet {
 				e.printStackTrace();
 			} 
 		}
+		else if (req.getPathInfo().equals("/approveAuction")) {
+			int cookie = Integer.parseInt(req.getParameter("cookie"));
+			try {
+				auctionHouse.approveAuction(req.getParameter("auctionID"));
+				resp.getWriter().write(Rythm.render("homeModerator.html", cookie, auctionHouse.getOpenAuctions()));
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
+		}
+		else if (req.getPathInfo().equals("/rejectAuction")) {
+			int cookie = Integer.parseInt(req.getParameter("cookie"));
+			try {
+				auctionHouse.rejectAuction(req.getParameter("auctionID"));
+				resp.getWriter().write(Rythm.render("homeModerator.html", cookie, auctionHouse.getOpenAuctions()));
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
+		}
 		
 		else {								
 			resp.getWriter().write(Rythm.render("loginModerator.html", ""));			//Gestione richiesta pagina di login e default
