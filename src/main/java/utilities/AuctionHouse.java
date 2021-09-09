@@ -456,7 +456,6 @@ public class AuctionHouse {
 	}
 
 	public  int saveMessage(int cookie, String receiverUsername, String message) throws SQLException  {
-		// TODO Auto-generated method stub
 		Connection cn = null;
 		Statement st;
 		ResultSet rs;
@@ -482,7 +481,7 @@ public class AuctionHouse {
             
 		} catch (SQLException e) {
 			
-			System.out.println("Error while connecting to the database for chat");
+			System.out.println("Error while connecting to the database");
 			return -1;
 		}
 		   finally {
@@ -514,7 +513,7 @@ public class AuctionHouse {
 
 			// Scorro tutti i risultati e aggiungo i corrispondenti Participant all'array
 			while (rs.next()) {
-				users.add(getProfile(rs.getString("userlist")));
+				users.add(new Participant(rs.getString("userlist")));
 			}
 
 			return users;
@@ -677,45 +676,6 @@ public class AuctionHouse {
 	public String getUsername(int cookie) {
 		return loggedIn.get(cookie);
 	}
-	
-	public Participant getProfile(String username) throws SQLException {
-		
-		Connection cn = null;
-		Statement st;
-		ResultSet rs;
-		String sql;
-		Participant p1;
-		//___________connesione___________
-        
-		   try {
-			 
-			   cn =  connectDB(); //Establishing connection
-		   	
-	           sql = "SELECT * FROM participant where username = '" + username + "';";
-
-	        
-	        //____________query___________
-			   st = cn.createStatement(); //creo  uno statement sulla coneesione
-			   rs = st.executeQuery(sql); //faccio la query su uno statement
-			   while(rs.next() == true) {
-				   File f =  new File("src/main/resources/imgDB/profilePics/" + rs.getString("img") + ".jpg");
-				   String encodstring = null;
-				   try {
-						encodstring = encodeFileToBase64Binary(f);
-				   } catch (Exception e) {
-					    e.printStackTrace();
-				   }
-				  p1 = new Participant(rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"), rs.getString("username"), rs.getString("password"),  rs.getDate("birthday").toLocalDate(), rs.getString("mobileNumber"), encodstring, rs.getString("intro"));
-				  return p1;
-			   }
-		   } catch(SQLException e) {
-			   System.out.println("errore: " + e.getMessage());
-		   }
-		   finally {
-			   cn.close();
-		   } 
-		return null;
-	}
 		   
 	private Connection connectDB() throws SQLException {
 			Connection cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11421731", "sql11421731", "83bkPjI9Yf");//Establishing connection
@@ -836,38 +796,6 @@ public class AuctionHouse {
 		   return null;
 		   
 	}
-	
-
-
-	public  void updateCard(int cookie, String fName, String lName, String date, String number, String cvv) throws Exception {
-		Connection cn = null;
-		Statement st;
-		String sql;
-		Participant p1;
-		//___________connesione___________
-        
-		   try {
-			 
-			   cn =  connectDB(); //Establishing connection
-			   sql = "delete from address where username = '" + loggedIn.get(cookie) +"'";
-			   st = cn.createStatement(); //creo  uno statement sulla coneesione
-			   st.executeUpdate(sql); //faccio la query su uno statement
-			   Random r = new Random();
-			   double randomValue = 1999999999 * r.nextDouble();
-			   sql = "insert into cCard(username, fName, lName, date, number, cvv, funds) values ('" + loggedIn.get(cookie) + "','" + fName + "','" + lName + "','" 
-						+ date + "','" + number + "','" + cvv + "','" + randomValue + "')";
-			   st.executeUpdate(sql);
-		   }
-		   catch (Exception e) {
-			   throw new Exception(e.getMessage());
-		   }
-		   finally {
-			   cn.close();
-		   }
-		
-	}
-	
-	
 	
 	public void updateImg(int cookie, InputStream fileContent) throws Exception {
 		Connection cn = null;

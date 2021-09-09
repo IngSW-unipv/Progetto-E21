@@ -9,6 +9,11 @@ public class ChatMessage {
 		this.text = text;
 		this.time=time;
 	}
+	
+	public void toDB()
+	{
+		
+	}
 
 	public String getSender() {
 		return sender;

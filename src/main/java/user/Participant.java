@@ -1,5 +1,7 @@
 package user;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -9,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Calendar;
 
 import user.userDetails.Address;
@@ -57,6 +60,56 @@ public class Participant {
 			this.address = address;
 			this.img = img;
 			this.intro = intro;
+		}
+	    
+	    
+	    public Participant(String username) throws SQLException
+	    {
+	    	Connection cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11421731", "sql11421731", "83bkPjI9Yf");
+			
+			Statement st;
+			ResultSet rs;
+			String sql;
+			Participant p1;
+			   try {
+		           sql = "SELECT * FROM participant where username = '" + username + "';";
+				   st = cn.createStatement(); //creo  uno statement sulla coneesione
+				   rs = st.executeQuery(sql); //faccio la query su uno statement
+				   while(rs.next() == true) {
+					   File f =  new File("src/main/resources/imgDB/profilePics/" + rs.getString("img") + ".jpg");
+					   String encodstring = null;
+					   try {
+							encodstring = encodeFileToBase64Binary(f);
+					   } catch (Exception e) {
+						    e.printStackTrace();
+					   }
+					   this.firstName = rs.getString("firstName");
+					   this.lastName = rs.getString("lastName");
+					   this.email = rs.getString("email");
+					   this.username = username;
+					   this.password = rs.getString("password");
+					   this.bDay = rs.getDate("birthday").toLocalDate();
+					   this.intro = rs.getString("intro");
+					   this.mobileNumber = rs.getString("mobileNumber");
+					   this.img = encodstring;
+				  }
+			   } catch(SQLException e) {
+				   System.out.println("errore: " + e.getMessage());
+			   }
+			   finally {
+				   cn.close();
+			   } 
+	    	
+	    	
+	    }
+	    
+
+		private static String encodeFileToBase64Binary(File file) throws Exception{
+		        FileInputStream fileInputStreamReader = new FileInputStream(file);
+		        byte[] bytes = new byte[(int)file.length()];
+				fileInputStreamReader.read(bytes);
+				byte[] encodedBytes = Base64.getEncoder().encode(bytes);
+				return new String(encodedBytes);
 		}
 	    
 	    
