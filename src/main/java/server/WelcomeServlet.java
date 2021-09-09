@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -51,7 +52,8 @@ public class WelcomeServlet extends HttpServlet {
 		else if (req.getPathInfo().equals("/productDetails")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			try {
-				resp.getWriter().write(Rythm.render("productDetails.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), new Participant(req.getParameter("auctioner")).getImg(), ""));
+				//resp.getWriter().write(Rythm.render("productDetails.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), new Participant(req.getParameter("auctioner")).getImg(), ""));
+				resp.getWriter().write(Rythm.render("productDetails.html", cookie, new Auction(req.getParameter("auctionID")), new Participant(req.getParameter("auctioner")).getImg(), ""));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -64,7 +66,7 @@ public class WelcomeServlet extends HttpServlet {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			try {
 				String msg = auctionHouse.placeBid(auctionHouse.getUsername(cookie), req.getParameter("auctionID"));
-				resp.getWriter().write(Rythm.render("productDetails.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), new Participant(req.getParameter("auctioner")).getImg(), msg));
+				resp.getWriter().write(Rythm.render("productDetails.html", cookie, new Auction(req.getParameter("auctionID")), new Participant(req.getParameter("auctioner")).getImg(), msg));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -110,7 +112,7 @@ public class WelcomeServlet extends HttpServlet {
 		else if (req.getPathInfo().equals("/checkPayment")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			try {
-				resp.getWriter().write(Rythm.render("checkPayment.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), auctionHouse.getUsername(cookie), ""));
+				resp.getWriter().write(Rythm.render("checkPayment.html", cookie, new Auction(req.getParameter("auctionID")), auctionHouse.getUsername(cookie), ""));
 			} catch (Exception e) {
 				e.printStackTrace();
 			} 
@@ -142,14 +144,14 @@ public class WelcomeServlet extends HttpServlet {
 			try {
 				int operation = auctionHouse.paymentNextStep(cookie, req.getParameter("auctionID"));
 				if (operation == 0){
-					resp.getWriter().write(Rythm.render("checkPayment.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), auctionHouse.getUsername(cookie), ""));
+					resp.getWriter().write(Rythm.render("checkPayment.html", cookie, new Auction(req.getParameter("auctionID")), auctionHouse.getUsername(cookie), ""));
 				}
 				else if (operation == 1){
-					resp.getWriter().write(Rythm.render("writeReview.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID"))));
+					resp.getWriter().write(Rythm.render("writeReview.html", cookie, new Auction(req.getParameter("auctionID"))));
 				}
 				else
 				{
-					resp.getWriter().write(Rythm.render("checkPayment.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), auctionHouse.getUsername(cookie), "Error connecting to database, please try again later"));
+					resp.getWriter().write(Rythm.render("checkPayment.html", cookie, new Auction(req.getParameter("auctionID")), auctionHouse.getUsername(cookie), "Error connecting to database, please try again later"));
 				}
 				
 			} catch (Exception e) {
@@ -212,9 +214,12 @@ public class WelcomeServlet extends HttpServlet {
 		else if (req.getPathInfo().equals("/sendMessage")) {
 			int cookie = Integer.parseInt(req.getCookies()[0].getValue());
 			String receiverUsername = req.getParameter("profile");
-			String text = req.getParameter("message");
 			try {
-				auctionHouse.saveMessage(cookie, receiverUsername, text);
+				LocalDateTime now = LocalDateTime.now();
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm");
+				String nowFormatted = now.format(formatter);
+				ChatMessage msg = new ChatMessage(auctionHouse.getUsername(cookie), receiverUsername, req.getParameter("message"), nowFormatted);
+				msg.toDB();
 				resp.getWriter().write(Rythm.render("chat.html", cookie, auctionHouse.getUsername(cookie),
 						receiverUsername, auctionHouse.getMessages(cookie, receiverUsername), new Participant(auctionHouse.getUsername(cookie)),
 						new Participant(receiverUsername)));

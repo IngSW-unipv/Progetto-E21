@@ -51,7 +51,7 @@ public class AuctionHouseTest {
     	init();
     	double bid = 0;
     	try {
-			auction = house.getAuction("2");
+			auction = new Auction("2");
 			house.placeBid("IronMan", "2");
 			bid = auction.getHighestBid();
 			house.placeBid("user", "2");
