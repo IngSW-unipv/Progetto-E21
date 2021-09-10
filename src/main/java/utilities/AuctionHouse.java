@@ -318,7 +318,7 @@ public class AuctionHouse {
 	}
 
 	// METODO CHE SALVA LA REVIEW NEL DB
-	public int saveReview(int cookie, String receiverUsername, String review) throws SQLException {
+	public int saveReview(int cookie, String receiverUsername, String review, String auctionID) throws SQLException {
 		Connection cn = null;
 		Statement st;
 		ResultSet rs;
@@ -329,19 +329,16 @@ public class AuctionHouse {
 
 			cn = connectDB();
 			sql = "insert into reviews(receiver, sender, text) values ('" + receiverUsername + "','" + senderUsername + "','" + review + "')";
-
 			st = cn.createStatement();
-
 			st.execute(sql);
+			sql = "update auction set status = 'completed' where auctionID ='" + auctionID + "'";
+		   	st.executeUpdate(sql); 
 
 			System.out.println("Review submitted.");
-			System.out.println("Connection terminated.");
+
 
 		} catch (SQLException e) {
-			System.out.println("Error while inserting review into DB");
-			System.out.println(senderUsername);
-			System.out.println(receiverUsername);
-			System.out.println(review);
+			e.printStackTrace();
 			return -1;
 		} finally {
 			cn.close();

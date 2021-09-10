@@ -18,6 +18,7 @@
     <script class="u-script" type="text/javascript" src="https://drive.google.com/uc?id=11Ws-Mg8DSz0pf785U-7iF0Ish0WVPRrn" defer=""></script>
     <script>    
       document.cookie = "cookie = @cookie"
+	  
     </script>
   </head>
 
@@ -39,6 +40,7 @@
         <h5 class="u-text u-text-default u-text-palette-4-dark-2 u-text-2">YOUR REVIEW</h5>
         <div class="u-form u-palette-1-light-3 u-form-1">
           <form action="/sendReview" method="POST" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form" style="padding: 10px;">
+			<input type="hidden" id="profile" name="auctionID" value="@(auction.getId())">
             <div class="u-form-group u-form-message">
               <label for="message-7675" class="u-form-control-hidden u-label"></label>
               <textarea rows="4" cols="50" id="message" name="message" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="" placeholder="Add a review. (MAX 250 characters)"></textarea>

@@ -202,7 +202,7 @@ public class WelcomeServlet extends HttpServlet {
 			String receiverUsername = req.getParameter("username");
 			String text = req.getParameter("message");
 			try {
-				auctionHouse.saveReview(cookie, receiverUsername, text);
+				auctionHouse.saveReview(cookie, receiverUsername, text, req.getParameter("auctionID"));
 				resp.getWriter().write(Rythm.render("profile.html", cookie, new Participant(req.getParameter("username")),
 						auctionHouse.getReviews(req.getParameter("username"))));
 			} catch (Exception e) {
