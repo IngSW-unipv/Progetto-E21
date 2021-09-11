@@ -31,7 +31,7 @@
         <h2 class="u-text u-text-1">Auction House</h2>
         <a href="/home?cookie=@cookie" method="post" class="u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-radius-50 u-text-palette-4-dark-2 u-white u-btn-1">HOME<br></a>
         <a href="/myProfile?cookie=@cookie" method="post" class="u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-radius-50 u-text-palette-4-dark-2 u-white u-btn-2">PROFILE</a>
-        <a href="https://nicepage.com/k/business-card-html-templates" class="u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-radius-50 u-text-palette-4-dark-2 u-white u-btn-3">CHAT</a>
+        <a href="/chatList?cookie=@cookie" class="u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-radius-50 u-text-palette-4-dark-2 u-white u-btn-3">CHAT</a>
       </div>
     </header>
     <section class="u-clearfix u-image u-section-1" id="sec-be68" data-image-width="1834" data-image-height="1080">
@@ -42,7 +42,7 @@
             <input type="hidden" id="pageId" name="pageId" value="12296394">
             <div class="u-form-group u-form-message u-form-group-1">
               <label for="message-4853" class="u-form-control-hidden u-label"></label>
-              <textarea placeholder="Description" rows="4" cols="50" id="message-4853" name="intro" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white" required=""></textarea>
+              <textarea onkeypress="return /[a-z 0-9.,-]/i.test(event.key)" placeholder="Description" maxlength="200" rows="4" cols="50" id="message-4853" name="intro" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white" required=""></textarea>
             </div>
             <div class="u-align-right u-form-group u-form-submit u-form-group-2">
               <button href="/saveIntro" class="u-border-none u-btn u-btn-round u-btn-submit u-button-style u-palette-4-dark-2 u-radius-50 u-btn-1">Submit</button>
@@ -57,23 +57,23 @@
           <form action="/saveCard" method="POST" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form" style="padding: 10px;">
             <div class="u-form-group u-form-partition-factor-2">
               <label for="name-a3a0" class="u-form-control-hidden u-label"></label>
-              <input type="text" placeholder="First Name" id="name-a3a0" name="fName" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white" required="required">
+              <input type="text" onkeypress="return /[a-z ]/i.test(event.key)" placeholder="First Name" id="name-a3a0" name="fName" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white" required="required">
             </div>
             <div class="u-form-group u-form-partition-factor-2 u-form-group-4">
               <label for="text-0202" class="u-form-control-hidden u-label"></label>
-              <input type="text" placeholder="Last Name" id="text-0202" name="lName" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white">
+              <input type="text" onkeypress="return /[a-z ]/i.test(event.key)" placeholder="Last Name" id="text-0202" name="lName" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white" required="required">
             </div>
             <div class="u-form-group u-form-group-5">
               <label for="text-21a4" class="u-form-control-hidden u-label"></label>
-              <input type="text" placeholder="Card Number" id="text-21a4" name="number" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white">
+              <input type="text" onkeypress="return /[0-9]/i.test(event.key)" required pattern="[0-9]{16}" maxlength="16" placeholder="Card Number" id="text-21a4" name="number" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white">
             </div>
             <div class="u-form-date u-form-group u-form-group-6">
               <label for="date-4eab" class="u-form-control-hidden u-label"></label>
-              <input type="text" placeholder="MM/YYYY" id="date-4eab" name="date" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white" required="">
+              <input maxlength="7" onkeypress="return /[0-9/]/i.test(event.key)" required pattern="[0-9 /]{7}" type="text" placeholder="MM/YYYY" id="date-4eab" name="date" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white" required="">
             </div>
             <div class="u-form-group u-form-group-7">
               <label for="text-0d30" class="u-form-control-hidden u-label"></label>
-              <input type="text" placeholder="CVV" id="text-0d30" name="cvv" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white">
+              <input type="text" onkeypress="return /[0-9]/i.test(event.key)" required pattern="[0-9]{3}" maxlength="3" placeholder="CVV" id="text-0d30" name="cvv" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white">
             </div>
             <div class="u-align-right u-form-group u-form-submit">
               <button href="/saveCard" class="u-border-none u-btn u-btn-round u-btn-submit u-button-style u-palette-4-dark-2 u-radius-50 u-btn-2">Submit<br></button>
@@ -87,7 +87,7 @@
             <div class="u-form-group u-form-select u-form-group-9">
               <label for="select-adbb" class="u-form-control-hidden u-label"></label>
               <div class="u-form-select-wrapper">
-                <select id="select-adbb" name="country" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white">
+                <select id="select-adbb" name="country" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white" >
                   <option value="Select Country">Select Country</option>
                   <option value="Afghanistan">Afghanistan</option>
                   <option value="Albania">Albania</option>
@@ -315,19 +315,19 @@
             </div>
             <div class="u-form-group u-form-name">
               <label for="name-421e" class="u-form-control-hidden u-label"></label>
-              <input type="text" placeholder="City" id="name-421e" name="city" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white" required="">
+              <input type="text" onkeypress="return /[a-z 0-9]/i.test(event.key)" placeholder="City" id="name-421e" name="city" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white" required="">
             </div>
             <div class="u-form-group u-form-group-11">
               <label for="text-2a21" class="u-form-control-hidden u-label"></label>
-              <input type="text" placeholder="Road" id="text-2a21" name="road" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white">
+              <input type="text" onkeypress="return /[a-z 0-9]/i.test(event.key)" required="" placeholder="Road" id="text-2a21" name="road" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white">
             </div>
             <div class="u-form-group u-form-partition-factor-2 u-form-group-12">
               <label for="text-47cc" class="u-form-control-hidden u-label"></label>
-              <input type="text" placeholder="Number" id="text-47cc" name="number" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white">
+              <input type="text" onkeypress="return /[0-9]/i.test(event.key)" required pattern="[0-9]{1}{4}" maxlength="4" placeholder="Number" id="text-47cc" name="number" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white">
             </div>
             <div class="u-form-group u-form-partition-factor-2 u-form-group-13">
               <label for="text-b03c" class="u-form-control-hidden u-label"></label>
-              <input type="text" placeholder="PostalCode" id="text-b03c" name="cap" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white">
+              <input type="text" onkeypress="return /[0-9]/i.test(event.key)" required pattern="[0-9]{5}" maxlength="5" placeholder="PostalCode" id="text-b03c" name="cap" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-30 u-white">
             </div>
             <div class="u-align-right u-form-group u-form-submit">
               <button href="/saveAddress" class="u-border-none u-btn u-btn-round u-btn-submit u-button-style u-palette-4-dark-2 u-radius-50 u-btn-3">Submit<br>

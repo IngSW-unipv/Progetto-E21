@@ -35,11 +35,11 @@
             <div class="u-form-email u-form-group u-form-group-1">
               <label for="text-9823" class="u-form-control-hidden u-label"></label>
               <h3 class="w3-center" style="color:red" >@msgLogin</h3>
-              <input type="email" placeholder="Email" id="text-9823" name="email" class="u-custom-font u-grey-10 u-input u-input-rectangle u-text-black u-text-font u-input-1">
+              <input onkeypress="return /[a-z0-9@@.]/i.test(event.key)" type="email" placeholder="Email" id="text-9823" name="email" class="u-custom-font u-grey-10 u-input u-input-rectangle u-text-black u-text-font u-input-1" required="">
             </div>
             <div class="u-form-group u-form-group-2">
               <label for="text-077d" class="u-form-control-hidden u-label"></label>
-              <input type="password" placeholder="Password" id="text-077d" name="password" class="u-custom-font u-grey-10 u-input u-input-rectangle u-text-black u-text-font u-input-2">
+              <input onkeypress="return /[a-z0-9]/i.test(event.key)" type="password" placeholder="Password" id="text-077d" name="password" class="u-custom-font u-grey-10 u-input u-input-rectangle u-text-black u-text-font u-input-2" required="">
             </div>
             <div class="u-align-left u-form-group u-form-submit u-form-group-3">
               <button type="submit" class="u-active-palette-1-light-1 u-border-1 u-border-active-palette-1-light-1 u-border-hover-palette-1-light-1 u-border-palette-4-light-1 u-btn u-btn-round u-btn-submit u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-radius-50 u-btn-1">log in</button>

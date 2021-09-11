@@ -38,31 +38,31 @@
           <form action="/createAuction" method="POST" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form" style="padding: 10px;">
             <div class="u-form-group u-form-name">
               <label for="name-0938" class="u-form-control-hidden u-label"></label>
-              <input type="text" placeholder="Name" id="name-0938" name="name" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
+              <input type="text" onkeypress="return /[a-z 0-9-.]/i.test(event.key)" placeholder="Name" id="name-0938" name="name" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
             </div>
             <div class="u-form-group u-form-partition-factor-2 u-form-group-2">
               <label for="text-673d" class="u-form-control-hidden u-label"></label>
-              <input type="text" placeholder="Starting Price" id="text-673d" name="sPrice" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
+              <input type="text" onkeypress="return /[0-9]/i.test(event.key)" required pattern="[0-9]{1}{6}" maxlength="6" placeholder="Starting Price" id="text-673d" name="sPrice" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
             </div>
             <div class="u-form-group u-form-partition-factor-2 u-form-group-3">
               <label for="text-32ad" class="u-form-control-hidden u-label"></label>
-              <input type="text" placeholder="Rise" id="text-32ad" name="rise" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
+              <input type="text" onkeypress="return /[0-9]/i.test(event.key)" required pattern="[0-9]{1}{5}" placeholder="Rise" id="text-32ad" name="rise" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
             </div>
             <div class="u-form-date u-form-group u-form-partition-factor-2 u-form-group-4">
               <label for="text-510a" class="u-label">Auction Start</label>
-              <input type="date" placeholder="" id="text-510a" name="sDate" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
+              <input type="date" placeholder="" id="text-510a" name="sDate" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
             </div>
             <div class="u-form-group u-form-partition-factor-2 u-form-group-5">
               <label for="text-1bfd" class="u-form-control-hidden u-label"></label>
-              <input type="time" placeholder="" id="text-1bfd" name="sTime" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
+              <input type="time" placeholder="" id="text-1bfd" name="sTime" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
             </div>
             <div class="u-form-date u-form-group u-form-partition-factor-2 u-form-group-6">
               <label for="text-daa2" class="u-label">Auction Deadline</label>
-              <input type="date" placeholder="" id="text-daa2" name="eDate" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
+              <input type="date" placeholder="" id="text-daa2" name="eDate" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
             </div>
             <div class="u-form-group u-form-partition-factor-2 u-form-group-7">
               <label for="text-da20" class="u-form-control-hidden u-label"></label>
-              <input type="time" placeholder="" id="text-da20" name="eTime" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white">
+              <input type="time" placeholder="" id="text-da20" name="eTime" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
             </div>
             <div class="u-form-checkbox u-form-group u-form-group-8">
               <input type="checkbox" id="checkbox-80c5" name="timeExtension" value="On">

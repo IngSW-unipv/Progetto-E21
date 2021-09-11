@@ -22,7 +22,7 @@
   <body background="https://drive.google.com/uc?id=1zWqNFwlhP6bVOsuspOEZV5aQHYY56BII" style="background-position: 50% 50% ; background-attachment: fixed;" class="u-body">
     <header class="u-clearfix u-header u-palette-4-dark-2 u-header" id="sec-b42a">
       <div class="u-clearfix u-sheet u-sheet-1">
-        <a href="https://nicepage.com" class="u-image u-logo u-image-1" data-image-width="512" data-image-height="512">
+        <a href="/home?cookie=@cookie" class="u-image u-logo u-image-1" data-image-width="512" data-image-height="512">
           <img src="https://drive.google.com/uc?id=1JCaE2DLg3qk_daWs81GI9r9iGoMEF06x" class="u-logo-image u-logo-image-1" data-image-width="89.95">
         </a>
         <h2 class="u-text u-text-1">Auction House</h2>
@@ -53,14 +53,16 @@
             </div>
           </div>
         </div>
-        <h3 class="u-text u-text-palette-4-dark-2 u-text-4"><b style="">Reviews</b>
+        <h3 style="left: -70px;" class="u-text u-text-palette-4-dark-2 u-text-4"><b style="">Reviews</b></h3>
+
 		@for (user.userDetails.Review rv: reviews) {
 			<div alt=""  class="u-image u-image-circle u-image-2" style ="margin: 10px 10px 0px 25px;" data-image-width="1056" data-image-height="1500">
 				<img alt="Errore" style="border-width: 5px; border-style: solid; color: white" class="u-back-image u-image-circle  u-expanded u-radius-50 u-shape-round"  src="data:image/png;base64, @(rv.getImg())" data-image-width="1056" data-image-height="1500">
 			</div>
-			<h6 class="u-text-5">@(rv.getSender())</h6>
-			<p class="u-text u-text-6">@(rv.getText())</p> 		
+			<h6 style="left: -66px; top:13px;" align="left" class="u-text-5">@(rv.getSender())</h6>
+			<p style=" left: -50px ; top: 27px;" align="left" class="u-text u-text-6">@(rv.getText())</p><br>		
 		  }
+
        </div>
     </section>
     <section class="u-backlink u-clearfix u-grey-80">

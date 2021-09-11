@@ -37,11 +37,11 @@
           <form action="/addLot" method="POST" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form" style="padding: 10px;">
             <div class="u-form-group u-form-name">
               <label for="name-3ad5" class="u-form-control-hidden u-label"></label>
-              <input type="text" placeholder="Name" id="name-3ad5" name="name" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
+              <input type="text" onkeypress="return /[a-z 0-9.-]/i.test(event.key)" placeholder="Name" id="name-3ad5" name="name" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
             </div>
             <div class="u-form-group u-form-message">
               <label for="message-3ad5" class="u-form-control-hidden u-label"></label>
-              <textarea placeholder="Description" rows="4" cols="50" id="message-3ad5" name="description" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required=""></textarea>
+              <textarea placeholder="Description" onkeypress="return /[a-z 0-9.,-]/i.test(event.key)" rows="4" cols="50" id="message-3ad5" name="description" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="" maxlength="200"></textarea>
             </div>
             <div class="u-align-right u-form-group u-form-submit">
               <button href="/addLot" class="u-border-none u-btn u-btn-round u-btn-submit u-button-style u-palette-4-dark-2 u-radius-50 u-btn-1">Sumbit</button>
