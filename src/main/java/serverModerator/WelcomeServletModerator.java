@@ -53,7 +53,7 @@ public class WelcomeServletModerator extends HttpServlet {
 		else if (req.getPathInfo().equals("/home")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			try {
-				resp.getWriter().write(Rythm.render("homeModerator.html", cookie, auctionHouse.getOpenAuctions()));
+				resp.getWriter().write(Rythm.render("homeModerator.html", cookie, auctionHouse.getPendingAuctions()));
 			} catch (Exception e) {
 				e.printStackTrace();
 			} 
@@ -62,7 +62,7 @@ public class WelcomeServletModerator extends HttpServlet {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			try {
 				auctionHouse.approveAuction(req.getParameter("auctionID"));
-				resp.getWriter().write(Rythm.render("homeModerator.html", cookie, auctionHouse.getOpenAuctions()));
+				resp.getWriter().write(Rythm.render("homeModerator.html", cookie, auctionHouse.getPendingAuctions()));
 			} catch (Exception e) {
 				e.printStackTrace();
 			} 
@@ -71,7 +71,7 @@ public class WelcomeServletModerator extends HttpServlet {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			try {
 				auctionHouse.rejectAuction(req.getParameter("auctionID"));
-				resp.getWriter().write(Rythm.render("homeModerator.html", cookie, auctionHouse.getOpenAuctions()));
+				resp.getWriter().write(Rythm.render("homeModerator.html", cookie, auctionHouse.getPendingAuctions()));
 			} catch (Exception e) {
 				e.printStackTrace();
 			} 

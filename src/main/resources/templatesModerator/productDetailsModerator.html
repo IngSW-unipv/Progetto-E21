@@ -12,7 +12,7 @@
 	<meta name="theme-color" content="#478ac9">
     <meta property="og:title" content="PRODUCT DETAILS">
     <meta property="og:type" content="website">
-    <title>Product Details Approbation</title>
+    <title>Auction Preview</title>
     <link rel="stylesheet" href="https://drive.google.com/uc?id=1PjOz0t4R1DDs9_j_mLc90MPUli5jMHe1" media="screen">
 	<link rel="stylesheet" href="https://drive.google.com/uc?id=1v5wuuSNWjw71KqrHiW86Q98DIoQ4gKtJ" media="screen">
 	<link rel="stylesheet" href="https://drive.google.com/uc?id=1d78irKUB2L-OMqge2otfgQ87UfiS1MZ5" media="screen">
@@ -79,12 +79,13 @@
 			}
 		</script>		
 		<div style="position:relative; bottom: 50px; ">
-		<a width = 100px href="/placeBid?cookie=@cookie&auctionID=@(auction.getId())&auctioner=@(auction.getOwner())" class="u-btn u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-btn-1" style = "bottom:0">Approve Auction: <br></a>  <br><br><br>
-		<a style="width: 428px;"  width = 50px href="/placeBid?cookie=@cookie&auctionID=@(auction.getId())&auctioner=@(auction.getOwner())" class="u-btn u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-btn-1" style = "bottom:0">Reject Auction: <br></a>
+		<a width = 100px href="/approveAuction?cookie=@cookie&auctionID=@(auction.getId())" class="u-btn u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-btn-1" style = "bottom:0">Approve Auction: <br></a>  <br><br><br>
+		<a style="width: 428px;"  width = 50px href="/rejectAuction?cookie=@cookie&auctionID=@(auction.getId())" class="u-btn u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-btn-1" style = "bottom:0">Reject Auction: <br></a>
 		<p style="margin-top:60px; margin-left: 650px; margin-right: 150px; color:red" class="">@msg</p>
 		</div>
 		@for (auction.Lot lot: auction.getLots()) {
 				<p class="u-text u-text-8" style ="font-weight: bold;  font-size: 40px;">@(lot.getName())</p>
+				<p class="u-text u-text-8" style ="font-weight: bold;  font-size: 30px;">@(lot.getDescription())</p>
 				@for (auction.Item itm: lot.getItems()) {
 					<p class="u-text u-text-8" style ="font-weight: bold;">@(itm.getName()):</p>
 					<p class="u-text u-text-8">@(itm.getDescription())</p><br><br>

@@ -809,7 +809,7 @@ public class AuctionHouse {
 		   try {
 			 
 			cn =  connectDB(); //Establishing connection
-			sql = "insert into messages(sender, receiver, message, time) values ('AuctionHouse','" + receiver + "','" + msg + "','" + nowFormatted + "')";
+			sql = "insert into messages(sender, receiver, message, time) values ('AuctionHouseMail','" + receiver + "','" + msg + "','" + nowFormatted + "')";
 			st = cn.createStatement();
 			st.execute(sql);
 		   }
