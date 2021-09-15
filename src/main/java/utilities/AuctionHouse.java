@@ -24,6 +24,7 @@ import auction.Lot;
 import user.Participant;
 import user.User;
 import user.userDetails.Address;
+import user.userDetails.CreditCard;
 import user.userDetails.Review;
 
 public class AuctionHouse {
@@ -143,6 +144,20 @@ public class AuctionHouse {
 		   }  
 
 		return candy;
+	}
+	
+	//Metodo per controllare se l'utente ha inserito una carta di credito
+	public boolean checkCard(int cookie) {
+		CreditCard c = null;
+		try {
+			c = new CreditCard(loggedIn.get(cookie));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (c.getNumber()==null) return false;
+		else return true;
+		
 	}
 		
 	//Metodo per ottenere tutte le review fatte ad un utente
@@ -704,10 +719,10 @@ public class AuctionHouse {
 	        
 			   try { 
 				   cn =  connectDB(); //Establishing connection
-				   sql = "update auctionHouse set amount = amount -" + a.getHighestBid();
+				   sql = "update auctionHouse set amount = amount -" + a.getHighestBid() * 0.99;
 				   st = cn.createStatement(); 
 			   	   st.executeUpdate(sql); 
-			   	   sql = "update cCard set funds = funds + " + a.getHighestBid() + " where username = '" + a.getOwner()+ "'";
+			   	   sql = "update cCard set funds = funds + " + a.getHighestBid()* 0.99 + " where username = '" + a.getOwner()+ "'";
 				   st.executeUpdate(sql);
 			   	   sql = "update auction set status = 'paid' where auctionID ='" + a.getId() + "'";
 			   	   st.executeUpdate(sql); 
@@ -896,13 +911,6 @@ public class AuctionHouse {
 
 		
 	}
-
-
-
-	
-
-
-	
 
 
 	
