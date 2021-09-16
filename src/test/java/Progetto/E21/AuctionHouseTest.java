@@ -46,6 +46,8 @@ public class AuctionHouseTest {
 		house = new AuctionHouse("Auction House");
 	}
 	
+	
+
     @Test
     public void placeBidTest() {
     	init();
