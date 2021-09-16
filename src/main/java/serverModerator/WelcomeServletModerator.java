@@ -36,7 +36,7 @@ import utilities.ChatMessage;
 
 public class WelcomeServletModerator extends HttpServlet {
 	
-	private AuctionHouse auctionHouse = new AuctionHouse("Il mercationo della sirena");
+	private AuctionHouse auctionHouse = new AuctionHouse("Auction House");
 	private ArrayList<Auction> pendingAucton = new ArrayList<Auction>();
  
 	@Override

@@ -84,11 +84,11 @@
 		<p style="margin-top:60px; margin-left: 650px; margin-right: 150px; color:red" class="">@msg</p>
 		</div>
 		@for (auction.Lot lot: auction.getLots()) {
-				<p class="u-text u-text-8" style ="font-weight: bold;  font-size: 40px;">@(lot.getName())</p>
-				<p class="u-text u-text-8" style ="font-weight: bold;  font-size: 30px;">@(lot.getDescription())</p>
+				<p class="u-text u-text-8" style ="font-weight: bold;  font-size: 40px;    margin-right: 45px">@(lot.getName())</p>
+				<p class="u-text u-text-8" align= "left" style ="font-size: 20px;  margin-bottom: 45px  ; margin-right: 45px">@(lot.getDescription())</p>
 				@for (auction.Item itm: lot.getItems()) {
-					<p class="u-text u-text-8" style ="font-weight: bold;">@(itm.getName()):</p>
-					<p class="u-text u-text-8">@(itm.getDescription())</p><br><br>
+					<p class="u-text u-text-8" align= "left" style ="font-weight: bold;     margin-right: 45px">@(itm.getName()):</p>
+					<p class="u-text u-text-8"  align= "left"   margin-right: 45px>@(itm.getDescription())</p><br><br>
 				}			
 		  }
 		<script>

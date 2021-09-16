@@ -41,7 +41,7 @@ public class WelcomeServlet extends HttpServlet {
 	
 	private static final MultipartConfigElement MULTI_PART_CONFIG = new MultipartConfigElement("./tmp");
 	
-	private AuctionHouse auctionHouse = new AuctionHouse("Il mercationo della sirena");
+	private AuctionHouse auctionHouse = new AuctionHouse("Auction House");
 	private ArrayList<Auction> pendingAucton = new ArrayList<Auction>();
  
 	@Override
@@ -58,6 +58,15 @@ public class WelcomeServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 		}
+		
+		else if (req.getPathInfo().equals("/termOfUse")) {
+			try {
+				resp.getWriter().write(Rythm.render("termOfUse.html"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
 		else if (req.getPathInfo().equals("/createAuction")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			if (auctionHouse.checkCard(cookie)){
