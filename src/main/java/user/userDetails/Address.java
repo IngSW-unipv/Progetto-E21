@@ -1,5 +1,8 @@
 package user.userDetails;
 
+/**
+ * This class describes a home address
+ */
 public class Address {
 	
 

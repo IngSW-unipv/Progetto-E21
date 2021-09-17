@@ -27,6 +27,9 @@ import user.userDetails.Address;
 import user.userDetails.CreditCard;
 import user.userDetails.Review;
 
+/**
+ * This class describes the Auction House and all the logic behind it
+ */
 public class AuctionHouse {
 	private String name;
 	private int sessionCookie = 0, moderatorCookie = 0;
@@ -37,8 +40,14 @@ public class AuctionHouse {
 	public AuctionHouse(String name) {
 		this.name = name;
 	}
-	
-	//Metodo per ottenere tutti gli utenti registrati al sito
+
+	/**
+	 * This method gets all the Participants registered in the DB
+	 * and returns them as an ArrayList of Participants
+	 *
+	 * @return List of all the Participants registered to DB
+	 * @throws SQLException
+	 */
 	public  ArrayList<Participant> getAllParticipant() throws SQLException {
 		Connection cn = null;
 		Statement st;
@@ -78,7 +87,13 @@ public class AuctionHouse {
 		 }  
 		return list;
 	}
-	//Metodo per la registrazione degli utenti
+
+	/**
+	 * This method registers the Participant given as parameter to DB
+	 * @param p The Participant you want to register to DB
+	 * @return Returns current session cookie
+	 * @throws Exception SQL Exception
+	 */
 	public synchronized int registerParticipantToDB(Participant p) throws Exception {
 		
 		Connection cn = null;
@@ -113,7 +128,14 @@ public class AuctionHouse {
 
 		   
 	}
-	//metodo login utenti standard
+
+	/**
+	 * This method logins into the website using the given email and password
+	 * @param email Email of the user
+	 * @param pwd Password of the user
+	 * @return Returns cookie of the current session
+	 * @throws SQLException
+	 */
 	public int login(String email, String pwd) throws SQLException {
 		Connection cn = null;
 		Statement st;
@@ -145,8 +167,12 @@ public class AuctionHouse {
 
 		return candy;
 	}
-	
-	//Metodo per controllare se l'utente ha inserito una carta di credito
+
+	/**
+	 * This method checks if the user currently has a credit card registered to the website
+	 * @param cookie Current session cookie
+	 * @return True if the user has a credit card, false otherwise
+	 */
 	public boolean checkCard(int cookie) {
 		CreditCard c = null;
 		try {
@@ -159,8 +185,13 @@ public class AuctionHouse {
 		else return true;
 		
 	}
-		
-	//Metodo per ottenere tutte le review fatte ad un utente
+
+	/**
+	 * This method outputs the reviews of the given user
+	 * @param username Username of the current user
+	 * @return Return an ArrayList of Reviews
+	 * @throws SQLException
+	 */
 	public ArrayList<Review> getReviews(String username) throws SQLException{		
 		Connection cn = null;
 		Statement st;
@@ -204,8 +235,13 @@ public class AuctionHouse {
 		return list;
 		
 	}
-	
-	//Metodo per ottenere tutte le aste concluse
+
+	/**
+	 * This methods outputs all current closed Auctions
+	 * @param cookie Current session cookie
+	 * @return Returns an ArrayList of Auctions
+	 * @throws SQLException
+	 */
 	public  ArrayList<Auction> getClosedAuctions(int cookie) throws SQLException {
 		Connection cn = null;
 		Statement st1, st2, st3;
@@ -246,8 +282,13 @@ public class AuctionHouse {
 		
 		
 	}
-		
-	//Metodo per ottenere tutte le aste online
+
+	/**
+	 * This method outputs the current open Auctions
+	 * @return Return an ArrayList of Auctions
+	 * @throws SQLException
+	 * @throws ParseException
+	 */
 	public ArrayList<Auction> getOpenAuctions() throws SQLException, ParseException {
 		Connection cn = null;
 		Statement st1, st2, st3;
@@ -278,11 +319,11 @@ public class AuctionHouse {
 				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(0, date1.length()-2), formatter);
 				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(0, date2.length()-2), formatter);
 				 
-				  if(currentDate.isBefore(eDate) && currentDate.isAfter(sDate)) { //Controllo se l'asta è scaduta
+				  if(currentDate.isBefore(eDate) && currentDate.isAfter(sDate)) { //Controllo se l'asta ï¿½ scaduta
 					  a1 = new Auction(rs1.getString("auctionID"));
 					  auctions.add(a1);
 				   }
-				  else { //Se l'asta è scaduta la imposto come chiusa
+				  else { //Se l'asta ï¿½ scaduta la imposto come chiusa
 					   sql2 = "update auction set auction.status = 'closed' where auctionID = '" + rs1.getInt("auctionID") + "'";
 					   st2 = cn.createStatement(); 
 					   st2.executeUpdate(sql2); 
@@ -302,6 +343,12 @@ public class AuctionHouse {
 
 		
 	}
+
+	/**
+	 * This method removes a Participant from the DB
+	 * @param p1 Participant you want to remove
+	 * @throws SQLException
+	 */
 	//Metodo per eliminare un participant (NON ANCORA UTILIZZATO)
 	public void deleteParticipant(Participant p1) throws SQLException {
 		
@@ -332,7 +379,15 @@ public class AuctionHouse {
 		
 	}
 
-	// METODO CHE SALVA LA REVIEW NEL DB
+	/**
+	 * This method saves a given Review into DB
+	 * @param cookie Current session cookie
+	 * @param receiverUsername The username you are writing a Review for
+	 * @param review Text of the Review
+	 * @param auctionID ID of the Auction you are reviewing
+	 * @return Returns 0 if the method worked accordingly
+	 * @throws SQLException
+	 */
 	public int saveReview(int cookie, String receiverUsername, String review, String auctionID) throws SQLException {
 		Connection cn = null;
 		Statement st;
@@ -362,7 +417,12 @@ public class AuctionHouse {
 		return 0;
 	}
 
-	// METODO PER PRENDERE LA LISTA DI USERNAME CON CUI HAI SCAMBIATO MESSAGGI
+	/**
+	 * This method outputs the Participants you had a conversation with
+	 * @param cookie Current session cookie
+	 * @return Returns an ArrayList of Participants
+	 * @throws SQLException
+	 */
 	public ArrayList<Participant> getMessageList(int cookie) throws SQLException {
 
 		Connection cn = null;
@@ -398,7 +458,13 @@ public class AuctionHouse {
 		return null;
 	}
 
-//Metodo per ottenere tutti imessaggi scambiati tra due utenti
+	/**
+	 * This method outputs all the messages exchanged between two Participants
+	 * @param cookie Current session cookie
+	 * @param receiverUsername Username of the receiver
+	 * @return Returns an ArrayList of Chat Messages
+	 * @throws SQLException
+	 */
 	public ArrayList<ChatMessage> getMessages(int cookie, String receiverUsername) throws SQLException {
 		Connection cn = null;
 		Statement st;
@@ -432,8 +498,14 @@ public class AuctionHouse {
 
 		return null;
 	}
-	
-	//Metodo per registrare una puntata
+
+	/**
+	 * This method places a bid increasing the total price of the Auction
+	 * @param username Username of the Participant that placed the bid
+	 * @param auctionID ID of the Auction
+	 * @return Returns a String message that tells the user if he placed a bid or he failed
+	 * @throws Exception
+	 */
 	public synchronized String placeBid(String username , String auctionID) throws Exception {
 		try {
 			Auction a = new Auction(auctionID);
@@ -473,20 +545,33 @@ public class AuctionHouse {
 			return e.getMessage();
 		}
 	}
-	
-	//Metodo per ottenere username a partire dal cookie
+
+	/**
+	 * Outputs the username logged in the current session
+	 * @param cookie Cookie of the current session
+	 * @return A String of the username
+	 */
 	public String getUsername(int cookie) {
 		return loggedIn.get(cookie);
 	}
-		
-	//Metodo per la connessione al DB
+
+	/**
+	 * This method connects to DB
+	 * @return Returns the Connection
+	 * @throws SQLException
+	 */
 	private Connection connectDB() throws SQLException {
 			Connection cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11421731", "sql11421731", "83bkPjI9Yf");//Establishing connection
 			System.out.println("Connected With the database successfully");
 			return cn;		
 	}
-	
-	//Metodo per modifica intro profilo dell'utente
+
+	/**
+	 * This method updates the current user intro
+	 * @param cookie Current session cookie
+	 * @param intro String text of the intro
+	 * @throws Exception
+	 */
 	public  void updateIntro(int cookie, String intro) throws Exception {
 		
 		Connection cn = null;
@@ -513,8 +598,17 @@ public class AuctionHouse {
 			   cn.close();
 		   }
 	}
-	
-	//Metodo per aggiornare indirizzo
+
+	/**
+	 * This method updates the address
+	 * @param cookie Current session cookie
+	 * @param country Country you want to update
+	 * @param city City you want to update
+	 * @param road Street you want to update
+	 * @param number Number you want to update
+	 * @param cap Postal code you want to update
+	 * @throws Exception
+	 */
 	public  void updateAddress(int cookie, String country, String city, String road, String number, String cap) throws Exception {
 		Connection cn = null;
 		Statement st;
@@ -540,10 +634,15 @@ public class AuctionHouse {
 		   }
 		
 	}
-	
-	
-	
-	//Metodo per l'inserimento di una nuova asta nel database
+
+
+	/**
+	 * This method inserts a new Auction into DB
+	 * @param username Username that created the new Auction
+	 * @param a The Auction an user just created
+	 * @return Returns null if the method is successful or an error message otherwise
+	 * @throws Exception
+	 */
 	public  Auction registerAuctionToDB(String username, Auction a) throws Exception {
 		Connection cn = null;
 		Statement st;
@@ -599,8 +698,13 @@ public class AuctionHouse {
 		   return null;
 		   
 	}
-	
-	//Metodo per aggiornare l'immagine di profilo
+
+	/**
+	 * This method updates the user image profile
+	 * @param cookie Current session cookie
+	 * @param fileContent An InputStream of the image you want to update into DB
+	 * @throws Exception
+	 */
 	public void updateImg(int cookie, InputStream fileContent) throws Exception {
 		Connection cn = null;
 		Statement st;
@@ -647,7 +751,12 @@ public class AuctionHouse {
 	   }
 		
 	}
-	
+
+	/**
+	 * This method saves the images inserted into DB
+	 * @param imgFile InputStream of the img file
+	 * @param id ID of the image
+	 */
 	//Metodo per il salvataggio delle immagini	
 	private void saveImg(InputStream imgFile, int id) {
 		File file = new File("src/main/resources/imgDB/auctionsPics/"+id+".jpg");
@@ -662,6 +771,12 @@ public class AuctionHouse {
 			}
 	}
 
+	/**
+	 * This method encodes images into base64
+	 * @param file Image file passed to encode
+	 * @return Returns the encoded bytes of the image
+	 * @throws Exception
+	 */
 //Metodo per la codifica in base64 delle immagini, usate nell'HTML
 	private static String encodeFileToBase64Binary(File file) throws Exception{
 	        FileInputStream fileInputStreamReader = new FileInputStream(file);
@@ -671,6 +786,13 @@ public class AuctionHouse {
 			return new String(encodedBytes);
 	}
 
+	/**
+	 * This method performs all the payment steps needed for the payment to be successful
+	 * @param cookie Current session cookie
+	 * @param auctionID ID of the Auction you are paying for
+	 * @return Returns 0 if the method if successful
+	 * @throws Exception
+	 */
 //Metodo che tratta i diversi step del pagamento
 	public int paymentNextStep(int cookie, String auctionID) throws Exception {
 		Auction a = new Auction(auctionID);
@@ -735,7 +857,7 @@ public class AuctionHouse {
 				   cn.close();
 			   }
 		}
-		else if (a.getStatus().equals("paid")) //terzo step- Possibilità di scrivere recensione
+		else if (a.getStatus().equals("paid")) //terzo step- Possibilitï¿½ di scrivere recensione
 		{
 			return 1;
 		}
@@ -743,6 +865,11 @@ public class AuctionHouse {
 		return -1;
 	}
 
+	/**
+	 * This method removes an Auction from DB
+	 * @param auctionID ID of the Auction you want to remove
+	 * @throws Exception
+	 */
 	//Metodo per eliminare un asta
 	public void deleteAuction(String auctionID) throws Exception {
 		Connection cn = null;
@@ -771,8 +898,13 @@ public class AuctionHouse {
 	
 
 //METODI MODERATOR
-	
-//Metodo per approvare annuncio
+
+	/**
+	 * This changes an Auction status in Approved
+	 * @param auctionID ID of the Auction to approve
+	 * @throws Exception
+	 */
+	//Metodo per approvare annuncio
 	public void approveAuction(String auctionID) throws Exception {
 		Connection cn = null;
 		Statement st;
@@ -797,6 +929,11 @@ public class AuctionHouse {
 		   }	
 	}
 
+	/**
+	 * Method that rejects an Auction
+	 * @param auctionID ID of the Auction to reject
+	 * @throws Exception
+	 */
 	//metodo per rifiutare annuncio
 	public void rejectAuction(String auctionID) throws Exception {        
 		   try { 
@@ -810,6 +947,12 @@ public class AuctionHouse {
 		   }
 	}
 
+	/**
+	 * This method sends a message from the Auction House to the user if his Auction has been approved or not
+	 * @param receiver Username of the receiver
+	 * @param msg String text of the message
+	 * @throws Exception
+	 */
 	//Metodo per l'invio di messaggi da parte di auctionhouse per notificare approvazione o rifiuto dell'annuncio
 	public void auctionHouseSendMsg(String receiver, String msg) throws Exception
 	{
@@ -836,7 +979,14 @@ public class AuctionHouse {
 		   }
 	}
 
-//Metodo login Moderatori
+	/**
+	 * This method logins as moderator
+	 * @param username Username of the moderator
+	 * @param pwd Password of the moderator
+	 * @return Returns the session cookie
+	 * @throws SQLException
+	 */
+	//Metodo login Moderatori
 	public int loginModerator(String username, String pwd) throws SQLException {
 		Connection cn = null;
 		Statement st;
@@ -869,6 +1019,11 @@ public class AuctionHouse {
 		return candy;
 	}
 
+	/**
+	 * This method outputs a list of Auctions to be approved
+	 * @return Returns an ArrayList of Auctions
+	 * @throws SQLException
+	 */
 	//Metodo per ottenere una lista delle aste da approvare 
 	public ArrayList<Auction> getPendingAuctions() throws SQLException {
 		Connection cn = null;
