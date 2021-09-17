@@ -37,6 +37,10 @@ public class AuctionHouse {
 	Map<Integer, String> loggedIn = new HashMap<>();
 	Map<Integer, String> moderatorLoggedIn = new HashMap<>();
 	
+	public String getName() {
+		return name;
+	}
+
 	public AuctionHouse(String name) {
 		this.name = name;
 	}
@@ -530,10 +534,14 @@ public class AuctionHouse {
 			           return "You placed a bid";
 				   }
 				   else {
+					   java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 					   double bid = a.getHighestBid() + a.getMinimumRise();
-					   LocalDateTime newDate = a.geteDate();
-					   newDate = newDate.plusDays(1);
-					   sql = "update auction set auction.endDate = '" + newDate + "' , auction.currentPrice = '" + bid + "' , auction.bidder = '" +  username +"' where auctionID = '" + auctionID + "'";
+					   LocalDateTime currentDate = LocalDateTime.parse(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), formatter);
+					   LocalDateTime endDate = a.geteDate();
+					   if(currentDate.getYear() == endDate.getYear() && currentDate.getDayOfYear() == endDate.getDayOfYear()) {
+						   currentDate = currentDate.plusDays(1);
+					   }
+					   sql = "update auction set auction.endDate = '" + currentDate + "' , auction.currentPrice = '" + bid + "' , auction.bidder = '" +  username +"' where auctionID = '" + auctionID + "'";
 			           st.executeUpdate(sql); 
 			           return "You placed a bid";
 				   }
