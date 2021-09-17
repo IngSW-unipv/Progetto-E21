@@ -11,6 +11,9 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.rythmengine.Rythm;
 
+/**
+ * This class is the main Application Server
+ */
 public class ApplicationServer {
 	 private int port;
 	    private Servlet servlet;
@@ -20,7 +23,12 @@ public class ApplicationServer {
 	        this.port = port;
 	        this.servlet = servlet;
 	    }
-	    public void start() throws Exception {
+
+	/**
+	 * This method starts the server
+	 * @throws Exception
+	 */
+	public void start() throws Exception {
 	    	initTemplateEngine();
 	        server = new Server(port);
 	        ServletContextHandler handler = new ServletContextHandler();
@@ -30,10 +38,14 @@ public class ApplicationServer {
 	        server.start();
 	    }
 
+	/**
+	 * This method stops the server
+	 * @throws Exception
+	 */
 	    public void stop() throws Exception {
 	        server.stop();
 	    }
-	  
+
 	    private void addStaticFileServing(ServletContextHandler handler) {
 	        ServletHolder holderPwd = new ServletHolder("default", new DefaultServlet());
 	        holderPwd.setInitParameter("resourceBase", "./src/main/resources/statics");
@@ -41,7 +53,7 @@ public class ApplicationServer {
 	        holderPwd.setInitParameter("pathInfoOnly","true");
 	        handler.addServlet(holderPwd, "/statics/*");
 	    }
-	    
+
 	    private void initTemplateEngine() {
 	        Map<String, Object> conf = new HashMap<>();
 	        conf.put("home.template", "templates");

@@ -9,6 +9,9 @@ import java.util.Random;
 
 import user.Participant;
 
+/**
+ * Class that describes a Credit Card
+ */
 public class CreditCard {
 	private String number, CVV, expirationDate, firstName, lastName, username;
 	double funds;
@@ -23,7 +26,12 @@ public class CreditCard {
 		this.lastName = lastName;
 		this.username = username;
 	}
-	
+
+	/**
+	 * Outputs the CreditCard linked to the given username
+	 * @param username Username of the CreditCard owner
+	 * @throws Exception
+	 */
 	public CreditCard(String username) throws Exception{
 		Connection cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11421731", "sql11421731", "83bkPjI9Yf");
 		Statement st;
@@ -52,9 +60,12 @@ public class CreditCard {
 		   }
 		
 	}
-	
-	
 
+
+	/**
+	 * Saves a new CreditCard to DB
+	 * @throws Exception
+	 */
 	public void toDB() throws Exception {
 		Connection cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11421731", "sql11421731", "83bkPjI9Yf");
 		Statement st;

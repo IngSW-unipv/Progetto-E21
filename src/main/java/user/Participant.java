@@ -16,6 +16,9 @@ import java.util.Calendar;
 
 import user.userDetails.Address;
 
+/**
+ * This class describes a Participant and all its details
+ */
 public class Participant {
 	
 	    private String firstName, lastName, email, username, mobileNumber, password, img, intro;
@@ -61,9 +64,13 @@ public class Participant {
 			this.img = img;
 			this.intro = intro;
 		}
-	    
-	    
-	    public Participant(String username) throws SQLException
+
+	/**
+	 * Outputs a Participant inserted into DB given his username
+	 * @param username Username of the Participant
+	 * @throws SQLException
+	 */
+	public Participant(String username) throws SQLException
 	    {
 	    	Connection cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11421731", "sql11421731", "83bkPjI9Yf");
 			
@@ -102,8 +109,13 @@ public class Participant {
 	    	
 	    	
 	    }
-	    
 
+		/**
+		 * This method encodes images into base64
+		 * @param file Image file passed to encode
+		 * @return Returns the encoded bytes of the image
+		 * @throws Exception
+		 */
 		private static String encodeFileToBase64Binary(File file) throws Exception{
 		        FileInputStream fileInputStreamReader = new FileInputStream(file);
 		        byte[] bytes = new byte[(int)file.length()];

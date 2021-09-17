@@ -33,12 +33,21 @@ import user.Participant;
 import utilities.AuctionHouse;
 import utilities.ChatMessage;
 
-
+/**
+ * This class is the main Servlet
+ */
 public class WelcomeServletModerator extends HttpServlet {
 	
 	private AuctionHouse auctionHouse = new AuctionHouse("Auction House");
 	private ArrayList<Auction> pendingAucton = new ArrayList<Auction>();
- 
+
+	/**
+	 * GET methods
+	 * @param req Request
+	 * @param resp Response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		if (req.getPathInfo().equals("/productDetails")) {
@@ -81,8 +90,14 @@ public class WelcomeServletModerator extends HttpServlet {
 			resp.getWriter().write(Rythm.render("loginModerator.html", ""));			//Gestione richiesta pagina di login e default
 		}	
 	}
-		
-	
+
+	/**
+	 * POST methods
+	 * @param req Request
+	 * @param resp Response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		

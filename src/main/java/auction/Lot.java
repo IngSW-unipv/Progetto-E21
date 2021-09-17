@@ -10,6 +10,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Base64;
 
+/**
+ * This class describes an Auction Lot
+ */
 public class Lot {
 	
 	private String name, description, owner;
@@ -22,7 +25,16 @@ public class Lot {
 		this.description = description;
 		this.lotId = lotId;
 	}
-	
+
+	/**
+	 * Outputs the Lot from DB given its parameters
+	 * @param name Name of the Lot
+	 * @param description Description of the Lot
+	 * @param lotId ID of the Lot
+	 * @param auctionId ID of the Auction
+	 * @param owner Owner of the auction
+	 * @throws SQLException
+	 */
 	public Lot(String name, String description, int lotId, int auctionId, String owner) throws SQLException {
 		this.name = name;
 		this.description = description;

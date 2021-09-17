@@ -17,7 +17,11 @@ public class ChatMessage {
 		this.text = text;
 		this.time=time;
 	}
-	
+
+	/**
+	 * Saves a ChatMessage into DB
+	 * @throws SQLException
+	 */
 	public void toDB() throws SQLException
 	{
 		Connection cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11421731", "sql11421731", "83bkPjI9Yf");

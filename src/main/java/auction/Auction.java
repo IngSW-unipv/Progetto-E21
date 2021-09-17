@@ -14,6 +14,9 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Base64;
 
+/**
+ * This class describes an Auction
+ */
 public class Auction {
 	private String name, owner, status, approved, highestBidder = "";
 	private LocalDateTime sDate, eDate;
@@ -51,8 +54,12 @@ public class Auction {
 		this.currentPrice = startingPrice;
 		this.timeExt = timeExt;
 	}
-	
-	
+
+	/**
+	 * Outputs an Auction from DB given its ID
+	 * @param auctionID ID of the Auction
+	 * @throws SQLException
+	 */
 	public Auction(String auctionID) throws SQLException {
 		Connection cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11421731", "sql11421731", "83bkPjI9Yf");
 		Statement st1, st2;
@@ -109,7 +116,12 @@ public class Auction {
 			   cn.close();
 		   }
 	}
-	
+	/**
+	 * This method encodes images into base64
+	 * @param file Image file passed to encode
+	 * @return Returns the encoded bytes of the image
+	 * @throws Exception
+	 */
 	private static String encodeFileToBase64Binary(File file) throws Exception{
         FileInputStream fileInputStreamReader = new FileInputStream(file);
         byte[] bytes = new byte[(int)file.length()];
@@ -137,7 +149,11 @@ public class Auction {
 		}
 		else return startingPrice;
 	}
-	
+
+	/**
+	 * Outputs all the images from a Lot
+	 * @return Returns an ArrayList of encoded image Strings
+	 */
 	public ArrayList<String> getAllImg(){
 		ArrayList<String> imgs = new ArrayList<String>();
 		for (Lot lot : getLots()) {

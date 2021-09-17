@@ -6,6 +6,9 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+/**
+ * This class describes an Item inside the Lot
+ */
 public class Item {
 	private String name, description, imgPath;
 	private int itemId;
