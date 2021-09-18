@@ -286,6 +286,7 @@ public class AuctionHouse {
 		
 		
 	}
+	
 
 	/**
 	 * This method outputs the current open Auctions
@@ -353,6 +354,61 @@ public class AuctionHouse {
 
 		
 	}
+	
+	/**
+	 * This method outputs all the auctions created by a user
+	 * @return Return an ArrayList of Auctions
+	 * @throws SQLException
+	 * @throws ParseException
+	 */
+	public ArrayList<Auction> getMyAuctions(int cookie) throws SQLException {
+		Connection cn = null;
+		Statement st1, st2, st3;
+		ResultSet rs1, rs2, rs3;
+		String sql1, sql2, sql3;
+		ArrayList<Auction> auctions = new ArrayList<Auction>();
+		Auction a1;
+		Lot l1;
+		Item i1;
+		//___________connesione___________
+        
+		   try {
+			 
+			   cn =  connectDB(); //Establishing connection
+		   	
+			// CREAZIONE AUCTIONS
+	           sql1 = "SELECT * FROM auction where username ='" + loggedIn.get(cookie) + "';";
+			   st1 = cn.createStatement(); //creo sempre uno statement sulla coneesione		   
+			   rs1 = st1.executeQuery(sql1); //faccio la query su uno statement
+			   
+			   java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			   String date1, date2;
+			   
+			   while(rs1.next() == true) { 
+				  date1 =rs1.getTimestamp("startDate").toString();
+				  date2 =rs1.getTimestamp("endDate").toString();		   
+				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(0, date1.length()-2), formatter);
+				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(0, date2.length()-2), formatter);
+				  a1 = new Auction(rs1.getString("auctionID"));
+				  auctions.add(a1);
+			   }
+			   cn.close();
+			   return auctions;
+			   
+		   } catch(SQLException e) {
+			   System.out.println("errore: " + e.getMessage());
+		   }
+		   finally {
+			   cn.close();
+		   }
+		return null;
+
+		
+	}
+	
+	
+	
+	
 
 	/**
 	 * This method removes a Participant from the DB
@@ -1081,6 +1137,7 @@ public class AuctionHouse {
 
 		
 	}
+
 
 
 	

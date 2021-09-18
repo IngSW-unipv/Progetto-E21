@@ -102,6 +102,16 @@ public class WelcomeServlet extends HttpServlet {
 				e.printStackTrace();
 			} 
 		}
+		
+		else if (req.getPathInfo().equals("/myAuctions")) {
+			int cookie = Integer.parseInt(req.getParameter("cookie"));
+			try {
+				resp.getWriter().write(Rythm.render("home.html", cookie, auctionHouse.getMyAuctions(cookie)));
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
+		}
+		
 		else if (req.getPathInfo().equals("/visitProfile")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			try {
