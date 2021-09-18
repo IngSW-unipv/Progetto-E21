@@ -18,7 +18,6 @@ public class CreditCard {
 
 	
 	public CreditCard(String number, String CVV, String expirationDate, String firstName, String lastName, String username) {
-		
 		this.number = number;
 		this.CVV = CVV;
 		this.expirationDate = expirationDate;
@@ -26,78 +25,31 @@ public class CreditCard {
 		this.lastName = lastName;
 		this.username = username;
 	}
-
-	/**
-	 * Outputs the CreditCard linked to the given username
-	 * @param username Username of the CreditCard owner
-	 * @throws Exception
-	 */
-	public CreditCard(String username) throws Exception{
-		Connection cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11421731", "sql11421731", "83bkPjI9Yf");
-		Statement st;
-		ResultSet rs;
-		String sql;
-		
-		 try {
-			   sql = "select * from cCard where username = '" + username +"'";
-			   st = cn.createStatement(); //creo  uno statement sulla coneesione
-			   rs = st.executeQuery(sql); //faccio la query su uno statement
-			   if (rs.next()) {
-				   this.number = rs.getString("number");
-				   this.username = rs.getString("username");
-				   this.CVV = rs.getString("cvv");
-				   this.firstName = rs.getString("lName");
-				   this.lastName = rs.getString("fName");
-				   this.expirationDate = rs.getString("date");
-				   this.funds = rs.getDouble("funds");
-			   }
-		   }
-		   catch (Exception e) {
-			   throw new Exception(e.getMessage());
-		   }
-		   finally {
-			   cn.close();
-		   }
-		
+	
+	public CreditCard(String number, String CVV, String expirationDate, String firstName, String lastName, String username, double funds) {
+		this.number = number;
+		this.CVV = CVV;
+		this.expirationDate = expirationDate;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.username = username;
+		this.funds = funds;
 	}
-
-
-	/**
-	 * Saves a new CreditCard to DB
-	 * @throws Exception
-	 */
-	public void toDB() throws Exception {
-		Connection cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11421731", "sql11421731", "83bkPjI9Yf");
-		Statement st;
-		String sql;
-		Participant p1;
-		//___________connesione___________
-        
-		   try {
-			   sql = "delete from cCard where username = '" + username +"'";
-			   st = cn.createStatement(); //creo  uno statement sulla coneesione
-			   st.executeUpdate(sql); //faccio la query su uno statement
-			   Random r = new Random();
-			   this.funds = 1999999999 * r.nextDouble();
-			   sql = "insert into cCard(username, fName, lName, date, number, cvv, funds) values ('" + username + "','" + firstName + "','" + lastName + "','" 
-						+ expirationDate + "','" + number + "','" + CVV + "','" + funds + "')";
-			   st.executeUpdate(sql);
-		   }
-		   catch (Exception e) {
-			   throw new Exception(e.getMessage());
-		   }
-		   finally {
-			   cn.close();
-		   }
-		
-		
-	}
+	
 	
 	public double getFunds ()
 	{
 		return funds;
 	}
 	
+	
+	public void setFunds(double funds) {
+		this.funds = funds;
+	}
+
+	public String getUsernamer() {
+		return username;
+	}
 	
 	public String getNumber() {
 		return number;

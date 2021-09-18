@@ -17,4 +17,37 @@ public abstract class User {
 		this.password = password;
 	}
 
+
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+
+
+	public String getLastName() {
+		return lastName;
+	}
+
+
+
+	public String getUsername() {
+		return username;
+	}
+
+
+
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+
+
+
+	public String getPassword() {
+		return password;
+	}
+
+	
+	
+	
 }

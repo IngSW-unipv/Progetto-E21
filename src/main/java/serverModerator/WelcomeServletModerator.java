@@ -53,7 +53,7 @@ public class WelcomeServletModerator extends HttpServlet {
 		if (req.getPathInfo().equals("/productDetails")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			try {
-				resp.getWriter().write(Rythm.render("productDetailsModerator.html", cookie, new Auction(req.getParameter("auctionID")), new Participant(req.getParameter("auctioner")).getImg(), ""));
+				resp.getWriter().write(Rythm.render("productDetailsModerator.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), auctionHouse.getParticipant(req.getParameter("auctioner")).getImg(), ""));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

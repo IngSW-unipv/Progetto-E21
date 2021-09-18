@@ -40,7 +40,7 @@ public class AuctionHouseTest {
 		String date2 = "2020-03-12 10:11:00";		   
 		LocalDateTime sDate = java.time.LocalDateTime.parse(date1, formatter);
 		LocalDateTime eDate = java.time.LocalDateTime.parse(date2, formatter);
-		auction = new Auction("auction123", "owner", "user1", sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), 100.0, 10.0, 1.0, 100, true, sDate, eDate, "open");
+		auction = new Auction("auction123", "owner", "user1", sDate.toString().substring(0, 10), eDate.toString().substring(0, 10), 100.0, 10.0, 1.0, 100, true, sDate, eDate, "open", "yes");
 		auction.addLot(lot1);
 		auction.addLot(lot2);
 		house = new AuctionHouse("Auction House");
@@ -53,7 +53,7 @@ public class AuctionHouseTest {
     	init();
     	double bid = 0;
     	try {
-			auction = new Auction("2");
+			auction = house.getAuction("2");
 			house.placeBid("IronMan", "2");
 			bid = auction.getHighestBid();
 			house.placeBid("user", "2");

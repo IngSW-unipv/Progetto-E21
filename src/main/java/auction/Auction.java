@@ -26,7 +26,7 @@ public class Auction {
 	boolean timeExt = false;
 	private ArrayList<Lot> lots = new ArrayList<Lot>();
 	
-	public Auction(String name, String owner, String highestBidder, String sDateStr,String eDateStr, double currentPrice, double startingPrice, double minimumRise, int id , boolean timeExt, LocalDateTime sDate, LocalDateTime eDate, String status) {
+	public Auction(String name, String owner, String highestBidder, String sDateStr,String eDateStr, double currentPrice, double startingPrice, double minimumRise, int id , boolean timeExt, LocalDateTime sDate, LocalDateTime eDate, String status, String approved) {
 		super();
 		this.name = name;
 		this.owner = owner;
@@ -40,6 +40,7 @@ public class Auction {
 		this.minimumRise = minimumRise;
 		this.id = id;
 		this.currentPrice=currentPrice;
+		this.approved = approved;
 	}
 	
 	public Auction(String name, String owner, LocalDateTime sDate, LocalDateTime eDate, double startingPrice, double minimumRise, int id, boolean timeExt) {
@@ -55,80 +56,6 @@ public class Auction {
 		this.timeExt = timeExt;
 	}
 
-	/**
-	 * Outputs an Auction from DB given its ID
-	 * @param auctionID ID of the Auction
-	 * @throws SQLException
-	 */
-	public Auction(String auctionID) throws SQLException {
-		Connection cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11421731", "sql11421731", "83bkPjI9Yf");
-		Statement st1, st2;
-		ResultSet rs1, rs2;
-		String sql1, sql2;
-		Lot l1;
-
-		   try {
-		   	
-			// CREAZIONE AUCTIONS
-	           sql1 = "SELECT * FROM auction where auctionID =" + auctionID +";";
-			   st1 = cn.createStatement(); //creo sempre uno statement sulla coneesione		   
-			   rs1 = st1.executeQuery(sql1); //faccio la query su uno statement
-			   java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-			   String date1, date2;
-			   
-			   while(rs1.next() == true) { 
-				  date1 = "20" + rs1.getTimestamp("startDate").toString();
-				  date2 = "20" + rs1.getTimestamp("endDate").toString();		   
-				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(2, date1.length()-2), formatter);
-				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(2, date1.length()-2), formatter);
-				  this.name = rs1.getString("name");
-				  this.owner = rs1.getString("username");
-				  this.highestBidder = rs1.getString("bidder");
-				  this.sDateStr = sDate.toString().substring(0,10);
-				  this.eDateStr = eDate.toString().substring(0,10);
-				  this.currentPrice = rs1.getDouble("currentPrice");
-				  this.startingPrice = rs1.getDouble("startingPrice");
-				  this.eDate = eDate;
-				  this.sDate = sDate;
-				  this.status = rs1.getString("status");
-				  this.approved = rs1.getString("approved");
-				  this.timeExt = rs1.getBoolean("timeExt");
-				  this.id = rs1.getInt("auctionID");
-				  this.minimumRise = rs1.getDouble("minimumRise");
-				  
-				  
-				  //CREAZIONE LOT
-				  sql2 = "SELECT * FROM lot where username = '" + rs1.getString("username") + "' and auctionID = " + id + ";";
-				  st2 = cn.createStatement();
-				  rs2 = st2.executeQuery(sql2);
-				  
-				  
-				  while(rs2.next() == true) {
-					  l1 = new Lot(rs2.getString("name"), rs2.getString("description"), rs2.getInt("lotID"), id, owner);
-					  lots.add(l1);
-				  }
-			   }
-			   
-		   } catch(SQLException e) {
-			   System.out.println("errore: " + e.getMessage());
-		   } 
-		   finally {
-			   cn.close();
-		   }
-	}
-	/**
-	 * This method encodes images into base64
-	 * @param file Image file passed to encode
-	 * @return Returns the encoded bytes of the image
-	 * @throws Exception
-	 */
-	private static String encodeFileToBase64Binary(File file) throws Exception{
-        FileInputStream fileInputStreamReader = new FileInputStream(file);
-        byte[] bytes = new byte[(int)file.length()];
-		fileInputStreamReader.read(bytes);
-		byte[] encodedBytes = Base64.getEncoder().encode(bytes);
-		return new String(encodedBytes);
-	}
 	
 	public String getThumbnail() {
 		return lots.get(0).getItems().get(0).getImage();	

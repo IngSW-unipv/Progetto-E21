@@ -53,7 +53,7 @@ public class WelcomeServlet extends HttpServlet {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			try {
 				//resp.getWriter().write(Rythm.render("productDetails.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), new Participant(req.getParameter("auctioner")).getImg(), ""));
-				resp.getWriter().write(Rythm.render("productDetails.html", cookie, new Auction(req.getParameter("auctionID")), new Participant(req.getParameter("auctioner")).getImg(), ""));
+				resp.getWriter().write(Rythm.render("productDetails.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), auctionHouse.getParticipant(req.getParameter("auctioner")).getImg(), ""));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -80,7 +80,7 @@ public class WelcomeServlet extends HttpServlet {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			try {
 				String msg = auctionHouse.placeBid(auctionHouse.getUsername(cookie), req.getParameter("auctionID"));
-				resp.getWriter().write(Rythm.render("productDetails.html", cookie, new Auction(req.getParameter("auctionID")), new Participant(req.getParameter("auctioner")).getImg(), msg));
+				resp.getWriter().write(Rythm.render("productDetails.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), auctionHouse.getParticipant(req.getParameter("auctioner")).getImg(), msg));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -115,7 +115,7 @@ public class WelcomeServlet extends HttpServlet {
 		else if (req.getPathInfo().equals("/visitProfile")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			try {
-				resp.getWriter().write(Rythm.render("profile.html", cookie, new Participant(req.getParameter("profile")), auctionHouse.getReviews(req.getParameter("profile"))));
+				resp.getWriter().write(Rythm.render("profile.html", cookie, auctionHouse.getParticipant(req.getParameter("profile")), auctionHouse.getReviews(req.getParameter("profile"))));
 			} catch (Exception e) {
 				e.printStackTrace();
 			} 
@@ -128,7 +128,7 @@ public class WelcomeServlet extends HttpServlet {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			String pr = auctionHouse.getUsername(cookie);
 			try {
-				resp.getWriter().write(Rythm.render("myProfile.html", cookie, new Participant(pr), auctionHouse.getReviews(pr)));
+				resp.getWriter().write(Rythm.render("myProfile.html", cookie, auctionHouse.getParticipant(pr), auctionHouse.getReviews(pr)));
 			} catch (Exception e) {
 				e.printStackTrace();
 			} 
@@ -136,7 +136,7 @@ public class WelcomeServlet extends HttpServlet {
 		else if (req.getPathInfo().equals("/checkPayment")) {
 			int cookie = Integer.parseInt(req.getParameter("cookie"));
 			try {
-				resp.getWriter().write(Rythm.render("checkPayment.html", cookie, new Auction(req.getParameter("auctionID")), auctionHouse.getUsername(cookie), ""));
+				resp.getWriter().write(Rythm.render("checkPayment.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), auctionHouse.getUsername(cookie), ""));
 			} catch (Exception e) {
 				e.printStackTrace();
 			} 
@@ -155,8 +155,8 @@ public class WelcomeServlet extends HttpServlet {
 			String receiverUsername = req.getParameter("receiver");
 
 			try {
-				Participant sender = new Participant(senderUsername);
-				Participant receiver = new Participant(receiverUsername);
+				Participant sender = auctionHouse.getParticipant(senderUsername);
+				Participant receiver = auctionHouse.getParticipant(receiverUsername);
 				resp.getWriter().write(Rythm.render("chat.html", cookie, senderUsername,
 						receiverUsername, auctionHouse.getMessages(cookie, receiverUsername), sender, receiver));
 			} catch (Exception e) {
@@ -168,14 +168,14 @@ public class WelcomeServlet extends HttpServlet {
 			try {
 				int operation = auctionHouse.paymentNextStep(cookie, req.getParameter("auctionID"));
 				if (operation == 0){
-					resp.getWriter().write(Rythm.render("checkPayment.html", cookie, new Auction(req.getParameter("auctionID")), auctionHouse.getUsername(cookie), ""));
+					resp.getWriter().write(Rythm.render("checkPayment.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), auctionHouse.getUsername(cookie), ""));
 				}
 				else if (operation == 1){
-					resp.getWriter().write(Rythm.render("writeReview.html", cookie, new Auction(req.getParameter("auctionID"))));
+					resp.getWriter().write(Rythm.render("writeReview.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID"))));
 				}
 				else
 				{
-					resp.getWriter().write(Rythm.render("checkPayment.html", cookie, new Auction(req.getParameter("auctionID")), auctionHouse.getUsername(cookie), "Error connecting to database, please try again later"));
+					resp.getWriter().write(Rythm.render("checkPayment.html", cookie, auctionHouse.getAuction(req.getParameter("auctionID")), auctionHouse.getUsername(cookie), "Error connecting to database, please try again later"));
 				}
 				
 			} catch (Exception e) {
@@ -227,7 +227,7 @@ public class WelcomeServlet extends HttpServlet {
 			String text = req.getParameter("message");
 			try {
 				auctionHouse.saveReview(cookie, receiverUsername, text, req.getParameter("auctionID"));
-				resp.getWriter().write(Rythm.render("profile.html", cookie, new Participant(req.getParameter("username")),
+				resp.getWriter().write(Rythm.render("profile.html", cookie, auctionHouse.getParticipant(req.getParameter("username")),
 						auctionHouse.getReviews(req.getParameter("username"))));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -242,8 +242,8 @@ public class WelcomeServlet extends HttpServlet {
 				ChatMessage msg = new ChatMessage(auctionHouse.getUsername(cookie), receiverUsername, req.getParameter("message"));
 				auctionHouse.saveMessage(msg);
 				resp.getWriter().write(Rythm.render("chat.html", cookie, auctionHouse.getUsername(cookie),
-						receiverUsername, auctionHouse.getMessages(cookie, receiverUsername), new Participant(auctionHouse.getUsername(cookie)),
-						new Participant(receiverUsername)));
+						receiverUsername, auctionHouse.getMessages(cookie, receiverUsername), auctionHouse.getParticipant(auctionHouse.getUsername(cookie)),
+						auctionHouse.getParticipant(receiverUsername)));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				resp.getWriter().write(Rythm.render("error.html", cookie, e.getMessage()));
@@ -295,7 +295,7 @@ public class WelcomeServlet extends HttpServlet {
 			int cookie = Integer.parseInt(req.getCookies()[0].getValue());
 			try {
 				CreditCard card = new CreditCard(req.getParameter("number"), req.getParameter("cvv"), req.getParameter("date"), req.getParameter("fName"), req.getParameter("lName"), auctionHouse.getUsername(cookie));
-				card.toDB();
+				auctionHouse.saveCreditCard(card);
 				resp.getWriter().write(Rythm.render("editProfile.html", cookie, "", "Updated", "", "" ));
 				
 			} catch (Exception e) {
@@ -401,7 +401,7 @@ public class WelcomeServlet extends HttpServlet {
 								Item pItem = new Item(req.getParameter("name"), req.getParameter("description"), fileName, fileContent);
 								pendingAucton.get(i).getLots().get(pendingAucton.get(i).getLots().size()-1).getItems().add(pItem);
 								String auctionID = auctionHouse.registerAuctionToDB(auctionHouse.getUsername(cookie), pendingAucton.get(i));
-								resp.getWriter().write(Rythm.render("productDetails.html", cookie, new Auction(auctionID), new Participant(auctionHouse.getUsername(cookie)).getImg()));
+								resp.getWriter().write(Rythm.render("productDetails.html", cookie, auctionHouse.getAuction(auctionID), auctionHouse.getParticipant(auctionHouse.getUsername(cookie)).getImg()));
 								pendingAucton.remove(i);
 							}
 						}

@@ -132,6 +132,87 @@ public class AuctionHouse {
 
 		   
 	}
+	
+	/**
+	 * Outputs an Auction from DB given its ID
+	 * @param auctionID ID of the Auction
+	 * @throws SQLException
+	 */
+	public Auction getAuction(String auctionID) throws SQLException {
+		Connection cn = null;
+		Statement st1, st2, st3;
+		ResultSet rs1, rs2, rs3;
+		String sql1, sql2, sql3;
+		Auction a1 = null;
+		Lot l1;
+		Item i1;
+		//___________connesione___________
+        
+		   try {
+			   cn =  connectDB(); //Establishing connection
+		   	
+			// CREAZIONE AUCTIONS
+	           sql1 = "SELECT * FROM auction where auctionID =" + auctionID +";";
+			   st1 = cn.createStatement(); //creo sempre uno statement sulla coneesione		   
+			   rs1 = st1.executeQuery(sql1); //faccio la query su uno statement
+			   java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			   String date1, date2;
+			   
+			   while(rs1.next() == true) { 
+				  date1 = "20" + rs1.getTimestamp("startDate").toString();
+				  date2 = "20" + rs1.getTimestamp("endDate").toString();		   
+				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(2, date1.length()-2), formatter);
+				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(2, date1.length()-2), formatter);
+				  a1 = new Auction(rs1.getString("name"), rs1.getString("username"), rs1.getString("bidder"), sDate.toString().substring(0,10), eDate.toString().substring(0,10),  rs1.getDouble("currentPrice"), rs1.getDouble("startingPrice"), rs1.getDouble("minimumRise"), rs1.getInt("auctionID"), rs1.getBoolean("timeExt"), sDate, eDate, rs1.getString("status"), rs1.getString("approved"));
+				  
+				  
+				  //CREAZIONE LOT
+				  sql2 = "SELECT * FROM lot where username = '" + rs1.getString("username") + "' and auctionID = " + rs1.getInt("auctionID") + ";";
+				  st2 = cn.createStatement();
+				  rs2 = st2.executeQuery(sql2);
+				  
+				  
+				  while(rs2.next() == true) {
+					  l1 = new Lot(rs2.getString("name"), rs2.getString("description"), rs2.getInt("lotID"));
+					  
+					  //CREAZIONE ITEM
+					  sql3 = "SELECT * FROM item where username = '" + rs2.getString("username") + "' and auctionID = " + rs2.getInt("auctionID") + " and lotID = " + rs2.getInt("lotID") + ";";
+					  st3 = cn.createStatement();
+					  rs3 = st3.executeQuery(sql3);
+					  
+					  
+					  while(rs3.next() == true) {
+						  
+					      File f =  new File("src/main/resources/imgDB/auctionsPics/" + rs3.getString("img") + ".jpg");
+					      String encodstring = null;
+						  try {
+								encodstring = encodeFileToBase64Binary(f);
+						  } catch (Exception e) {
+						    	e.printStackTrace();
+						  }
+						  i1 = new Item(rs3.getString("name"), rs3.getString("description"), encodstring , rs3.getInt("itemID"));
+						  l1.addItem(i1);
+					  }
+					  a1.addLot(l1);
+				  }
+			   }
+			   return a1;
+			   
+		   } catch(SQLException e) {
+			   System.out.println("errore: " + e.getMessage());
+		   } 
+		   finally {
+			   cn.close();
+		   }
+		   return null;	   
+	}
+	
+	
+	
+	
+	
+	
+	
 
 	/**
 	 * This method logins into the website using the given email and password
@@ -180,7 +261,7 @@ public class AuctionHouse {
 	public boolean checkCard(int cookie) {
 		CreditCard c = null;
 		try {
-			c = new CreditCard(loggedIn.get(cookie));
+			c = getCreditCard(loggedIn.get(cookie));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -239,6 +320,8 @@ public class AuctionHouse {
 		return list;
 		
 	}
+	
+	
 
 	/**
 	 * This methods outputs all current closed Auctions
@@ -270,7 +353,7 @@ public class AuctionHouse {
 			   String date1, date2;
 			   
 			   while(rs1.next() == true) { 
-				  a1 = new Auction(rs1.getString("auctionID"));
+				  a1 = getAuction(rs1.getString("auctionID"));
 				  auctions.add(a1);
 			   }
 			   return auctions;
@@ -330,7 +413,7 @@ public class AuctionHouse {
 						   st2 = cn.createStatement(); 
 						   st2.executeUpdate(sql2);  
 					  }
-					  a1 = new Auction(rs1.getString("auctionID"));
+					  a1 = getAuction(rs1.getString("auctionID"));
 					  auctions.add(a1);
 				   }
 				  else { //Se l'asta è scaduta la imposto come chiusaF
@@ -359,6 +442,43 @@ public class AuctionHouse {
 		
 	}
 	
+	
+	
+	/**
+	 * Outputs a Participant inserted into DB given his username
+	 * @param username Username of the Participant
+	 * @throws SQLException
+	 */
+	public Participant getParticipant(String username) throws SQLException
+	    {
+	    	Connection cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11421731", "sql11421731", "83bkPjI9Yf");		
+			Statement st;
+			ResultSet rs;
+			String sql;
+			Participant p1;
+			   try {
+		           sql = "SELECT * FROM participant where username = '" + username + "';";
+				   st = cn.createStatement(); //creo  uno statement sulla coneesione
+				   rs = st.executeQuery(sql); //faccio la query su uno statement
+				   if(rs.next() == true) {
+					   File f =  new File("src/main/resources/imgDB/profilePics/" + rs.getString("img") + ".jpg");
+					   String encodstring = null;
+					   try {
+							encodstring = encodeFileToBase64Binary(f);
+					   } catch (Exception e) {
+						    e.printStackTrace();
+					   }
+					   p1= new Participant(rs.getString("firstName"), rs.getString("lastName"), rs.getString("email"), username, rs.getString("password"), rs.getDate("birthday").toLocalDate(), rs.getString("mobileNumber"), encodstring, rs.getString("intro"));
+					   return p1;
+				   }
+			   } catch(SQLException e) {
+				   System.out.println("errore: " + e.getMessage());
+			   }
+			   finally {
+				   cn.close();
+			   } 
+			   return null;
+	    }
 	
 	/**
 	 * This method saves a message to the DB
@@ -423,7 +543,7 @@ public class AuctionHouse {
 				  date2 =rs1.getTimestamp("endDate").toString();		   
 				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(0, date1.length()-2), formatter);
 				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(0, date2.length()-2), formatter);
-				  a1 = new Auction(rs1.getString("auctionID"));
+				  a1 = getAuction(rs1.getString("auctionID"));
 				  auctions.add(a1);
 			   }
 			   cn.close();
@@ -543,7 +663,7 @@ public class AuctionHouse {
 
 			// Scorro tutti i risultati e aggiungo i corrispondenti Participant all'array
 			while (rs.next()) {
-				users.add(new Participant(rs.getString("userlist")));
+				users.add(getParticipant(rs.getString("userlist")));
 			}
 
 			return users;
@@ -608,7 +728,7 @@ public class AuctionHouse {
 	 */
 	public synchronized String placeBid(String username , String auctionID) throws Exception {
 		try {
-			Auction a = new Auction(auctionID);
+			Auction a = getAuction(auctionID);
 			if (!username.equals(a.getHighestBidder()) && !username.equals(a.getOwner()))
 				{
 				   Connection cn = null;
@@ -736,6 +856,69 @@ public class AuctionHouse {
 		   finally {
 			   cn.close();
 		   }
+		
+	}
+	
+	/**
+	 * Saves a new CreditCard to DB
+	 * @throws Exception
+	 */
+	public void saveCreditCard(CreditCard c) throws Exception {
+		Connection cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11421731", "sql11421731", "83bkPjI9Yf");
+		Statement st;
+		String sql;
+		Participant p1;
+		//___________connesione___________
+        
+		   try {
+			   sql = "delete from cCard where username = '" + c.getUsernamer() +"'";
+			   st = cn.createStatement(); //creo  uno statement sulla coneesione
+			   st.executeUpdate(sql); //faccio la query su uno statement
+			   Random r = new Random();
+			   c.setFunds(1999999999 * r.nextDouble());
+			   sql = "insert into cCard(username, fName, lName, date, number, cvv, funds) values ('" + c.getUsernamer() + "','" + c.getFirstName() + "','" + c.getLastName() + "','" 
+						+ c.getExpirationDate() + "','" + c.getNumber() + "','" + c.getCVV() + "','" + c.getFunds() + "')";
+			   st.executeUpdate(sql);
+		   }
+		   catch (Exception e) {
+			   throw new Exception(e.getMessage());
+		   }
+		   finally {
+			   cn.close();
+		   }
+		
+		
+	}
+	
+	/**
+	 * Outputs the CreditCard linked to the given username
+	 * @param username Username of the CreditCard owner 
+	 * @return Returns CreditCard if successful or an error message otherwise
+	 * @throws Exception
+	 */
+	public CreditCard  getCreditCard(String username) throws Exception{
+		Connection cn = DriverManager.getConnection("jdbc:mysql://sql11.freemysqlhosting.net:3306/sql11421731", "sql11421731", "83bkPjI9Yf");
+		Statement st;
+		ResultSet rs;
+		String sql;
+		CreditCard c;
+		
+		 try {
+			   sql = "select * from cCard where username = '" + username +"'";
+			   st = cn.createStatement(); //creo  uno statement sulla coneesione
+			   rs = st.executeQuery(sql); //faccio la query su uno statement
+			   if (rs.next()) {
+				   c = new CreditCard(rs.getString("number"), rs.getString("cvv"), rs.getString("date"), rs.getString("fName"), rs.getString("lName"), username, rs.getDouble("funds"));
+				   return c;
+			   }
+		   }
+		   catch (Exception e) {
+			   throw new Exception(e.getMessage());
+		   }
+		   finally {
+			   cn.close();
+		   }
+		 return null;
 		
 	}
 
@@ -900,7 +1083,7 @@ public class AuctionHouse {
 	 */
 //Metodo che tratta i diversi step del pagamento
 	public int paymentNextStep(int cookie, String auctionID) throws Exception {
-		Auction a = new Auction(auctionID);
+		Auction a = getAuction(auctionID);
 		if (a.getStatus().equals("closed")) //Primo step- Accredito denaro sul fondo di AuctionHouse
 		{
 			Connection cn = null;
@@ -1023,7 +1206,7 @@ public class AuctionHouse {
 			   st = cn.createStatement(); 
 		   	   sql = "update auction set approved = 'yes' where auctionID ='" + auctionID + "'";
 		   	   st.executeUpdate(sql); 
-		   	   Auction a = new Auction(auctionID);
+		   	   Auction a = getAuction(auctionID);
 		   	   auctionHouseSendMsg(a.getOwner(), "Auction: " + a.getName() + " approved");
 		   }
 		   catch (Exception e) {
@@ -1042,7 +1225,7 @@ public class AuctionHouse {
 	//metodo per rifiutare annuncio
 	public void rejectAuction(String auctionID) throws Exception {        
 		   try { 
-			   Auction a = new Auction(auctionID);
+			   Auction a = getAuction(auctionID);
 		   	   auctionHouseSendMsg(a.getOwner(), "Auction: " + a.getName() + " rejected");
 		   	   deleteAuction(auctionID);
 
@@ -1154,7 +1337,7 @@ public class AuctionHouse {
 			   String date1, date2;
 			   
 			   while(rs1.next() == true) { 
-				 a1 = new Auction(rs1.getString("auctionID"));
+				 a1 = getAuction(rs1.getString("auctionID"));
 				 auctions.add(a1);
 				  
 			   }
