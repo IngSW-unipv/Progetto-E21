@@ -289,12 +289,11 @@ public class AuctionHouse {
 	
 
 	/**
-	 * This method outputs the current open Auctions
+	 * This method outputs the current open Auctions, it also checks if there are any expired auctions and notify the users involved
 	 * @return Return an ArrayList of Auctions
-	 * @throws SQLException
-	 * @throws ParseException
+	 * @throws Exception 
 	 */
-	public ArrayList<Auction> getOpenAuctions() throws SQLException, ParseException {
+	public ArrayList<Auction> getOpenAuctions() throws Exception {
 		Connection cn = null;
 		Statement st1, st2, st3;
 		ResultSet rs1, rs2, rs3;
@@ -338,6 +337,11 @@ public class AuctionHouse {
 					   sql2 = "update auction set auction.status = 'closed' where auctionID = '" + rs1.getInt("auctionID") + "'";
 					   st2 = cn.createStatement(); 
 					   st2.executeUpdate(sql2); 
+					   if(!rs1.getString("bidder").equals("null")) {
+						   ChatMessage msg = new ChatMessage(rs1.getString("username"), rs1.getString("bidder"), "Auction: " + rs1.getString("name")+ " closed, you placed the winning bid, please proceed to the payment in the next 30 days" );
+						   saveMessage(msg);
+					   }
+					   else auctionHouseSendMsg(rs1.getString("username"), "Auction: " + rs1.getString("name") + " expired with no winner");
 				  }
 				  
 			   }
@@ -355,11 +359,41 @@ public class AuctionHouse {
 		
 	}
 	
+	
+	/**
+	 * This method saves a message to the DB
+	 * @throws SQLException
+	 */
+	public void saveMessage(ChatMessage msg) throws SQLException {
+
+		Connection cn = null;
+		Statement st;
+		ResultSet rs;
+		String sql;
+		try {
+			cn = connectDB();
+			sql = "insert into messages(sender, receiver, message, time) values ('" + msg.getSender() + "','" + msg.getReceiver() + "','" + msg.getText() + "','" + msg.getTime() + "')";
+			st = cn.createStatement();
+			st.execute(sql);
+			System.out.println("inserted new message on the DB");
+			System.out.println("connection terminated");
+            
+		} catch (SQLException e) {
+			System.out.println("Error while connecting to the database");
+		}
+		   finally {
+			   cn.close();
+	     }	
+		
+	}
+	
+	
+	
+
 	/**
 	 * This method outputs all the auctions created by a user
 	 * @return Return an ArrayList of Auctions
 	 * @throws SQLException
-	 * @throws ParseException
 	 */
 	public ArrayList<Auction> getMyAuctions(int cookie) throws SQLException {
 		Connection cn = null;
