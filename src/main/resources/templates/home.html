@@ -46,7 +46,7 @@
                   <div class="u-container-layout u-valign-middle u-container-layout-2">
                   </div>
                 </div>
-                <p class="u-text u-text-3"><h5 class="u-text u-text-2" >@(ac.getName())</h5>Starting price: @(ac.getStartingPrice())$ Ending: @(ac.geteDateStr()) Auctioner: @(ac.getOwner())</p>
+                <p class="u-text u-text-3"><h5 class="u-text u-text-2" >@(ac.getName())</h5><h6>Current price: @(ac.getHighestBid())$</h6> <br> Starting price: @(ac.getStartingPrice())$ Ending: @(ac.geteDateStr()) Auctioner: @(ac.getOwner())</p>
                 <a href="/productDetails?cookie=@cookie&auctioner=@(ac.getOwner())&auctionID=@(ac.getId())" method = "get" class="u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-palette-4-dark-2 u-radius-50 u-btn-1">go to auction</a>
               </div>
             </div>
