@@ -1,4 +1,4 @@
-@args int cookie, auction.Auction auction
+ @args int cookie, auction.Auction auction
 <!DOCTYPE html>
 <html style="font-size: 16px;">
   <head>
@@ -43,7 +43,7 @@
 			<input type="hidden" id="profile" name="auctionID" value="@(auction.getId())">
             <div class="u-form-group u-form-message">
               <label for="message-7675" class="u-form-control-hidden u-label"></label>
-              <textarea rows="4" cols="50" id="message" name="message" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="" placeholder="Add a review. (MAX 250 characters)"></textarea>
+              <textarea onkeypress="return /[a-z0-9@@./?-]/i.test(event.key)" maxlength="245" rows="4" cols="50" id="message" name="message" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="" placeholder="Add a review. (MAX 250 characters)"></textarea>
             </div>
             <div class="u-align-right u-form-group u-form-submit">
               <button href="/sendMessage" class="u-border-none u-btn u-btn-round u-btn-submit u-button-style u-palette-4-dark-2 u-radius-50 u-btn-1">Submit</button>
