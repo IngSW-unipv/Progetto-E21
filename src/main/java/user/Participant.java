@@ -26,7 +26,6 @@ public class Participant {
 	    Address address;
 	    
 	    public Participant(String firstName, String lastName, String email, String username, String password, LocalDate birthday, String mobileNumber) {
-			
 			this.firstName = firstName;
 			this.lastName = lastName;
 			this.email = email;

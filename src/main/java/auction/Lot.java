@@ -51,7 +51,7 @@ public class Lot {
 		rs = st.executeQuery(sql);
 		while(rs.next() == true) {
 			  
-		      File f =  new File("src/main/resources/imgDB/auctionsPics/" + rs.getString("img"));
+		      File f =  new File("src/main/resources/imgDB/auctionsPics/" + rs.getString("img") + ".jpg");
 		      String encodstring = null;
 			  try {
 					encodstring = encodeFileToBase64Binary(f);

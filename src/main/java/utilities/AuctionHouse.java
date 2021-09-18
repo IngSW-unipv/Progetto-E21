@@ -156,7 +156,7 @@ public class AuctionHouse {
 			   st = cn.createStatement(); //creo sempre uno statement sulla coneesione
 			   
 			   rs = st.executeQuery(sql); //faccio la query su uno statement
-			   while(rs.next() == true) {
+			   if(rs.next() == true) {
 			        loggedIn.put(sessionCookie, rs.getString("username"));
 			        candy = sessionCookie;
 			        sessionCookie +=1;
@@ -656,6 +656,7 @@ public class AuctionHouse {
 		Statement st;
 		ResultSet rs;
 		String sql;
+		String id = null;
 		//___________connesione___________
         
 		   try {
@@ -667,7 +668,7 @@ public class AuctionHouse {
 			   st = cn.createStatement(); //creo sempre uno statement sulla coneesione		   
 			   rs = st.executeQuery(sql); //faccio la query su uno statement
 			   rs.next();
-			   int id = rs.getInt("max(auctionID)") + 1;
+			   id = String.valueOf(rs.getInt("max(auctionID)") + 1);
 			   
 			   Boolean ok = a.getTimeExt();
 			   sql = "insert into auction(username, auctionID, name, startDate, endDate, bidder, startingPrice, minimumRise, currentPrice, timeExt, status, approved) values ('" + username +"','" + id + "','" + a.getName() + "','" + a.getsDate() + "','" 
@@ -677,8 +678,7 @@ public class AuctionHouse {
 			   sql = "select max(img) from item;";
 			   rs = st.executeQuery(sql);
 			   rs.next();
-			   String img = rs.getString("max(img)");
-			   int imgId = Integer.parseInt(img.substring(0, img.length()-4)) + 1;
+			   int imgId = rs.getInt("max(img)") + 1;
 			   
 			   //inserisco lotti
 			   for(int i = 0; i < a.getLots().size(); i++)
@@ -690,7 +690,7 @@ public class AuctionHouse {
 				   for(int k = 0; k < a.getLots().get(i).getItems().size(); k++)
 				   {
 					   saveImg(a.getLots().get(i).getItems().get(k).getImgFile(), imgId);
-					   sql = "insert into item(username, auctionID, lotID, itemID, img, name, description) values ('" + username + "','" + id + "','" + i + "','" + k + "','" + imgId + ".jpg','" + a.getLots().get(i).getItems().get(k).getName() + "','" + a.getLots().get(i).getItems().get(k).getDescription() + "')";
+					   sql = "insert into item(username, auctionID, lotID, itemID, img, name, description) values ('" + username + "','" + id + "','" + i + "','" + k + "','" + imgId + "','" + a.getLots().get(i).getItems().get(k).getName() + "','" + a.getLots().get(i).getItems().get(k).getDescription() + "')";
 					   imgId++;
 					   st.executeUpdate(sql);
 				   }
@@ -698,6 +698,7 @@ public class AuctionHouse {
 			   
 		   } catch(SQLException e) {
 			   System.out.println("errore: " + e.getMessage());
+			   deleteAuction(id); //Elimino le parti eventualmente inserite nel DB
 			   throw new Exception("Error while connecting to DataBase, try again later");
 		   } 
 		   finally {
