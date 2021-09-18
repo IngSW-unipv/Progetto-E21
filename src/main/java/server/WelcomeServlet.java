@@ -239,11 +239,8 @@ public class WelcomeServlet extends HttpServlet {
 			int cookie = Integer.parseInt(req.getCookies()[0].getValue());
 			String receiverUsername = req.getParameter("profile");
 			try {
-				LocalDateTime now = LocalDateTime.now();
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm");
-				String nowFormatted = now.format(formatter);
-				ChatMessage msg = new ChatMessage(auctionHouse.getUsername(cookie), receiverUsername, req.getParameter("message"), nowFormatted);
-				msg.toDB();
+				ChatMessage msg = new ChatMessage(auctionHouse.getUsername(cookie), receiverUsername, req.getParameter("message"));
+				auctionHouse.saveMessage(msg);
 				resp.getWriter().write(Rythm.render("chat.html", cookie, auctionHouse.getUsername(cookie),
 						receiverUsername, auctionHouse.getMessages(cookie, receiverUsername), new Participant(auctionHouse.getUsername(cookie)),
 						new Participant(receiverUsername)));
