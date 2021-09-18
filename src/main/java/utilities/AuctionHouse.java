@@ -309,7 +309,7 @@ public class AuctionHouse {
 			   cn =  connectDB(); //Establishing connection
 		   	
 			// CREAZIONE AUCTIONS
-	           sql1 = "SELECT * FROM auction where status = 'open' and approved = 'yes';";
+	           sql1 = "SELECT * FROM auction where (status = 'open' or status = 'pending') and approved = 'yes';";
 			   st1 = cn.createStatement(); //creo sempre uno statement sulla coneesione		   
 			   rs1 = st1.executeQuery(sql1); //faccio la query su uno statement
 			   
@@ -323,11 +323,17 @@ public class AuctionHouse {
 				  LocalDateTime sDate = java.time.LocalDateTime.parse(date1.substring(0, date1.length()-2), formatter);
 				  LocalDateTime eDate = java.time.LocalDateTime.parse(date2.substring(0, date2.length()-2), formatter);
 				 
-				  if(currentDate.isBefore(eDate) && currentDate.isAfter(sDate)) { //Controllo se l'asta ï¿½ scaduta
+				  if(currentDate.isBefore(eDate) && currentDate.isAfter(sDate)) { //Controllo se l'asta è scaduta
+					  if (rs1.getString("status").equals("pending")) //Se la data corrente è olte la data d'inizio dell'asta le imposto come aperte
+					  {
+						  sql2 = "update auction set auction.status = 'open' where auctionID = '" + rs1.getInt("auctionID") + "'";
+						   st2 = cn.createStatement(); 
+						   st2.executeUpdate(sql2);  
+					  }
 					  a1 = new Auction(rs1.getString("auctionID"));
 					  auctions.add(a1);
 				   }
-				  else { //Se l'asta ï¿½ scaduta la imposto come chiusa
+				  else { //Se l'asta è scaduta la imposto come chiusaF
 					   sql2 = "update auction set auction.status = 'closed' where auctionID = '" + rs1.getInt("auctionID") + "'";
 					   st2 = cn.createStatement(); 
 					   st2.executeUpdate(sql2); 
@@ -672,7 +678,7 @@ public class AuctionHouse {
 			   
 			   Boolean ok = a.getTimeExt();
 			   sql = "insert into auction(username, auctionID, name, startDate, endDate, bidder, startingPrice, minimumRise, currentPrice, timeExt, status, approved) values ('" + username +"','" + id + "','" + a.getName() + "','" + a.getsDate() + "','" 
-						+ a.geteDate() + "','" + null  +   "','" + a.getStartingPrice() +  "','" + a.getMinimumRise() +  "','" + a.getStartingPrice() + "','"+ ok.compareTo(false) + "', 'open' , 'no')";
+						+ a.geteDate() + "','" + null  +   "','" + a.getStartingPrice() +  "','" + a.getMinimumRise() +  "','" + a.getStartingPrice() + "','"+ ok.compareTo(false) + "', 'pending' , 'no')";
 			   st.executeUpdate(sql);
 			   //cerco da quale numero partire per rinominare le immagini
 			   sql = "select max(img) from item;";
