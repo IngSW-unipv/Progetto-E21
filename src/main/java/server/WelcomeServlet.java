@@ -393,8 +393,8 @@ public class WelcomeServlet extends HttpServlet {
 							    InputStream fileContent = filePart.getInputStream();	
 								Item pItem = new Item(req.getParameter("name"), req.getParameter("description"), fileName, fileContent);
 								pendingAucton.get(i).getLots().get(pendingAucton.get(i).getLots().size()-1).getItems().add(pItem);
-								auctionHouse.registerAuctionToDB(auctionHouse.getUsername(cookie), pendingAucton.get(i));
-								resp.getWriter().write(Rythm.render("productDetails.html", cookie, pendingAucton.get(i), new Participant(auctionHouse.getUsername(cookie)).getImg()));
+								String auctionID = auctionHouse.registerAuctionToDB(auctionHouse.getUsername(cookie), pendingAucton.get(i));
+								resp.getWriter().write(Rythm.render("productDetails.html", cookie, new Auction(auctionID), new Participant(auctionHouse.getUsername(cookie)).getImg()));
 								pendingAucton.remove(i);
 							}
 						}

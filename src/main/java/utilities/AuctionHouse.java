@@ -654,10 +654,10 @@ public class AuctionHouse {
 	 * This method inserts a new Auction into DB
 	 * @param username Username that created the new Auction
 	 * @param a The Auction an user just created
-	 * @return Returns null if the method is successful or an error message otherwise
+	 * @return Returns auctionID if successful or an error message otherwise
 	 * @throws Exception
 	 */
-	public  Auction registerAuctionToDB(String username, Auction a) throws Exception {
+	public  String registerAuctionToDB(String username, Auction a) throws Exception {
 		Connection cn = null;
 		Statement st;
 		ResultSet rs;
@@ -701,6 +701,7 @@ public class AuctionHouse {
 					   st.executeUpdate(sql);
 				   }
 			   }
+			   return id;
 			   
 		   } catch(SQLException e) {
 			   System.out.println("errore: " + e.getMessage());
@@ -710,7 +711,6 @@ public class AuctionHouse {
 		   finally {
 			   cn.close();
 		   }
-		   return null;
 		   
 	}
 
