@@ -48,7 +48,7 @@
 			<div class="slideshow-container">
 				@for (auction.Lot lot: auction.getLots()) {
 					@for (auction.Item itm: lot.getItems()) {
-						<div class="mySlides fade">
+						<div class="mySlides fade"   style="display: block; width: 433px; height: 358px;">
 							<img src="data:image/png;base64, @(itm.getImage())" style="width:100%">
 							<div class="text" style= "background: rgba(77, 77, 77, 0.5)">@(itm.getName())</div>
 						</div>						
