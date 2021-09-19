@@ -69,4 +69,6 @@ Mediante il vostro browser, diregitevi sulla vostra barra di ricerca e inserire 
 Per accedere alla pagina web dei moderatori è neccessario avviare dal vostro IDE la classe
 [mainModerator.java](https://github.com/IngSW-unipv/Progetto-E21/blob/main/src/main/java/serverModerator/MainModerator.java)
 
+Entrare successivamente al seguente link:
+[http://localhost:8081](http://localhost:8081)
 
