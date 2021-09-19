@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -94,30 +95,34 @@ public class AuctionHouse {
 
 	/**
 	 * This method registers the Participant given as parameter to DB
-	 * @param p The Participant you want to register to DB
+	 * @param firstName The first name of the user
+	 * @param lastName The last name of the user
+	 * @param email The email of the user
+	 * @param username The username of the user
+	 * @param password The password of the user
+	 * @param birthday The birthday of the user
+	 * @param mobileNumber The mobileNumber of the user
 	 * @return Returns current session cookie
 	 * @throws Exception SQL Exception
 	 */
-	public synchronized int registerParticipantToDB(Participant p) throws Exception {
+	public synchronized int registerParticipantToDB(String firstName, String lastName, String email, String username, String password, LocalDate birthday, String mobileNumber) throws Exception {
 		
 		Connection cn = null;
 		Statement st;
 		ResultSet rs;
 		String sql;
 		int candy = -1;
-		
-	
 		   try {
 			 
 			cn =  connectDB(); //Establishing connection	
-			sql = "insert into participant(firstName, lastName, email, username, password, birthday, mobileNumber) values ('" + p.getFirstName() + "','" + p.getLastName() + "','" + p.getEmail() + "','" 
-					+ p.getUsername() + "','" + p.getPassword() + "','" + p.getBirthday() + "','" + p.getMobileNumber() + "')";
+			sql = "insert into participant(firstName, lastName, email, username, password, birthday, mobileNumber) values ('" + firstName + "','" + lastName + "','" + email + "','" 
+					+ username + "','" + password+ "','" + birthday + "','" + mobileNumber + "')";
 
 			st = cn.createStatement();				
 			st.execute(sql);
 			System.out.println("inserted new participant on the DB");
 			System.out.println("connection terminated");
-			loggedIn.put(sessionCookie, p.getUsername());
+			loggedIn.put(sessionCookie, username);
 	        candy = sessionCookie;
 	        sessionCookie +=1;
 			return candy;

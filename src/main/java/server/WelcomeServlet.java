@@ -211,9 +211,8 @@ public class WelcomeServlet extends HttpServlet {
 		else if (req.getPathInfo().equals("/register")) {
 			java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			java.time.LocalDate birthday = java.time.LocalDate.parse(req.getParameter("bday"), formatter);
-			Participant p1 = new Participant(req.getParameter("firstName"), req.getParameter("lastName"), req.getParameter("email"), req.getParameter("username"), req.getParameter("pwd"), birthday, req.getParameter("mobileNumber"));
 			try {
-				int cookie = auctionHouse.registerParticipantToDB(p1);
+				int cookie = auctionHouse.registerParticipantToDB(req.getParameter("firstName"), req.getParameter("lastName"), req.getParameter("email"), req.getParameter("username"), req.getParameter("pwd"), birthday, req.getParameter("mobileNumber"));
 				resp.getWriter().write(Rythm.render("home.html", cookie, auctionHouse.getOpenAuctions())); 		 
 			} catch (Exception e) {
 				resp.getWriter().write(Rythm.render("register.html", "An error has occured during the registration process, please try again later"));

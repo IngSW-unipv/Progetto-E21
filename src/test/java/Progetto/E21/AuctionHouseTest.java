@@ -71,11 +71,10 @@ public class AuctionHouseTest {
 		String date2 = "2000-03-12";		   
 		LocalDate sDate = java.time.LocalDate.parse(date1, formatter);
 		LocalDate eDate = java.time.LocalDate.parse(date2, formatter);
-    	Participant p1 = new Participant("test1", "test1", "a@a.com", "test1", "test", sDate, "1234567891");
     	try {
     		int users = house.getAllParticipant().size();
-			house.registerParticipantToDB(p1);
-			house.deleteParticipant(p1);
+			house.registerParticipantToDB("test1", "test1", "a@a.com", "test1", "test", sDate, "1234567891");
+			house.deleteParticipant(house.getParticipant("test1"));
 			assertEquals(users, house.getAllParticipant().size(), 0);
 		} catch (Exception e) {
 			e.printStackTrace();
