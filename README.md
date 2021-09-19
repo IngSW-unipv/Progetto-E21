@@ -6,7 +6,7 @@
 
 Istruzioni per l'uso corretto del sistema:
 
-## 0.) Setup Repository
+## 0) Setup Repository
 
 ### 0.1) Dowload di git
 
@@ -25,7 +25,7 @@ L'applicazione può essere avviata anche da gradle. Nel caso non si volesse inst
 Per una corretta installazione si consiglia di seguire i passaggi sul sito di [gradle](https://gradle.org/install/) facendo attenzione alla giusta scelta del vostro sistema operativo
 Nel caso aveste optato per l'installazione di gradle andate al passo `1b`
 
-## 1.) Setup Progetto
+## 1) Setup Progetto
 
 ### 1.1.1) Importazione del progetto
 
@@ -65,7 +65,7 @@ Mediante il vostro browser, diregitevi sulla vostra barra di ricerca e inserire 
 [http://localhost:8080](http://localhost:8080)
 
 
-## 3) Esecuzione dell'applicativo dei moderatori
+## 2) Esecuzione dell'applicativo dei moderatori
 Per accedere alla pagina web dei moderatori è neccessario avviare dal vostro IDE la classe
 [mainModerator.java](https://github.com/IngSW-unipv/Progetto-E21/blob/main/src/main/java/serverModerator/MainModerator.java)
 
