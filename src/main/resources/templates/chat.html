@@ -8,7 +8,7 @@
     <meta name="keywords" content="Auction House">
     <meta name="description" content="">
     <meta name="page_type" content="np-template-header-footer-from-plugin">
-    <title>messages</title>
+    <title>Messages</title>
     <link rel="stylesheet" href="https://drive.google.com/uc?id=1AXjBrqqINoMh2QVIYvSfvvJnso3gkPVa" media="screen">
     <link rel="stylesheet" href="https://drive.google.com/uc?id=156x8TGWEg7mkFzySz-FoSt4pr-FUoMOw" media="screen">
     <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i">
@@ -44,7 +44,7 @@
             <div class="u-container-style u-group u-radius-50 u-shape-round u-white u-group-2">
               <div class="u-container-layout u-container-layout-2">
                 <img style="top: 20%;" class="u-image u-image-circle u-preserve-proportions u-image-1" src="data:image/png;base64, @(senderParticipant.getImg())" alt="Avatar" data-image-width="700" data-image-height="700">
-                <p class="u-text u-text-2" style="top: 25%;">@(msg.getText())</p>
+                <p class="u-text u-text-2" style="top: 25%; margin-right: 95px;">@(msg.getText())</p>
                 <span style="position:absolute ; bottom:0; right:50px;" class="time-left">@(msg.getTime())</span>
               </div>
             </div>
@@ -64,7 +64,7 @@
                 <input type="hidden" id="profile" name="profile" value="@receiver">
                 <div class="u-form-group u-form-message">
                   <label for="message-550c" class="u-form-control-hidden u-label"></label>
-                  <textarea onkeypress="return /[a-z 0-9@@.,/-]/i.test(event.key)" placeholder="Type here your message" rows="4" cols="50" id="message-550c" name="message" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-50 u-white" required="" maxlength="100"></textarea>
+                  <textarea onkeypress="return /[a-z 0-9@@.,/?)(+%:!-]/i.test(event.key)" placeholder="Type here your message" rows="4" cols="50" id="message-550c" name="message" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-radius-50 u-white" required="" maxlength="100"></textarea>
                 </div>
                 <div class="u-align-right u-form-group u-form-submit">
                   <button href="/sendMessage" class="u-border-none u-btn u-btn-round u-btn-submit u-button-style u-palette-4-dark-2 u-radius-50 u-btn-1">SEND<br>

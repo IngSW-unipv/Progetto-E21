@@ -35,23 +35,23 @@
           <form action="/register" method="post" class="u-clearfix u-form-spacing-31 u-form-vertical u-inner-form" style="padding: 0px;" source="custom" name="form">
             <div class="u-form-group u-form-name u-form-group-1">
               <label for="name-5151" class="u-form-control-hidden u-label"></label>
-              <input onkeypress="return /[a-z ]/i.test(event.key)" maxlength="40" type="text" placeholder="Name" id="name-5151" name="firstName" class="u-custom-font u-grey-10 u-input u-input-rectangle u-text-black u-text-font u-input-1" required="">
+              <input onkeypress="return /[a-z -]/i.test(event.key)" maxlength="40" type="text" placeholder="Name" id="name-5151" name="firstName" class="u-custom-font u-grey-10 u-input u-input-rectangle u-text-black u-text-font u-input-1" required="">
             </div>
             <div class="u-form-group u-form-group-2">
               <label for="email-cd2c" class="u-form-control-hidden u-label" wfd-invisible="true"></label>
-              <input onkeypress="return /[a-z ]/i.test(event.key)" maxlength="40" type="text" id="email-cd2c" name="lastName" class="u-custom-font u-grey-10 u-input u-input-rectangle u-text-black u-text-font u-input-2" required="required" placeholder="Last Name">
+              <input onkeypress="return /[a-z -]/i.test(event.key)" maxlength="40" type="text" id="email-cd2c" name="lastName" class="u-custom-font u-grey-10 u-input u-input-rectangle u-text-black u-text-font u-input-2" required="required" placeholder="Last Name">
             </div>
 			            <div class="u-form-group u-form-group-3">
               <label for="text-1902" class="u-form-control-hidden u-label"></label>
-              <input onkeypress="return /[a-z0-9]/i.test(event.key)" maxlength="40" type="text" placeholder="Username" id="text-1902" name="username" class="u-custom-font u-grey-10 u-input u-input-rectangle u-text-black u-text-font u-input-3" required="">
+              <input onkeypress="return /[a-z0-9.]/i.test(event.key)" maxlength="40" type="text" placeholder="Username" id="text-1902" name="username" class="u-custom-font u-grey-10 u-input u-input-rectangle u-text-black u-text-font u-input-3" required="">
             </div>
             <div class="u-form-email u-form-group u-form-group-4">
               <label for="text-9823" class="u-form-control-hidden u-label"></label>
-              <input onkeypress="return /[a-z0-9@@.]/i.test(event.key)" maxlength="40" type="email" placeholder="Email" id="email-cd2c" name="email" class="u-custom-font u-grey-10 u-input u-input-rectangle u-text-black u-text-font u-input-4" required="">
+              <input onkeypress="return /[a-z0-9@@./?-]/i.test(event.key)" maxlength="40" type="email" placeholder="Email" id="email-cd2c" name="email" class="u-custom-font u-grey-10 u-input u-input-rectangle u-text-black u-text-font u-input-4" required="">
             </div>
             <div class="u-form-group u-form-group-5">
               <label for="text-077d" class="u-form-control-hidden u-label"></label>
-              <input onkeypress="return /[a-z0-9]/i.test(event.key)"type="password" maxlength="40" placeholder="Password" id="text-077d" name="pwd" class="u-custom-font u-grey-10 u-input u-input-rectangle u-text-black u-text-font u-input-5" required="">
+              <input onkeypress="return /[a-z0-9.,/?+%:!-]/i.test(event.key)"type="password" maxlength="40" placeholder="Password" id="text-077d" name="pwd" class="u-custom-font u-grey-10 u-input u-input-rectangle u-text-black u-text-font u-input-5" required="">
             </div>
             <div class="u-form-group u-form-phone u-form-group-6">
               <label for="text-ded9" class="u-form-control-hidden u-label"></label>

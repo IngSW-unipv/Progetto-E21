@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#478ac9">
     <meta property="og:title" content="reviews">
     <meta property="og:type" content="website">
-    <title>reviews</title>
+    <title>Reviews</title>
     <link rel="stylesheet" href="https://drive.google.com/uc?id=1RdPDIv9FQI3Be7-dTAjJKrZaEWm2KgOa" media="screen">
     <link rel="stylesheet" href="https://drive.google.com/uc?id=1xjtFC3I9GQA6i8C9CCQlehydJXS6xTOV" media="screen">
     <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i">
@@ -43,7 +43,7 @@
 			<input type="hidden" id="profile" name="auctionID" value="@(auction.getId())">
             <div class="u-form-group u-form-message">
               <label for="message-7675" class="u-form-control-hidden u-label"></label>
-              <textarea onkeypress="return /[a-z0-9@@./?-]/i.test(event.key)" maxlength="245" rows="4" cols="50" id="message" name="message" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="" placeholder="Add a review. (MAX 250 characters)"></textarea>
+              <textarea onkeypress="return /[a-z0-9.,/?)(+%:!-]/i.test(event.key)" maxlength="245" rows="4" cols="50" id="message" name="message" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="" placeholder="Add a review. (MAX 250 characters)"></textarea>
             </div>
             <div class="u-align-right u-form-group u-form-submit">
               <button href="/sendMessage" class="u-border-none u-btn u-btn-round u-btn-submit u-button-style u-palette-4-dark-2 u-radius-50 u-btn-1">Submit</button>
