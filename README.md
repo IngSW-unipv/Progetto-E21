@@ -70,5 +70,6 @@ Per accedere alla pagina web dei moderatori è neccessario avviare dal vostro ID
 [mainModerator.java](https://github.com/IngSW-unipv/Progetto-E21/blob/main/src/main/java/serverModerator/MainModerator.java)
 
 Entrare successivamente al seguente link:
+
 [http://localhost:8081](http://localhost:8081)
 
