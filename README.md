@@ -4,6 +4,8 @@
 
 ![image](https://drive.google.com/uc?id=1R9SAA4RzZff9ROwLHzviA4g83Yxr5Gne)
 
+------------
+
 Istruzioni per l'uso corretto del sistema:
 
 ## 0) Setup Repository
