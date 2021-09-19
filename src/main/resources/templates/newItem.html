@@ -37,7 +37,7 @@
           <form action="/confirmAuction" method="POST" enctype="multipart/form-data" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form" style="padding: 10px;">
             <div class="u-form-group u-form-name">
               <label for="name-3ad5" class="u-form-control-hidden u-label"></label>
-              <input type="text" onkeypress="return /[a-z 0-9.-]/i.test(event.key)" maxlength="40" placeholder="Name" id="name-3ad5" name="name" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
+              <input type="text" onkeypress="return /[a-z 0-9.,/?)(+%:!-]/i.test(event.key)" maxlength="40" placeholder="Name" id="name-3ad5" name="name" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
             </div>
             <div class="u-form-group u-form-group-2">
               <label for="text-d750" class="u-label">Choose image</label>
@@ -45,7 +45,7 @@
             </div>
             <div class="u-form-group u-form-message">
               <label for="message-3ad5" class="u-form-control-hidden u-label"></label>
-              <textarea onkeypress="return /[a-z 0-9.,-]/i.test(event.key)" placeholder="Description" rows="4" cols="50" id="message-3ad5" name="description" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="" maxlength="200"></textarea>
+              <textarea onkeypress="return /[a-z 0-9.,/?)(+%:!-]/i.test(event.key)" placeholder="Description" rows="4" cols="50" id="message-3ad5" name="description" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="" maxlength="200"></textarea>
             </div>
 			<div class="u-align-right u-form-group u-form-submit">
               <button formaction="/newLot"   class="u-border-none u-btn u-btn-round u-btn-submit u-button-style u-palette-4-dark-2 u-radius-50 u-btn-1">New Lot</button>

@@ -38,7 +38,7 @@
           <form action="/createAuction" method="POST" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form" style="padding: 10px;">
             <div class="u-form-group u-form-name">
               <label for="name-0938" class="u-form-control-hidden u-label"></label>
-              <input type="text" onkeypress="return /[a-z 0-9-.]/i.test(event.key)" maxlength="40" placeholder="Name" id="name-0938" name="name" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
+              <input type="text" onkeypress="return /[a-z 0-9.,/?)(+%:!-]/i.test(event.key)" maxlength="40" placeholder="Name" id="name-0938" name="name" class="u-border-1 u-border-grey-30 u-input u-input-rectangle u-white" required="">
             </div>
             <div class="u-form-group u-form-partition-factor-2 u-form-group-2">
               <label for="text-673d" class="u-form-control-hidden u-label"></label>
