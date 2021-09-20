@@ -26,7 +26,7 @@ git clone https://github.com/IngSW-unipv/Progetto-E21.git
 
 ### 0.3) Download di Gradle (facoltativo)
 
-L'applicazione può essere avviata anche da gradle. Nel caso non si volesse installare gradle andare al passo successivo `1)`
+L'applicazione può essere avviata anche da gradle. Nel caso non si volesse installare gradle andare al passo successivo `1)`.
 Per una corretta installazione si consiglia di seguire i passaggi sul sito di [gradle](https://gradle.org/install/) facendo attenzione alla giusta scelta del vostro sistema operativo
 Nel caso aveste optato per l'installazione di gradle andate al passo `1.2.1)`
 
